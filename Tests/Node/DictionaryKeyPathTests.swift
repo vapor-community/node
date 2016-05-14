@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Genome
+import Node
 
 class DictionaryKeyPathTests: XCTestCase {
     static var allTests: [(String, (DictionaryKeyPathTests) -> () throws -> Void)] {

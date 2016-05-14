@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import Genome
+@testable import Node
 
 class NodeDataTypeTest: XCTestCase {
     static var allTests: [(String, (NodeDataTypeTest) -> () throws -> Void)] {

@@ -9,6 +9,12 @@ let package = Package(
             name: "Node",
             dependencies: [
             ]
+        ),
+        Target(
+            name: "NodeFoundation",
+            dependencies: [
+                 .Target(name: "Node")
+                              ]
         )
     ]
 )

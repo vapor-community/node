@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Genome
+@testable import Node
 
 class NodeIndexable: XCTestCase {
     static var allTests: [(String, (NodeIndexable) -> () throws -> Void)] {

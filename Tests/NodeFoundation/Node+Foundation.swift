@@ -8,7 +8,7 @@
 
 import XCTest
 import Foundation
-@testable import GenomeFoundation
+@testable import NodeFoundation
 
 #if xcode
 class NodeFoundationTests: XCTestCase {

@@ -11,6 +11,15 @@
           ReferencedContainer = "container:Node.xcodeproj">
         </BuildableReference>
       </BuildActionEntry>
+      <BuildActionEntry buildForTesting = "YES" buildForRunning = "YES" buildForProfiling = "YES" buildForArchiving = "YES" buildForAnalyzing = "YES">
+        <BuildableReference
+          BuildableIdentifier = "primary"
+          BlueprintIdentifier = "______Target_NodeFoundation"
+          BuildableName = "libNodeFoundation.dylib"
+          BlueprintName = "NodeFoundation"
+          ReferencedContainer = "container:Node.xcodeproj">
+        </BuildableReference>
+      </BuildActionEntry>
     </BuildActionEntries>
   </BuildAction>
   <TestAction
@@ -23,9 +32,9 @@
       skipped = "NO">
       <BuildableReference
         BuildableIdentifier = "primary"
-        BlueprintIdentifier = "______Target_GenomeTestSuite"
-        BuildableName = "GenomeTestSuite.xctest"
-        BlueprintName = "GenomeTestSuite"
+        BlueprintIdentifier = "______Target_NodeTestSuite"
+        BuildableName = "NodeTestSuite.xctest"
+        BlueprintName = "NodeTestSuite"
         ReferencedContainer = "container:Node.xcodeproj">
       </BuildableReference>
     </TestableReference>
@@ -33,9 +42,9 @@
       skipped = "NO">
       <BuildableReference
         BuildableIdentifier = "primary"
-        BlueprintIdentifier = "______Target_GenomeFoundationTestSuite"
-        BuildableName = "GenomeFoundationTestSuite.xctest"
-        BlueprintName = "GenomeFoundationTestSuite"
+        BlueprintIdentifier = "______Target_NodeFoundationTestSuite"
+        BuildableName = "NodeFoundationTestSuite.xctest"
+        BlueprintName = "NodeFoundationTestSuite"
         ReferencedContainer = "container:Node.xcodeproj">
       </BuildableReference>
     </TestableReference>
