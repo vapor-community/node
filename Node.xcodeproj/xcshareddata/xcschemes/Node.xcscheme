@@ -5,18 +5,9 @@
       <BuildActionEntry buildForTesting = "YES" buildForRunning = "YES" buildForProfiling = "YES" buildForArchiving = "YES" buildForAnalyzing = "YES">
         <BuildableReference
           BuildableIdentifier = "primary"
-          BlueprintIdentifier = "______Target_Genome"
-          BuildableName = "libGenome.dylib"
-          BlueprintName = "Genome"
-          ReferencedContainer = "container:Node.xcodeproj">
-        </BuildableReference>
-      </BuildActionEntry>
-      <BuildActionEntry buildForTesting = "YES" buildForRunning = "YES" buildForProfiling = "YES" buildForArchiving = "YES" buildForAnalyzing = "YES">
-        <BuildableReference
-          BuildableIdentifier = "primary"
-          BlueprintIdentifier = "______Target_GenomeFoundation"
-          BuildableName = "libGenomeFoundation.dylib"
-          BlueprintName = "GenomeFoundation"
+          BlueprintIdentifier = "______Target_Node"
+          BuildableName = "libNode.dylib"
+          BlueprintName = "Node"
           ReferencedContainer = "container:Node.xcodeproj">
         </BuildableReference>
       </BuildActionEntry>
