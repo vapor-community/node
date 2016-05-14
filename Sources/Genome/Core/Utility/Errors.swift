@@ -24,16 +24,6 @@ public enum Error: ErrorProtocol {
      @param [NodeIndexable] current path being mapped if applicable
      */
     case unableToConvert(node: Node, targeting: String, path: [NodeIndexable])
-
-    /**
-     Genome found that the `map` was prepared for an unexpected operation.
-     
-     ie: map is mapping from node, but tried an operation exclusive to `toNode`
-
-     @param Map.OperationType the operation found
-     @param Map.OperationType the operation expected to be found
-     */
-    case unexpectedOperation(got: Map.OperationType, expected: Map.OperationType)
 }
 
 extension Error {
@@ -62,13 +52,6 @@ internal struct ErrorFactory {
         let error = Error.unableToConvert(node: node,
                                           targeting: "\(type)",
                                           path: [])
-        return error.logged()
-    }
-
-    static func unexpectedOperation(got operation: Map.OperationType,
-                                    expected: Map.OperationType) -> Error {
-        let error = Error.unexpectedOperation(got: operation,
-                                              expected: expected)
         return error.logged()
     }
 }

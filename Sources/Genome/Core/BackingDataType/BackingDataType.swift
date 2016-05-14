@@ -1,20 +1,3 @@
-//
-//  BackingData.swift
-//  Genome
-//
-//  Created by Logan Wright on 2/10/16.
-//  Copyright © 2016 lowriDevs. All rights reserved.
-//
-
-/**
- *  This is purely a convenience name for more semantic clarity
- *
- *  Its intention is to be used as a bridge for data types such
- *  as Json, XML, Yaml, or CSV
- *
- */
-public typealias BackingData = NodeConvertible
-
 // MARK: Node
 
 extension Node {
@@ -27,7 +10,7 @@ extension Node {
 
      - returns: data representation of object
      */
-    public func toData<T: BackingData>(_ type: T.Type = T.self) throws -> T {
+    public func toData<T: NodeConvertible>(_ type: T.Type = T.self) throws -> T {
         return try type.init(with: self, in: self)
     }
 }
@@ -35,7 +18,6 @@ extension Node {
 // MARK: Node Convertible
 
 extension NodeConvertible {
-
     /**
      Used to initialize a convertible from another node convertible. 
      Usually a backing data type ie: Json, yml, CSV, etc.
@@ -45,21 +27,9 @@ extension NodeConvertible {
 
      - throws: if mapping fails
      */
-    public init<T: BackingData>(with data: T, in context: Context = EmptyNode) throws {
+    public init<T: NodeConvertible>(with data: T, in context: Context = EmptyNode) throws {
         let node = try data.toNode()
-        try self.init(with: node, in: context)
-    }
-}
-
-// MARK: Mappable Object
-
-extension MappableObject {
-    public init<T: BackingData>(with data: T, in context: Context = EmptyNode) throws {
-        let node = try data.toNode()
-        guard let _ = node.object else {
-            throw ErrorFactory.unableToConvert(node, to: Self.self)
-        }
-        try self.init(with: node, in: context)
+        self = try .init(with: node, in: context)
     }
 
     /**
@@ -71,7 +41,7 @@ extension MappableObject {
 
      - throws: if fails to initialize
      */
-    public init<T: BackingData>(with node: [String : T], in context: Context = EmptyNode) throws {
+    public init<T: NodeConvertible>(with node: [String : T], in context: Context = EmptyNode) throws {
         var mapped: [String : Node] = [:]
         try node.forEach { key, value in
             mapped[key] = try value.toNode()
