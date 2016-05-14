@@ -2,15 +2,15 @@
 
 extension Node {
     /**
-     Map the node back to a data type
+     Map the node back to a convertible type
 
      - parameter type: the type to map to -- can be inferred
 
      - throws: if mapping fails
 
-     - returns: data representation of object
+     - returns: convertible representation of object
      */
-    public func toData<T: NodeConvertible>(_ type: T.Type = T.self) throws -> T {
+    public func converted<T: NodeConvertible>(to type: T.Type = T.self) throws -> T {
         return try type.init(with: self, in: self)
     }
 }
@@ -27,8 +27,8 @@ extension NodeConvertible {
 
      - throws: if mapping fails
      */
-    public init<T: NodeConvertible>(with data: T, in context: Context = EmptyNode) throws {
-        let node = try data.toNode()
+    public init<T: NodeConvertible>(with convertible: T, in context: Context = EmptyNode) throws {
+        let node = try convertible.toNode()
         self = try .init(with: node, in: context)
     }
 
@@ -41,9 +41,9 @@ extension NodeConvertible {
 
      - throws: if fails to initialize
      */
-    public init<T: NodeConvertible>(with node: [String : T], in context: Context = EmptyNode) throws {
+    public init<T: NodeConvertible>(with convertible: [String : T], in context: Context = EmptyNode) throws {
         var mapped: [String : Node] = [:]
-        try node.forEach { key, value in
+        try convertible.forEach { key, value in
             mapped[key] = try value.toNode()
         }
 

@@ -30,9 +30,8 @@ extension Dictionary : Context {}
 /**
  The underlying protocol used for all conversions. 
  
- This is the base of all Genome, where both sides of data are NodeConvertible.
+ This is the base of all conversions, where both sides of data are NodeConvertible.
  
- The Mapped object, as well as the Backing data both conform. 
  Any NodeConvertible can be turned into any other NodeConvertible type
  
  Json => Node => Object

@@ -14,8 +14,8 @@ extension Sequence where Iterator.Element: NodeConvertible {
         let array = try map { try $0.toNode() }
         return Node(array)
     }
-    public func toData<T: NodeConvertible>(type: T.Type = T.self) throws -> T {
-        return try toNode().toData()
+    public func converted<T: NodeConvertible>(to type: T.Type = T.self) throws -> T {
+        return try toNode().converted()
     }
 }
 
@@ -28,7 +28,7 @@ extension Dictionary where Key: CustomStringConvertible, Value: NodeConvertible 
         return .object(mutable)
     }
 
-    public func toData<T: NodeConvertible>(type: T.Type = T.self) throws -> Node {
-        return try toNode().toData()
+    public func converted<T: NodeConvertible>(to type: T.Type = T.self) throws -> Node {
+        return try toNode().converted()
     }
 }
