@@ -2,10 +2,10 @@ import Foundation
 
 extension String {
     /**
-     Parses `key=value` pair data separated by `&`.
+        Parses `key=value` pair data separated by `&`.
 
-     - returns: String dictionary of parsed data
-     */
+        - returns: String dictionary of parsed data
+    */
     private func keyValuePairs() -> [String: String] {
         var data: [String: String] = [:]
         for pair in self.components(separatedBy: "&") {
