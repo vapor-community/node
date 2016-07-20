@@ -1,5 +1,4 @@
 extension Node: Polymorphic {
-
     public var string: String? {
         switch self {
         case .bool(let bool):

@@ -10,14 +10,14 @@ extension Node {
 
      - returns: convertible representation of object
      */
-    public func converted<T: NodeConvertible>(to type: T.Type = T.self) throws -> T {
+    public func converted<T: NodeRepresentable>(to type: T.Type = T.self) throws -> T {
         return try type.init(with: self, in: self)
     }
 }
 
-// MARK: Node Convertible
+// MARK: NodeRepresentable
 
-extension NodeConvertible {
+extension NodeRepresentable {
     /**
      Used to initialize a convertible from another node convertible. 
      Usually a backing data type ie: Json, yml, CSV, etc.
@@ -27,7 +27,7 @@ extension NodeConvertible {
 
      - throws: if mapping fails
      */
-    public init<T: NodeConvertible>(with convertible: T, in context: Context = EmptyNode) throws {
+    public init<T: NodeRepresentable>(with convertible: T, in context: Context = EmptyNode) throws {
         let node = try convertible.toNode()
         self = try .init(with: node, in: context)
     }
@@ -41,7 +41,7 @@ extension NodeConvertible {
 
      - throws: if fails to initialize
      */
-    public init<T: NodeConvertible>(with convertible: [String : T], in context: Context = EmptyNode) throws {
+    public init<T: NodeRepresentable>(with convertible: [String : T], in context: Context = EmptyNode) throws {
         var mapped: [String : Node] = [:]
         try convertible.forEach { key, value in
             mapped[key] = try value.toNode()

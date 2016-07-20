@@ -1,6 +1,3 @@
-@_exported import Polymorphic
-@_exported import PathIndexable
-
 extension Node: PathIndexable {
     /// If self is an array representation, return array
     public var pathIndexableArray: [Node]? {
