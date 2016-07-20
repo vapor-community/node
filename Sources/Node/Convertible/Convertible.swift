@@ -24,7 +24,7 @@ public protocol NodeRepresentable {
 
      - returns: a node if possible
      */
-    func toNode() throws -> Node
+    func makeNode() throws -> Node
 }
 
 public protocol NodeInitializable {

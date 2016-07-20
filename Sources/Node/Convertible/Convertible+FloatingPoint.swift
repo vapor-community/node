@@ -16,7 +16,7 @@ extension Double: NodeConvertibleFloatingPointType {
 }
 
 extension NodeConvertibleFloatingPointType {
-    public func toNode() throws -> Node {
+    public func makeNode() throws -> Node {
         return Node(doubleValue)
     }
 

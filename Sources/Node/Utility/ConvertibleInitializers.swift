@@ -28,7 +28,7 @@ extension NodeRepresentable {
      - throws: if mapping fails
      */
     public init<T: NodeRepresentable>(with convertible: T, in context: Context = EmptyNode) throws {
-        let node = try convertible.toNode()
+        let node = try convertible.makeNode()
         self = try .init(with: node, in: context)
     }
 
@@ -44,7 +44,7 @@ extension NodeRepresentable {
     public init<T: NodeRepresentable>(with convertible: [String : T], in context: Context = EmptyNode) throws {
         var mapped: [String : Node] = [:]
         try convertible.forEach { key, value in
-            mapped[key] = try value.toNode()
+            mapped[key] = try value.makeNode()
         }
 
         let node = Node(mapped)
