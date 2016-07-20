@@ -1,6 +1,6 @@
 extension Bool: NodeConvertible {
-    public func makeNode() throws -> Node {
-        return Node(self)
+    public func makeNode() -> Node {
+        return .bool(self)
     }
 
     public init(with node: Node, in context: Context) throws {

@@ -24,7 +24,6 @@ class NodeDataTypeTest: XCTestCase {
     lazy var integerNodeValue: Node = .number(Node.Number(self.integerValue))
 
     func testIntegers() {
-        
         let int = try! Int(with: integerNodeValue)
         XCTAssert(int == integerValue)
         

@@ -1,5 +1,5 @@
 extension String: NodeConvertible {
-    public func makeNode() throws -> Node {
+    public func makeNode() -> Node {
         return .string(self)
     }
 

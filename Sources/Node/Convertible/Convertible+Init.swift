@@ -1,54 +1,105 @@
-extension Node {
-    public init(_ dictionary: [String : NodeRepresentable]) throws {
-        var mutable: [String : Node] = [:]
-        try dictionary.forEach { key, value in
-            mutable[key] = try value.makeNode()
-        }
-        self = .object(mutable)
-    }
+extension NodeRepresentable {
+    /**
+     Map the node back to a convertible type
 
-    public init<NR: NodeRepresentable>(_ dictionary: [String : NR]) throws {
-        var mutable: [String : Node] = [:]
-        try dictionary.forEach { key, value in
-            mutable[key] = try value.makeNode()
-        }
-        self = .object(mutable)
+     - parameter type: the type to map to -- can be inferred
+     - throws: if mapping fails
+     - returns: convertible representation of object
+     */
+    public func converted<T: NodeInitializable>(
+        to type: T.Type = T.self,
+        in context: Context = EmptyNode) throws -> T {
+        let node = try makeNode()
+        return try type.init(with: node, in: context)
     }
 }
 
-extension Node {
-    // non homogenous
-    public init(_ array: [NodeRepresentable]) throws {
-        let mapped = try array.map { try $0.makeNode() }
-        self = .array(mapped)
-    }
+// MARK: Homogenous
 
-    // homogeous
-    public init<NR: NodeRepresentable>(_ array: [NR]) throws {
-        let mapped = try array.map { try $0.makeNode() }
-        self = .array(mapped)
-    }
-}
+extension NodeInitializable {
 
-extension Node {
-    public init<N: NodeRepresentable>(_ representable: N) throws {
-        self = try representable.makeNode()
-    }
+    // MARK: Arrays
 
-    public init<N: NodeRepresentable>(_ representable: N?) throws {
-        self = try representable?.makeNode() ?? .null
+    public init<N: NodeRepresentable>(_ representable: [N]) throws {
+        let mapped = try representable.map { try Node($0) }
+        let node = Node.array(mapped)
+        try self.init(with: node, in: EmptyNode)
     }
 
     public init<N: NodeRepresentable>(_ representable: [N?]) throws {
         let mapped = try representable.map { try Node($0) }
-        self = .array(mapped)
+        let node = Node.array(mapped)
+        try self.init(with: node, in: EmptyNode)
+    }
+
+    // MARK: Dictionaries 
+
+    public init<N: NodeRepresentable>(_ representable: [String: N]) throws {
+        var object: [String: Node] = [:]
+        try representable.forEach { key, representable in
+            object[key] = try Node(representable)
+        }
+        let node = Node.object(object)
+        try self.init(with: node, in: EmptyNode)
     }
 
     public init<N: NodeRepresentable>(_ representable: [String: N?]) throws {
-        var node: [String: Node] = [:]
-        for (key, representable) in representable {
-            node[key] = try Node(representable)
+        var object: [String: Node] = [:]
+        try representable.forEach { key, representable in
+            object[key] = try Node(representable)
         }
-        self = .object(node)
+        let node = Node.object(object)
+        try self.init(with: node, in: EmptyNode)
+    }
+}
+
+// MARK: Non-Homogenous 
+
+extension NodeInitializable {
+
+    // MARK: Individual
+
+    public init(_ representable: NodeRepresentable) throws {
+        let node = try representable.makeNode()
+        try self.init(with: node, in: EmptyNode)
+    }
+
+    public init(_ representable: NodeRepresentable?) throws {
+        let node = try representable?.makeNode() ?? .null
+        try self.init(with: node, in: EmptyNode)
+    }
+
+    // MARK: Arrays
+
+    public init(_ representable: [NodeRepresentable]) throws {
+        let mapped = try representable.map { try Node($0) }
+        let node = Node.array(mapped)
+        try self.init(with: node, in: EmptyNode)
+    }
+
+    public init(_ representable: [NodeRepresentable?]) throws {
+        let mapped = try representable.map { try Node($0) }
+        let node = Node.array(mapped)
+        try self.init(with: node, in: EmptyNode)
+    }
+
+    // MARK: Dictionaries
+
+    public init(_ representable: [String: NodeRepresentable]) throws {
+        var object: [String: Node] = [:]
+        try representable.forEach { key, representable in
+            object[key] = try Node(representable)
+        }
+        let node = Node.object(object)
+        try self.init(with: node, in: EmptyNode)
+    }
+
+    public init(_ representable: [String: NodeRepresentable?]) throws {
+        var object: [String: Node] = [:]
+        try representable.forEach { key, representable in
+            object[key] = try Node(representable)
+        }
+        let node = Node.object(object)
+        try self.init(with: node, in: EmptyNode)
     }
 }
