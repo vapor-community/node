@@ -1,7 +1,11 @@
 extension Bool {
     /**
-     This function seeks to replicate the expected behavior of `var boolValue: Bool` on `NSString`.  Any variant of `yes`, `y`, `true`, `t`, or any numerical value greater than 0 will be considered `true`
-     */
+        This function seeks to replicate the expected behavior 
+        of `var boolValue: Bool` on `NSString`.
+
+        Any variant of `yes`, `y`, `true`, `t`, or any numerical value 
+        greater than 0 will be considered `true`
+    */
     internal init(_ string: String) {
         let cleaned = string
             .lowercased()

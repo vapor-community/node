@@ -1,20 +1,10 @@
-//
-//  Genome
-//
-//  Created by Logan Wright
-//  Copyright © 2016 lowriDevs. All rights reserved.
-//
-//  MIT
-//
-
 public enum Error: ErrorProtocol {
     /**
-     Genome was unable to convert a given node to the target type
+        Unable to convert a given node to the target type.
 
-     @param Node            the node that was unable to convert
-     @param String          a description of the type Genome was trying to convert to
-     @param [NodeIndexable] current path being mapped if applicable
-     */
+        - param node: the node that was unable to convert
+        - param expected: a description of the type Genome was trying to convert to
+    */
     case unableToConvert(node: Node, expected: String)
 }
 
