@@ -4,15 +4,9 @@ extension Bool: NodeConvertible {
     }
 
     public init(with node: Node, in context: Context) throws {
-        switch node {
-        case let .bool(bool):
-            self = bool
-        case let .string(str):
-            self = Bool(str)
-        case let .number(num):
-            self = num.int == 1
-        default:
+        guard let bool = node.bool else {
             throw ErrorFactory.unableToConvert(node, to: self.dynamicType)
         }
+        self = bool
     }
 }

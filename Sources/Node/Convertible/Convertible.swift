@@ -17,11 +17,6 @@ public protocol NodeInitializable {
         to a context outside of the node ecosystem
     */
     init(with node: Node, in context: Context) throws
-
-    /**
-        Optional initializer for customizable default behavior
-    */
-    init(with node: Node) throws
 }
 
 extension NodeInitializable {

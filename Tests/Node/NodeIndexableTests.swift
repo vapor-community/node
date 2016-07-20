@@ -9,17 +9,15 @@
 import XCTest
 @testable import Node
 
-class NodeIndexable: XCTestCase {
-    static var allTests: [(String, (NodeIndexable) -> () throws -> Void)] {
-        return [
-                   ("testInt", testInt),
-                   ("testString", testString),
-                   ("testStringSequenceObject", testStringSequenceObject),
-                   ("testStringSequenceArray", testStringSequenceArray),
-                   ("testIntSequence", testIntSequence),
-                   ("testMixed", testMixed),
-        ]
-    }
+class NodeIndexableTests: XCTestCase {
+    static let allTests = [
+        ("testInt", testInt),
+        ("testString", testString),
+        ("testStringSequenceObject", testStringSequenceObject),
+        ("testStringSequenceArray", testStringSequenceArray),
+        ("testIntSequence", testIntSequence),
+        ("testMixed", testMixed),
+    ]
 
     func testInt() {
         let array: Node = ["one",

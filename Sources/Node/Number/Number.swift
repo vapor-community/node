@@ -33,12 +33,17 @@ extension Node.Number {
 
 // MARK: Accessors
 
+extension UInt {
+    static var intMax = UInt(Int.max)
+}
+
 extension Node.Number {
     public var int: Int {
         switch self {
         case let .int(i):
             return i
         case let .uint(u):
+            guard u < UInt.intMax else { return Int.max }
             return Int(u)
         case let .double(d):
             return Int(d)
@@ -48,6 +53,7 @@ extension Node.Number {
     public var uint: UInt {
         switch self {
         case let .int(i):
+            guard i > 0 else { return 0 }
             return UInt(i)
         case let .uint(u):
             return u
@@ -140,5 +146,20 @@ extension Node.Number: IntegerLiteralConvertible {
 extension Node.Number: FloatLiteralConvertible {
     public init(floatLiteral value: FloatLiteralType) {
         self.init(value)
+    }
+}
+
+// MARK: String
+
+extension Node.Number: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .int(i):
+            return i.description
+        case let .uint(u):
+            return u.description
+        case let .double(d):
+            return d.description
+        }
     }
 }

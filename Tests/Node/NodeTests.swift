@@ -9,7 +9,16 @@
 import XCTest
 @testable import Node
 
-class NodeEquatableTests: XCTestCase {
+class NodeTests: XCTestCase {
+    static let allTests = [
+        ("testInits", testInits),
+        ("testArrayInits", testArrayInits),
+        ("testObjectInits", testObjectInits),
+        ("testNonHomogenousArrayInits", testNonHomogenousArrayInits),
+        ("testNonHomogenousObjectInits", testNonHomogenousObjectInits),
+        ("testLiterals", testLiterals),
+        ("testEquatable", testEquatable),
+    ]
 
     func testInits() {
         // these are mostly here to ensure compilation errors don't occur
@@ -33,6 +42,60 @@ class NodeEquatableTests: XCTestCase {
         XCTAssert(Node(bytes: [1,2,3,4]) == .bytes([1,2,3,4]))
     }
 
+    func testArrayInits() throws {
+        let array: [Int] = [1,2,3,4,5]
+        let node = try Node(array)
+        XCTAssert(node == [1,2,3,4,5])
+
+        let optionalArray: [String?] = ["a", "b", "c", nil, "d", nil]
+        let optionalNode = try Node(optionalArray)
+        XCTAssert(optionalNode == ["a", "b", "c", .null, "d", .null])
+    }
+
+    func testObjectInits() throws {
+        let dict: [String: String] = [
+            "hello": "world",
+            "goodbye": "moon"
+        ]
+        let node = try Node(dict)
+        XCTAssert(node == ["hello": "world", "goodbye": "moon"])
+
+        let optionalDict: [String: String?] = [
+            "hello": "world",
+            "goodbye": nil
+        ]
+        let optionalNode = try Node(optionalDict)
+        XCTAssert(optionalNode == ["hello": "world", "goodbye": .null])
+    }
+
+    func testNonHomogenousArrayInits() throws {
+        let array: [NodeRepresentable] = [1, "hiya", Node.object(["a": "b"]), false]
+        let node = try Node(array)
+        XCTAssert(node == [1, "hiya", Node.object(["a": "b"]), false])
+
+
+        let optionalArray: [NodeRepresentable?] = [42, "bye", Node.array([1,2,3]), true, nil]
+        let optionalNode = try Node(optionalArray)
+        XCTAssert(optionalNode == [42, "bye", Node.array([1,2,3]), true, .null])
+    }
+
+    func testNonHomogenousObjectInits() throws {
+        let dict: [String: NodeRepresentable] = [
+            "hello": "world",
+            "goodbye": 1
+        ]
+        let node = try Node(dict)
+        XCTAssert(node == ["hello": "world", "goodbye": 1])
+
+        let optionalDict: [String: NodeRepresentable?] = [
+            "hello": "world",
+            "goodbye": nil,
+            "ok": 1
+        ]
+        let optionalNode = try Node(optionalDict)
+        XCTAssert(optionalNode == ["hello": "world", "goodbye": .null, "ok": 1])
+    }
+
     func testLiterals() {
         XCTAssert(Node.null == nil)
         XCTAssert(Node.bool(false) == false)
@@ -49,7 +112,7 @@ class NodeEquatableTests: XCTestCase {
         XCTAssert(Node.object(["key": "value"]) == ["key": "value"])
     }
 
-    func testEquatable() throws {
+    func testEquatable() {
         let truthyPairs: [(Node, Node)] = [
             (nil, nil),
             (1, 1.0),
