@@ -10,17 +10,17 @@ import XCTest
 @testable import Node
 
 class UtilityTests: XCTestCase {
-    func testBoolTrue() {
+    func testBoolTrue() throws {
         let trues = ["true", "t", "yes", "y", "1", "100"]
-        trues.forEach { truth in
-            XCTAssert(Bool(truth))
+        try trues.forEach { truth in
+            XCTAssert(try Bool(truth))
         }
     }
 
-    func testBoolFalse() {
+    func testBoolFalse() throws {
         let falses = ["false", "f", "no", "n", "0", ""]
-        falses.forEach { truth in
-            XCTAssert(!Bool(truth))
+        try falses.forEach { truth in
+            XCTAssert(try !Bool(truth))
         }
     }
 }

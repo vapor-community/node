@@ -25,6 +25,19 @@ extension Node: Polymorphic {
         }
     }
 
+    public var uint: UInt? {
+        switch self {
+        case .string(let string):
+            return string.uint
+        case .number(let number):
+            return number.uint
+        case .bool(let bool):
+            return bool ? 1 : 0
+        default:
+            return nil
+        }
+    }
+
     public var double: Double? {
         switch self {
         case .number(let number):

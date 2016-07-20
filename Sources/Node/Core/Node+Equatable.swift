@@ -14,6 +14,8 @@ public func ==(lhs: Node, rhs: Node) -> Bool {
         return l == r
     case let (.object(l), .object(r)):
         return l == r
+    case let (.bytes(l), .bytes(r)):
+        return l == r
     default:
         return false
     }

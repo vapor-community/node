@@ -1,3 +1,7 @@
+/**
+    Node is meant to be a transitive data structure that can be used to facilitate conversions
+    between different types.
+*/
 public enum Node {
     case null
     case bool(Bool)
@@ -6,119 +10,4 @@ public enum Node {
     case array([Node])
     case object([String: Node])
     case bytes([UInt8])
-}
-
-// MARK: Initialization
-
-extension Node {
-    public init(_ value: Bool) {
-        self = .bool(value)
-    }
-
-    public init(_ value: String) {
-        self = .string(value)
-    }
-
-    public init(_ int: Int) {
-        self = .number(Number(int))
-    }
-
-    public init(_ double: Double) {
-        self = .number(Number(double))
-    }
-
-    public init(_ uint: UInt) {
-        self = .number(Number(uint))
-    }
-
-    public init(_ number: Number) {
-        self = .number(number)
-    }
-
-    public init(_ value: [Node]) {
-        let array = [Node](value)
-        self = .array(array)
-    }
-
-    public init(_ value: [String : Node]) {
-        self = .object(value)
-    }
-
-    public init(_ bytes: [UInt8]) {
-        self = .bytes(bytes)
-    }
-}
-
-// MARK: Number Initializers
-
-//extension Node {
-//    public init<I: Integer>(_ value: I) {
-//        let number = Number(value)
-//        self = .number(number)
-//    }
-//
-//    public init<U: UnsignedInteger>(_ value: U) {
-//        let number = Number(value)
-//        self = .number(number)
-//    }
-//
-//    public init(_ value: Float) {
-//        let number = Number(value)
-//        self = .number(number)
-//    }
-//
-//    public init(_ value: Double) {
-//        let number = Number(value)
-//        self = .number(number)
-//    }
-//}
-
-// MARK: UInt
-
-extension String {
-    public var uint: UInt? {
-        return UInt(self)
-    }
-}
-
-extension Node {
-    public var uint: UInt? {
-        switch self {
-        case .string(let string):
-            return string.uint
-        case .number(let number):
-            return number.uint
-        case .bool(let bool):
-            return bool ? 1 : 0
-        default:
-            return nil
-        }
-    }
-}
-
-// MARK: Explicit Accessors
-
-extension Node {
-    // TODO: Polymorphic conflict. Consider overloadable functions? -- might not even solve underlying functions
-    public var nodeArray: [Node]? {
-        switch self {
-        case let .array(array):
-            return array
-        case let .string(string):
-            return string.array?
-                .flatMap { $0.string }
-                .map { Node($0) }
-        default:
-            return nil
-        }
-    }
-    
-    public var nodeObject: [String: Node]? {
-        switch self {
-        case let .object(ob):
-            return ob
-        default:
-            return nil
-        }
-    }
 }

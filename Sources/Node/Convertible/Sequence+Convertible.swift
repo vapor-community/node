@@ -3,6 +3,7 @@ extension Sequence where Iterator.Element: NodeRepresentable {
         let array = try map { try $0.makeNode() }
         return Node(array)
     }
+    
     public func converted<T: NodeInitializable>(to type: T.Type = T.self) throws -> T {
         return try makeNode().converted()
     }
