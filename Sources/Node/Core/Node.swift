@@ -4,7 +4,8 @@ public enum Node {
     case number(Number)
     case string(String)
     case array([Node])
-    case object([String : Node])
+    case object([String: Node])
+    case bytes([UInt8])
 }
 
 // MARK: Initialization
