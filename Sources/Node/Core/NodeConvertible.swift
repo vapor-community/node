@@ -7,6 +7,8 @@
 //  MIT
 //
 
+extension String: ErrorProtocol {}
+
 // MARK: Constants
 
 public let EmptyNode = Node.object([:])

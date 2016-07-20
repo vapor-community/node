@@ -8,28 +8,156 @@
 
 // MARK: Type Enforcing
 
-public enum TypeEnforcementLevel {
-    case strict
-    case fuzzy
-    
-    public var isStrict: Bool {
-        return self == .strict
-    }
-    
-    public var isFuzzy: Bool {
-        return self == .fuzzy
+//public enum TypeEnforcementLevel {
+//    case strict
+//    case fuzzy
+//    
+//    public var isStrict: Bool {
+//        return self == .strict
+//    }
+//    
+//    public var isFuzzy: Bool {
+//        return self == .fuzzy
+//    }
+//}
+//
+//public var typeEnforcementLevel: TypeEnforcementLevel = .strict
+
+extension Node {
+    public enum Number {
+        case int(Int)
+        case uint(UInt)
+        case double(Double)
     }
 }
 
-public var typeEnforcementLevel: TypeEnforcementLevel = .strict
+extension Node.Number {
+    public var int: Int {
+        switch self {
+        case let .int(i):
+            return i
+        case let .uint(u):
+            return Int(u)
+        case let .double(d):
+            return Int(d)
+        }
+    }
+
+    public var uint: UInt {
+        switch self {
+        case let .int(i):
+            return UInt(i)
+        case let .uint(u):
+            return u
+        case let .double(d):
+            return UInt(d)
+        }
+    }
+
+    public var double: Double {
+        switch self {
+        case let .int(i):
+            return Double(i)
+        case let .uint(u):
+            return Double(u)
+        case let .double(d):
+            return Double(d)
+        }
+    }
+}
+
+extension Node.Number {
+    public var bool: Bool? {
+        switch self {
+        case let .int(i):
+            switch i {
+            case 1: return true
+            case 0: return false
+            default:
+                return nil
+            }
+        case let .uint(u):
+            switch u {
+            case 1: return true
+            case 0: return false
+            default:
+                return nil
+            }
+        case let .double(d):
+            switch d {
+            case 1.0: return true
+            case 0.0: return false
+            default:
+                return nil
+            }
+        }
+    }
+}
 
 public enum Node {
     case null
     case bool(Bool)
-    case number(Double)
+    case int(Int)
+    case uint(UInt)
+    case number(Number)
     case string(String)
     case array([Node])
-    case object([String:Node])
+    case object([String : Node])
+}
+
+// MARK: Number Initializers
+
+extension Node {
+    public init<I: Integer>(_ value: I) {
+        let number = Number(value)
+        self = .number(number)
+    }
+
+    public init<U: UnsignedInteger>(_ value: U) {
+        let number = Number(value)
+        self = .number(number)
+    }
+
+    public init(_ value: Float) {
+        let number = Number(value)
+        self = .number(number)
+    }
+
+    public init(_ value: Double) {
+        let number = Number(value)
+        self = .number(number)
+    }
+}
+
+extension Integer {
+    public init<I: Integer>(_ integer: I) {
+        self.init(integer.toIntMax())
+    }
+}
+
+extension UnsignedInteger {
+    public init<U: UnsignedInteger>(_ integer: U) {
+        self.init(integer.toUIntMax())
+    }
+}
+
+extension Node.Number {
+    public init<I: Integer>(_ value: I) {
+        self = .int(Int(value))
+    }
+
+    public init<U: UnsignedInteger>(_ value: U) {
+        self = .uint(UInt(value))
+    }
+
+    public init(_ value: Float) {
+        let double = Double(value)
+        self = .init(double)
+    }
+
+    public init(_ value: Double) {
+        self = .double(value)
+    }
 }
 
 // MARK: Initialization
@@ -39,20 +167,12 @@ extension Node {
         self = .bool(value)
     }
     
-    public init(_ value: Double) {
-        self = .number(value)
-    }
-    
     public init(_ value: String) {
         self = .string(value)
     }
     
     public init(_ value: [String : Node]) {
         self = .object(value)
-    }
-
-    public init<T: Integer>(_ value: T) {
-        self = .number(Double(value.toIntMax()))
     }
 
     public init<T : Sequence where T.Iterator.Element == Node>(_ value: T) {
@@ -71,385 +191,432 @@ extension Node {
 
 // MARK: Convenience
 
-extension Node {
-    public var isNull: Bool {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictIsNull
-        case .fuzzy:
-            return fuzzyIsNull
-        }
-    }
-
-    public var strictIsNull: Bool {
-        guard case .null = self else { return false }
-        return true
-    }
-
-    public var fuzzyIsNull: Bool {
-        if strictIsNull {
-            return true
-        } else if let s = self.string {
-            return s == "null"
-        } else {
-            return false
-        }
-    }
-}
-
-extension Node {
-    public var bool: Bool? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictBool
-        case .fuzzy:
-            return fuzzyBool
-        }
-    }
-    
-    public var strictBool: Bool? {
-        if case let .bool(bool) = self {
-            return bool
-        } else if let integer = int where integer == 1 || integer == 0 {
-            // When converting from foundation type `[String : AnyObject]`, something that I see as important,
-            // it's not possible to distinguish between 'bool', 'double', and 'int'.
-            // Because of this, if we have an integer that is 0 or 1, and a user is requesting a boolean val,
-            // it's fairly likely this is their desired result.
-            return integer == 1
-        } else {
-            return nil
-        }
-    }
-    
-    public var fuzzyBool: Bool? {
-        if let strict = strictBool {
-            return strict
-        } else if let n = strictNumber {
-            return n > 0
-        } else if let s = strictString {
-            return Bool(s)
-        } else {
-            return nil
-        }
-    }
-}
-
-extension Node {
-    public var number: Double? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictNumber
-        case .fuzzy:
-            return fuzzyNumber
-        }
-    }
-    
-    public var strictNumber: Double? {
-        guard case let .number(number) = self else {
-            return nil
-        }
-        
-        return number
-    }
-    
-    public var fuzzyNumber: Double? {
-        if let n = strictNumber {
-            return n
-        } else if let s = strictString {
-            return Double(s)
-        } else if let b = strictBool {
-            return b ? 1 : 0
-        } else {
-            return nil
-        }
-    }
-    
-    public var double: Double? {
-        return self.number
-    }
-    
-    public var strictDouble: Double? {
-        return strictNumber
-    }
-    
-    public var fuzzyDouble: Double? {
-        return fuzzyNumber
-    }
-    
-    public var float: Float? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictFloat
-        case .fuzzy:
-            return fuzzyFloat
-        }
-    }
-    
-    public var strictFloat: Float? {
-        return strictNumber.flatMap(Float.init)
-    }
-    
-    public var fuzzyFloat: Float? {
-        return fuzzyNumber.flatMap(Float.init)
-    }
-    
-}
-
-extension Node {
-    public var int: Int? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictInt
-        case .fuzzy:
-            return fuzzyInt
-        }
-    }
-    
-    public var strictInt: Int? {
-        guard let double = self.number where double % 1 == 0 else {
-            return nil
-        }
-        
-        return Int(double)
-    }
-    
-    public var fuzzyInt: Int? {
-        if let i = strictInt {
-            return i
-        } else if let s = strictString {
-            return Int(s)
-        } else if let b = strictBool {
-            return b ? 1 : 0
-        } else {
-            return nil
-        }
-    }
-}
+//extension Node {
+//    public var isNull: Bool {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictIsNull
+//        case .fuzzy:
+//            return fuzzyIsNull
+//        }
+//    }
+//
+//    public var strictIsNull: Bool {
+//        guard case .null = self else { return false }
+//        return true
+//    }
+//
+//    public var fuzzyIsNull: Bool {
+//        if strictIsNull {
+//            return true
+//        } else if let s = self.string {
+//            return s == "null"
+//        } else {
+//            return false
+//        }
+//    }
+//}
+//
+//extension Node {
+//    public var bool: Bool? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictBool
+//        case .fuzzy:
+//            return fuzzyBool
+//        }
+//    }
+//    
+//    public var strictBool: Bool? {
+//        if case let .bool(bool) = self {
+//            return bool
+//        } else if let integer = int where integer == 1 || integer == 0 {
+//            // When converting from foundation type `[String : AnyObject]`, something that I see as important,
+//            // it's not possible to distinguish between 'bool', 'double', and 'int'.
+//            // Because of this, if we have an integer that is 0 or 1, and a user is requesting a boolean val,
+//            // it's fairly likely this is their desired result.
+//            return integer == 1
+//        } else {
+//            return nil
+//        }
+//    }
+//    
+//    public var fuzzyBool: Bool? {
+//        if let strict = strictBool {
+//            return strict
+//        } else if let n = strictNumber {
+//            return n > 0
+//        } else if let s = strictString {
+//            return Bool(s)
+//        } else {
+//            return nil
+//        }
+//    }
+//}
+//
+//extension Node {
+//    public var number: Double? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictNumber
+//        case .fuzzy:
+//            return fuzzyNumber
+//        }
+//    }
+//    
+//    public var strictNumber: Double? {
+//        guard case let .double(number) = self else {
+//            return nil
+//        }
+//        
+//        return number
+//    }
+//    
+//    public var fuzzyNumber: Double? {
+//        if let n = strictNumber {
+//            return n
+//        } else if let s = strictString {
+//            return Double(s)
+//        } else if let b = strictBool {
+//            return b ? 1 : 0
+//        } else {
+//            return nil
+//        }
+//    }
+//    
+//    public var double: Double? {
+//        return self.number
+//    }
+//    
+//    public var strictDouble: Double? {
+//        return strictNumber
+//    }
+//    
+//    public var fuzzyDouble: Double? {
+//        return fuzzyNumber
+//    }
+//    
+//    public var float: Float? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictFloat
+//        case .fuzzy:
+//            return fuzzyFloat
+//        }
+//    }
+//    
+//    public var strictFloat: Float? {
+//        return strictNumber.flatMap(Float.init)
+//    }
+//    
+//    public var fuzzyFloat: Float? {
+//        return fuzzyNumber.flatMap(Float.init)
+//    }
+//    
+//}
+//
+//extension Node {
+//    public var int: Int? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictInt
+//        case .fuzzy:
+//            return fuzzyInt
+//        }
+//    }
+//    
+//    public var strictInt: Int? {
+//        guard let double = self.number where double % 1 == 0 else {
+//            return nil
+//        }
+//        
+//        return Int(double)
+//    }
+//    
+//    public var fuzzyInt: Int? {
+//        if let i = strictInt {
+//            return i
+//        } else if let s = strictString {
+//            return Int(s)
+//        } else if let b = strictBool {
+//            return b ? 1 : 0
+//        } else {
+//            return nil
+//        }
+//    }
+//}
+//
 
 extension Node {
     public var uint: UInt? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictUInt
-        case .fuzzy:
-            return fuzzyUInt
-        }
-    }
-    
-    public var strictUInt: UInt? {
-        guard let intValue = strictInt where intValue >= 0 else { return nil }
-        return UInt(intValue)
-    }
-    
-    public var fuzzyUInt: UInt? {
-        if let ui = strictUInt {
-            return ui
-        } else if let i = strictInt {
-            return i > 0 ? UInt(i) : 0
-        } else if let s = strictString {
-            return UInt(s)
-        } else if let b = strictBool {
-            return b ? 1 : 0
-        } else {
-            return nil
-        }
-    }
-}
-
-extension Node {
-    public var string: String? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictString
-        case .fuzzy:
-            return fuzzyString
-        }
-    }
-    
-    public var strictString: String? {
-        guard case let .string(string) = self else {
-            return nil
-        }
-        
-        return string
-    }
-    
-    public var fuzzyString: String? {
-        if let s = strictString {
-            return s
-        } else if let i = strictInt { // int first so if it's an int, we omit `1.0` in preference of `1`
-            return i.description
-        } else if let n = strictNumber {
-            return n.description
-        } else if let b = strictBool {
-            return b.description
-        } else {
-            return nil
-        }
-    }
-}
-
-extension Node {
-    public var array: [Node]? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictArray
-        case .fuzzy:
-            return fuzzyArray
-        }
-    }
-    
-    public var strictArray: [Node]? {
-        guard case let .array(array) = self else { return nil }
-        return array
-    }
-    
-    public var fuzzyArray: [Node]? {
-        if let a = strictArray {
-            return a
-        } else if let s = strictString {
-            return s.characters
-                .split { $0 == "," }
-                .map(String.init)
-                .map { Node.string($0) }
-        } else {
-            return nil
-        }
-    }
-}
-
-extension Node {
-    public var object: [String : Node]? {
-        switch typeEnforcementLevel {
-        case .strict:
-            return strictObject
-        case .fuzzy:
-            return fuzzyObject
-        }
-
-    }
-    
-    public var strictObject: [String : Node]? {
-        guard case let .object(object) = self else { return nil }
-        return object
-    }
-    
-    public var fuzzyObject: [String : Node]? {
-        /*
-         I'm not sure that string should map to object this way, but the goal 
-         of fuzzy mapping is to try and fulfill the intent of the caller.
-         in this case, if a string properly maps to a dictionary, we should return it.
-         */
-        if let o = strictObject {
-            return o
-        } else if let s = strictString {
-            if s.isEmpty { return [:] }
-            
-            var mutable: [String : Node] = [:]
-            s.keyValuePairs().forEach { k, v in
-                mutable[k] = Node(v)
-            }
-            
-            // If our string has value, and the object doesn't,
-            // didn't have an object string
-            if mutable.isEmpty { return nil }
-            return mutable
-        } else {
-            return nil
-        }
-    }
-}
-
-extension Node: CustomStringConvertible, CustomDebugStringConvertible {
-    public var description: String {
         switch self {
-        case .null:
-            return "NULL"
-        case let .bool(boolean):
-            return boolean ? "true" : "false"
-        case let .string(string):
-            return string
-        case let .number(number):
-            return number.description
+        case .string(let string):
+            return string.uint
+        case .number(let number):
+            return number.uint
+        case .bool(let bool):
+            return bool ? 1 : 0
+        default:
+            return nil
+        }
+    }
+}
+
+extension String {
+    public var uint: UInt? {
+        return UInt(self)
+    }
+}
+
+//extension Node {
+//    public var uint: UInt? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictUInt
+//        case .fuzzy:
+//            return fuzzyUInt
+//        }
+//    }
+//
+//    public var strictUInt: UInt? {
+//        guard let intValue = strictInt where intValue >= 0 else { return nil }
+//        return UInt(intValue)
+//    }
+//    
+//    public var fuzzyUInt: UInt? {
+//        if let ui = strictUInt {
+//            return ui
+//        } else if let i = strictInt {
+//            return i > 0 ? UInt(i) : 0
+//        } else if let s = strictString {
+//            return UInt(s)
+//        } else if let b = strictBool {
+//            return b ? 1 : 0
+//        } else {
+//            return nil
+//        }
+//    }
+//}
+//
+//extension Node {
+//    public var string: String? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictString
+//        case .fuzzy:
+//            return fuzzyString
+//        }
+//    }
+//    
+//    public var strictString: String? {
+//        guard case let .string(string) = self else {
+//            return nil
+//        }
+//        
+//        return string
+//    }
+//    
+//    public var fuzzyString: String? {
+//        if let s = strictString {
+//            return s
+//        } else if let i = strictInt { // int first so if it's an int, we omit `1.0` in preference of `1`
+//            return i.description
+//        } else if let n = strictNumber {
+//            return n.description
+//        } else if let b = strictBool {
+//            return b.description
+//        } else {
+//            return nil
+//        }
+//    }
+//}
+//
+extension Node {
+    // TODO: Consider overloadable functions? -- might not even solve underlying functions
+    public var nodeArray: [Node]? {
+        switch self {
         case let .array(array):
-            return array.description
-        case let .object(object):
-            return object.description
+            return array
+        case let .string(string):
+            return string.array?
+                .flatMap { $0.string }
+                .map { Node($0) }
+        default:
+            return nil
         }
     }
     
-    public var debugDescription: String {
+    public var nodeObject: [String: Node]? {
         switch self {
-        case .null:
-            return "NULL".debugDescription
-        case let .bool(boolean):
-            return boolean ? "true".debugDescription : "false".debugDescription
-        case let .string(string):
-            return string.debugDescription
-        case let .number(number):
-            return number.description
-        case let .array(array):
-            return array.debugDescription
-        case let .object(object):
-            return object.debugDescription
+        case let .object(ob):
+            return ob
+        default:
+            return nil
         }
     }
 }
 
-extension Node: Equatable {}
+//extension Node {
+//    public var array: [Node]? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictArray
+//        case .fuzzy:
+//            return fuzzyArray
+//        }
+//    }
+//    
+//    public var strictArray: [Node]? {
+//        guard case let .array(array) = self else { return nil }
+//        return array
+//    }
+//    
+//    public var fuzzyArray: [Node]? {
+//        if let a = strictArray {
+//            return a
+//        } else if let s = strictString {
+//            return s.characters
+//                .split { $0 == "," }
+//                .map(String.init)
+//                .map { Node.string($0) }
+//        } else {
+//            return nil
+//        }
+//    }
+//}
+//
+//extension Node {
+//    public var object: [String : Node]? {
+//        switch typeEnforcementLevel {
+//        case .strict:
+//            return strictObject
+//        case .fuzzy:
+//            return fuzzyObject
+//        }
+//
+//    }
+//    
+//    public var strictObject: [String : Node]? {
+//        guard case let .object(object) = self else { return nil }
+//        return object
+//    }
+//    
+//    public var fuzzyObject: [String : Node]? {
+//        /*
+//         I'm not sure that string should map to object this way, but the goal 
+//         of fuzzy mapping is to try and fulfill the intent of the caller.
+//         in this case, if a string properly maps to a dictionary, we should return it.
+//         */
+//        if let o = strictObject {
+//            return o
+//        } else if let s = strictString {
+//            if s.isEmpty { return [:] }
+//            
+//            var mutable: [String : Node] = [:]
+//            s.keyValuePairs().forEach { k, v in
+//                mutable[k] = Node(v)
+//            }
+//            
+//            // If our string has value, and the object doesn't,
+//            // didn't have an object string
+//            if mutable.isEmpty { return nil }
+//            return mutable
+//        } else {
+//            return nil
+//        }
+//    }
+//}
 
-public func ==(lhs: Node, rhs: Node) -> Bool {
-    switch typeEnforcementLevel {
-    case .strict:
-        return strictEquals(lhs: lhs, rhs)
-    case .fuzzy:
-        return fuzzyEquals(lhs: lhs, rhs)
-    }
-}
+//extension Node: CustomStringConvertible, CustomDebugStringConvertible {
+//    public var description: String {
+//        switch self {
+//        case .null:
+//            return "NULL"
+//        case let .bool(boolean):
+//            return boolean ? "true" : "false"
+//        case let .string(string):
+//            return string
+//        case let .double(number):
+//            return number.description
+//        case let .array(array):
+//            return array.description
+//        case let .object(object):
+//            return object.description
+//        }
+//    }
+//    
+//    public var debugDescription: String {
+//        switch self {
+//        case .null:
+//            return "NULL".debugDescription
+//        case let .bool(boolean):
+//            return boolean ? "true".debugDescription : "false".debugDescription
+//        case let .string(string):
+//            return string.debugDescription
+//        case let .double(number):
+//            return number.description
+//        case let .array(array):
+//            return array.debugDescription
+//        case let .object(object):
+//            return object.debugDescription
+//        }
+//    }
+//}
 
-private func strictEquals(lhs: Node, _ rhs: Node) -> Bool {
-    switch lhs {
-    case .null:
-        return rhs.isNull
-    case .bool(let lhsValue):
-        guard case .bool(let rhsValue) = rhs else { return false }
-        return lhsValue == rhsValue
-    case .string(let lhsValue):
-        guard case .string(let rhsValue) = rhs else { return false }
-        return lhsValue == rhsValue
-    case .number(let lhsValue):
-        guard case .number(let rhsValue) = rhs else { return false }
-        return lhsValue == rhsValue
-    case .array(let lhsValue):
-        guard case .array(let rhsValue) = rhs else { return false }
-        return lhsValue == rhsValue
-    case .object(let lhsValue):
-        guard case .object(let rhsValue) = rhs else { return false }
-        return lhsValue == rhsValue
-    }
-}
-
-private func fuzzyEquals(lhs: Node, _ rhs: Node) -> Bool {
-    switch lhs {
-    case .null:
-        return rhs.isNull
-    case .bool(let lhsValue):
-        guard let rhsValue = rhs.fuzzyBool else { return false }
-        return lhsValue == rhsValue
-    case .string(let lhsValue):
-        guard let rhsValue = rhs.fuzzyString else { return false }
-        return lhsValue == rhsValue
-    case .number(let lhsValue):
-        guard let rhsValue = rhs.fuzzyNumber else { return false }
-        return lhsValue == rhsValue
-    case .array(let lhsValue):
-        guard let rhsValue = rhs.fuzzyArray else { return false }
-        return lhsValue == rhsValue
-    case .object(let lhsValue):
-        guard let rhsValue = rhs.fuzzyObject else { return false }
-        return lhsValue == rhsValue
-    }
-}
+//extension Node: Equatable {}
+//
+//public func ==(lhs: Node, rhs: Node) -> Bool {
+//    switch typeEnforcementLevel {
+//    case .strict:
+//        return strictEquals(lhs: lhs, rhs)
+//    case .fuzzy:
+//        return fuzzyEquals(lhs: lhs, rhs)
+//    }
+//}
+//
+//private func strictEquals(lhs: Node, _ rhs: Node) -> Bool {
+//    switch lhs {
+//    case .null:
+//        return rhs.isNull
+//    case .bool(let lhsValue):
+//        guard case .bool(let rhsValue) = rhs else { return false }
+//        return lhsValue == rhsValue
+//    case .string(let lhsValue):
+//        guard case .string(let rhsValue) = rhs else { return false }
+//        return lhsValue == rhsValue
+//    case .double(let lhsValue):
+//        guard case .double(let rhsValue) = rhs else { return false }
+//        return lhsValue == rhsValue
+//    case .array(let lhsValue):
+//        guard case .array(let rhsValue) = rhs else { return false }
+//        return lhsValue == rhsValue
+//    case .object(let lhsValue):
+//        guard case .object(let rhsValue) = rhs else { return false }
+//        return lhsValue == rhsValue
+//    }
+//}
+//
+//private func fuzzyEquals(lhs: Node, _ rhs: Node) -> Bool {
+//    switch lhs {
+//    case .null:
+//        return rhs.isNull
+//    case .bool(let lhsValue):
+//        guard let rhsValue = rhs.fuzzyBool else { return false }
+//        return lhsValue == rhsValue
+//    case .string(let lhsValue):
+//        guard let rhsValue = rhs.fuzzyString else { return false }
+//        return lhsValue == rhsValue
+//    case .double(let lhsValue):
+//        guard let rhsValue = rhs.fuzzyNumber else { return false }
+//        return lhsValue == rhsValue
+//    case .array(let lhsValue):
+//        guard let rhsValue = rhs.fuzzyArray else { return false }
+//        return lhsValue == rhsValue
+//    case .object(let lhsValue):
+//        guard let rhsValue = rhs.fuzzyObject else { return false }
+//        return lhsValue == rhsValue
+//    }
+//}
 
 // MARK: Literal Convertibles
 
@@ -461,36 +628,33 @@ extension Node: NilLiteralConvertible {
 
 extension Node: BooleanLiteralConvertible {
     public init(booleanLiteral value: BooleanLiteralType) {
-        self = .bool(value)
+        self.init(value)
     }
 }
 
 extension Node: IntegerLiteralConvertible {
     public init(integerLiteral value: IntegerLiteralType) {
-        self = .number(Double(value))
+        self.init(value)
     }
 }
 
 extension Node: FloatLiteralConvertible {
     public init(floatLiteral value: FloatLiteralType) {
-        self = .number(Double(value))
+        self.init(value)
     }
 }
 
 extension Node: StringLiteralConvertible {
-    public typealias UnicodeScalarLiteralType = String
-    public typealias ExtendedGraphemeClusterLiteralType = String
-    
-    public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self = .string(value)
+    public init(unicodeScalarLiteral value: String) {
+        self.init(value)
     }
     
-    public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterType) {
-        self = .string(value)
+    public init(extendedGraphemeClusterLiteral value: String) {
+        self.init(value)
     }
     
-    public init(stringLiteral value: StringLiteralType) {
-        self = .string(value)
+    public init(stringLiteral value: String) {
+        self.init(value)
     }
 }
 
