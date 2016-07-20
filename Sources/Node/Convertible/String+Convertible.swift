@@ -1,6 +1,6 @@
 extension String: NodeConvertible {
     public func makeNode() throws -> Node {
-        return Node(self)
+        return .string(self)
     }
 
     public init(with node: Node, in context: Context) throws {

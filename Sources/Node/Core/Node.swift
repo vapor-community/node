@@ -31,27 +31,27 @@ extension Node {
 
 // MARK: Number Initializers
 
-extension Node {
-    public init<I: Integer>(_ value: I) {
-        let number = Number(value)
-        self = .number(number)
-    }
-
-    public init<U: UnsignedInteger>(_ value: U) {
-        let number = Number(value)
-        self = .number(number)
-    }
-
-    public init(_ value: Float) {
-        let number = Number(value)
-        self = .number(number)
-    }
-
-    public init(_ value: Double) {
-        let number = Number(value)
-        self = .number(number)
-    }
-}
+//extension Node {
+//    public init<I: Integer>(_ value: I) {
+//        let number = Number(value)
+//        self = .number(number)
+//    }
+//
+//    public init<U: UnsignedInteger>(_ value: U) {
+//        let number = Number(value)
+//        self = .number(number)
+//    }
+//
+//    public init(_ value: Float) {
+//        let number = Number(value)
+//        self = .number(number)
+//    }
+//
+//    public init(_ value: Double) {
+//        let number = Number(value)
+//        self = .number(number)
+//    }
+//}
 
 // MARK: UInt
 

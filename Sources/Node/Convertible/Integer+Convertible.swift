@@ -6,8 +6,8 @@ extension Int64: NodeConvertible {}
 
 extension SignedInteger {
     public func makeNode() throws -> Node {
-        let double = Double(IntMax(self.toIntMax()))
-        return Node(double)
+        let number = Node.Number(self.toIntMax())
+        return .number(number)
     }
 
     public init(with node: Node, in context: Context) throws {

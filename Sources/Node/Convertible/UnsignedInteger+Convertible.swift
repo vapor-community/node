@@ -6,8 +6,8 @@ extension UInt64: NodeConvertible {}
 
 extension UnsignedInteger {
     public func makeNode() throws -> Node {
-        let double = Double(UIntMax(self.toUIntMax()))
-        return Node(double)
+        let number = Node.Number(self.toUIntMax())
+        return .number(number)
     }
 
     public init(with node: Node, in context: Context) throws {

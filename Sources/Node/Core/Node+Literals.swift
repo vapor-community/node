@@ -12,13 +12,15 @@ extension Node: BooleanLiteralConvertible {
 
 extension Node: IntegerLiteralConvertible {
     public init(integerLiteral value: IntegerLiteralType) {
-        self.init(value)
+        let number = Node.Number(value)
+        self = .number(number)
     }
 }
 
 extension Node: FloatLiteralConvertible {
     public init(floatLiteral value: FloatLiteralType) {
-        self.init(value)
+        let number = Node.Number(value)
+        self = .number(number)
     }
 }
 

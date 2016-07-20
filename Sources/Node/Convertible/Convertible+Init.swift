@@ -29,3 +29,26 @@ extension Node {
         self = .array(mapped)
     }
 }
+
+extension Node {
+    public init<N: NodeRepresentable>(_ representable: N) throws {
+        self = try representable.makeNode()
+    }
+
+    public init<N: NodeRepresentable>(_ representable: N?) throws {
+        self = try representable?.makeNode() ?? .null
+    }
+
+    public init<N: NodeRepresentable>(_ representable: [N?]) throws {
+        let mapped = try representable.map { try Node($0) }
+        self = .array(mapped)
+    }
+
+    public init<N: NodeRepresentable>(_ representable: [String: N?]) throws {
+        var node: [String: Node] = [:]
+        for (key, representable) in representable {
+            node[key] = try Node(representable)
+        }
+        self = .object(node)
+    }
+}
