@@ -1,4 +1,4 @@
-<h1 align="center">Node</h1>
+# Node
 
 > a point at which lines or pathways intersect or branch; a central or connecting point.
 
