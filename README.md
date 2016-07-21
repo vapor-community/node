@@ -6,7 +6,7 @@ The purpose of this package is to be an intermediary data layer that can allow t
 
 ![](/Resources/ConvertiblePNG.png)
 
-In this way, we can have multiple data types, ie: JSON, XML, Yaml, etc. and all of these can use Node as an intermediary to ready convert between the various types. In practice, Node might be used like this. An example of this type of model is that either `Json` or `DatabaseFormat` below can be swapped out for alternatives seamlessly.
+An example of this type of pattern below shows how we might create a `Model` from `JSON`, and then later serializing that `Model` to a `DatabaseFormat`. By using this pattern, we can seamlessly interchange `JSON` or `DatabaseFormat` as we see fit.
 
 ![](/Resources/ConcreteExamplePNG.png)
 
