@@ -60,6 +60,17 @@ Any type that conforms to this protocol can be converted into any other compatib
 
 > Note: `Context` above is an empty protocol that can be used for complex mapping. It is safe to ignore this if you're not using it internally
 
+## 🌏 Environment
+
+| Node  |     Xcode    |               Swift                    |
+|:-----:|:------------:|:--------------------------------------:|
+|0.2.x  |8.0 Beta **3**|DEVELOPMENT-SNAPSHOT-2016-07-20-qutheory|
+|0.1.x  |8.0 Beta **2**|3.0-PREVIEW-2                           |
+
+## 📖 Documentation
+
+Visit the Vapor web framework's [documentation](http://docs.qutheory.io) for instructions on how to install Swift 3. 
+
 ## 💧 Community
 
 We pride ourselves on providing a diverse and welcoming community. Join your fellow Vapor developers in [our slack](slack.qutheory.io) and take part in the conversation.
