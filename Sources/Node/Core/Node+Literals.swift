@@ -1,28 +1,28 @@
-extension Node: NilLiteralConvertible {
+extension Node: ExpressibleByNilLiteral {
     public init(nilLiteral value: Void) {
         self = .null
     }
 }
 
-extension Node: BooleanLiteralConvertible {
+extension Node: ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: BooleanLiteralType) {
         self.init(value)
     }
 }
 
-extension Node: IntegerLiteralConvertible {
+extension Node: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
         self = value.makeNode()
     }
 }
 
-extension Node: FloatLiteralConvertible {
+extension Node: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
         self = value.makeNode()
     }
 }
 
-extension Node: StringLiteralConvertible {
+extension Node: ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
         self.init(value)
     }
@@ -36,13 +36,13 @@ extension Node: StringLiteralConvertible {
     }
 }
 
-extension Node: ArrayLiteralConvertible {
+extension Node: ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: Node...) {
         self = .array(elements)
     }
 }
 
-extension Node: DictionaryLiteralConvertible {
+extension Node: ExpressibleByDictionaryLiteral {
     public init(dictionaryLiteral elements: (String, Node)...) {
         var object = [String : Node](minimumCapacity: elements.count)
         elements.forEach { key, value in

@@ -137,13 +137,13 @@ public func ==(lhs: Node.Number, rhs: Node.Number) -> Bool {
 
 // MARK: Literals
 
-extension Node.Number: IntegerLiteralConvertible {
+extension Node.Number: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
         self.init(value)
     }
 }
 
-extension Node.Number: FloatLiteralConvertible {
+extension Node.Number: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
         self.init(value)
     }

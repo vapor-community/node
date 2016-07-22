@@ -1,4 +1,4 @@
-public enum Error: ErrorProtocol {
+public enum NodeError: Error {
     /**
         Unable to convert a given node to the target type.
 
@@ -11,7 +11,7 @@ public enum Error: ErrorProtocol {
 internal struct ErrorFactory {
     static func unableToConvert<T>(_ node: Node,
                                    to type: T.Type) -> Error {
-        let error = Error.unableToConvert(node: node,
+        let error = NodeError.unableToConvert(node: node,
                                           expected: "\(type)")
         return error
     }

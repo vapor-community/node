@@ -20,7 +20,7 @@ extension Sequence where Iterator.Element == NodeRepresentable {
     }
 }
 
-extension Dictionary where Key: StringLiteralConvertible, Value: NodeRepresentable {
+extension Dictionary where Key: ExpressibleByStringLiteral, Value: NodeRepresentable {
 //extension Sequence where Iterator.Element == (Key: String, Value: String) {
     public func makeNode() throws -> Node {
         var mutable: [String : Node] = [:]
