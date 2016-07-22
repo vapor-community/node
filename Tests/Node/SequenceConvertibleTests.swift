@@ -24,6 +24,18 @@ class SequenceConvertibleTests: XCTestCase {
         ("testSetConvert", testSetConvert),
     ]
 
+    final class Foo: NodeConvertible {
+        var node: Node
+
+        init(with node: Node, in context: Context) throws {
+            self.node = node
+        }
+
+        func makeNode() throws -> Node {
+            return node
+        }
+    }
+
     func testSequence() throws {
         let ints: [Int] = [1,2,3,4,5]
         let node = try ints.makeNode()
@@ -83,5 +95,41 @@ class SequenceConvertibleTests: XCTestCase {
 
         let collectedMixed = try Set<Int>(with: [1, 2, "3", "4", 5])
         XCTAssert(collectedMixed == [1,2,3,4,5])
+    }
+
+    func testRepresentableDictionary() throws {
+        let node = try Node([
+            "hello": 52,
+            ])
+        XCTAssertEqual(node, .object(["hello": 52]))
+
+        let foo = try Foo([
+            "hello": 52
+        ])
+        XCTAssertEqual(foo.node, .object(["hello": 52]))
+
+        let fooWithNil = try Foo([
+            "hello": nil
+        ])
+        XCTAssertEqual(fooWithNil.node, .object(["hello": .null]))
+    }
+
+    func testRepresentableArray() throws {
+        let node = try Node([
+            "hello",
+        ])
+        XCTAssertEqual(node, .array(["hello"]))
+
+
+        let foo = try Foo([
+            "hello"
+        ])
+        XCTAssertEqual(foo.node, .array(["hello"]))
+
+        let fooWithNil = try Foo([
+            nil
+        ])
+        XCTAssertEqual(fooWithNil.node, .array([.null]))
+
     }
 }
