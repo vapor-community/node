@@ -62,10 +62,10 @@ Any type that conforms to this protocol can be converted into any other compatib
 
 ## 🌏 Environment
 
-| Node  |     Xcode    |               Swift                    |
-|:-----:|:------------:|:--------------------------------------:|
-|0.2.x  |8.0 Beta **3**|DEVELOPMENT-SNAPSHOT-2016-07-20-qutheory|
-|0.1.x  |8.0 Beta **2**|3.0-PREVIEW-2                           |
+|Node|Xcode|Swift|
+|:-:|:-:|:-:|
+|0.2.x|8.0 Beta **3**|DEVELOPMENT-SNAPSHOT-2016-07-25-a|
+|0.1.x|8.0 Beta **2**|3.0-PREVIEW-2|
 
 ## 📖 Documentation
 
