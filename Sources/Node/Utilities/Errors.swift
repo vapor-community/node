@@ -1,4 +1,4 @@
-public enum NodeError: Error {
+public enum NodeError: Swift.Error {
     /**
         Unable to convert a given node to the target type.
 
@@ -12,7 +12,7 @@ internal struct ErrorFactory {
     static func unableToConvert<T>(_ node: Node,
                                    to type: T.Type) -> Error {
         let error = NodeError.unableToConvert(node: node,
-                                          expected: "\(type)")
+                                              expected: "\(type)")
         return error
     }
 }

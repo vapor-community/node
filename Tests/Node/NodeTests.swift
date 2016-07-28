@@ -44,11 +44,11 @@ class NodeTests: XCTestCase {
 
     func testArrayInits() throws {
         let array: [Int] = [1,2,3,4,5]
-        let node = try Node(array)
+        let node = try Node(node: array)
         XCTAssert(node == [1,2,3,4,5])
 
         let optionalArray: [String?] = ["a", "b", "c", nil, "d", nil]
-        let optionalNode = try Node(optionalArray)
+        let optionalNode = try Node(node: optionalArray)
         XCTAssert(optionalNode == ["a", "b", "c", .null, "d", .null])
     }
 
@@ -57,25 +57,25 @@ class NodeTests: XCTestCase {
             "hello": "world",
             "goodbye": "moon"
         ]
-        let node = try Node(dict)
+        let node = try Node(node: dict)
         XCTAssert(node == ["hello": "world", "goodbye": "moon"])
 
         let optionalDict: [String: String?] = [
             "hello": "world",
             "goodbye": nil
         ]
-        let optionalNode = try Node(optionalDict)
+        let optionalNode = try Node(node: optionalDict)
         XCTAssert(optionalNode == ["hello": "world", "goodbye": .null])
     }
 
     func testNonHomogenousArrayInits() throws {
         let array: [NodeRepresentable] = [1, "hiya", Node.object(["a": "b"]), false]
-        let node = try Node(array)
+        let node = try Node(node: array)
         XCTAssert(node == [1, "hiya", Node.object(["a": "b"]), false])
 
 
         let optionalArray: [NodeRepresentable?] = [42, "bye", Node.array([1,2,3]), true, nil]
-        let optionalNode = try Node(optionalArray)
+        let optionalNode = try Node(node: optionalArray)
         XCTAssert(optionalNode == [42, "bye", Node.array([1,2,3]), true, .null])
     }
 
@@ -84,7 +84,7 @@ class NodeTests: XCTestCase {
             "hello": "world",
             "goodbye": 1
         ]
-        let node = try Node(dict)
+        let node = try Node(node: dict)
         XCTAssert(node == ["hello": "world", "goodbye": 1])
 
         let optionalDict: [String: NodeRepresentable?] = [
@@ -92,7 +92,7 @@ class NodeTests: XCTestCase {
             "goodbye": nil,
             "ok": 1
         ]
-        let optionalNode = try Node(optionalDict)
+        let optionalNode = try Node(node: optionalDict)
         XCTAssert(optionalNode == ["hello": "world", "goodbye": .null, "ok": 1])
     }
 

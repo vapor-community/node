@@ -39,54 +39,54 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: NodeRepresent
 
 public extension Array where Element : NodeInitializable {
     public init<T: NodeRepresentable>(
-        with convertible: T,
+        node convertible: T,
         in context: Context = EmptyNode) throws {
         let node = try convertible.makeNode()
         let array = node.nodeArray ?? [node]
-        try self.init(with: array, in: context)
+        try self.init(node: array, in: context)
     }
 
     public init<S: Sequence where S.Iterator.Element: NodeRepresentable>(
-        with convertible: S,
+        node convertible: S,
         in context: Context = EmptyNode) throws {
         self = try convertible
             .map { try $0.makeNode() }
-            .map { try Element.init(with: $0, in: context) }
+            .map { try Element(node: $0, in: context) }
     }
 
     public init<S: Sequence where S.Iterator.Element == NodeRepresentable>(
-        with convertible: S,
+        node convertible: S,
         in context: Context = EmptyNode) throws {
         self = try convertible
             .map { try $0.makeNode() }
-            .map { try Element.init(with: $0, in: context) }
+            .map { try Element(node: $0, in: context) }
     }
 }
 
 public extension Set where Element : NodeInitializable {
     public init<T: NodeRepresentable>(
-        with convertible: T,
+        node convertible: T,
         in context: Context = EmptyNode) throws {
         let node = try convertible.makeNode()
         let array = node.nodeArray ?? [node]
-        try self.init(with: array, in: context)
+        try self.init(node: array, in: context)
     }
 
     public init<S: Sequence where S.Iterator.Element: NodeRepresentable>(
-        with convertible: S,
+        node convertible: S,
         in context: Context = EmptyNode) throws {
         let array = try convertible
             .map { try $0.makeNode() }
-            .map { try Element.init(with: $0, in: context) }
+            .map { try Element(node: $0, in: context) }
         self.init(array)
     }
 
     public init<S: Sequence where S.Iterator.Element == NodeRepresentable>(
-        with convertible: S,
+        node convertible: S,
         in context: Context = EmptyNode) throws {
         let array = try convertible
             .map { try $0.makeNode() }
-            .map { try Element.init(with: $0, in: context) }
+            .map { try Element(node: $0, in: context) }
         self.init(array)
     }
 }

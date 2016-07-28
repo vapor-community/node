@@ -3,7 +3,7 @@ extension String: NodeConvertible {
         return .string(self)
     }
 
-    public init(with node: Node, in context: Context) throws {
+    public init(node: Node, in context: Context) throws {
         guard let string = node.string else {
             throw ErrorFactory.unableToConvert(node, to: self.dynamicType)
         }
