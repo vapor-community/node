@@ -29,16 +29,31 @@ func == (l: NoNull, r: NoNull) -> Bool {
     return l.node == r.node
 }
 
-
 class NodeExtractTests: XCTestCase {
     static let allTests = [
-//        ("testInt", testInt),
-//        ("testString", testString),
-//        ("testStringSequenceObject", testStringSequenceObject),
-//        ("testStringSequenceArray", testStringSequenceArray),
-//        ("testIntSequence", testIntSequence),
-//        ("testMixed", testMixed),
-        ]
+        ("testExtractTransform", testExtractTransform),
+        ("testExtractTransformThrows", testExtractTransformThrows),
+        ("testExtractTransformOptionalValue", testExtractTransformOptionalValue),
+        ("testExtractTransformOptionalNil", testExtractTransformOptionalNil),
+        ("testExtractSingle", testExtractSingle),
+        ("testExtractSingleOptional", testExtractSingleOptional),
+        ("testExtractSingleThrows", testExtractSingleThrows),
+        ("testExtractArray", testExtractArray),
+        ("testExtractArrayOptional", testExtractArrayOptional),
+        ("testExtractArrayThrows", testExtractArrayThrows),
+        ("testExtractArrayOfArrays", testExtractArrayOfArrays),
+        ("testExtractArrayOfArraysOptional", testExtractArrayOfArraysOptional),
+        ("testExtractArrayOfArraysThrows", testExtractArrayOfArraysThrows),
+        ("testExtractObject", testExtractObject),
+        ("testExtractObjectOptional", testExtractObjectOptional),
+        ("testExtractObjectThrows", testExtractObjectThrows),
+        ("testExtractObjectOfArrays", testExtractObjectOfArrays),
+        ("testExtractObjectOfArraysOptional", testExtractObjectOfArraysOptional),
+        ("testExtractObjectOfArraysThrows", testExtractObjectOfArraysThrows),
+        ("testExtractSet", testExtractSet),
+        ("testExtractSetOptional", testExtractSetOptional),
+        ("testExtractSetThrows", testExtractSetThrows),
+    ]
 
     func testExtractTransform() throws {
         let node = try Node(node: ["date": 250])
