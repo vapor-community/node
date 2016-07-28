@@ -232,10 +232,6 @@ class NodeExtractTests: XCTestCase {
     }
 }
 
-#if os(Linux)
-typealias Date = NSDate
-#endif
-
 extension Date {
     static func fromTimestamp(_ timestamp: Int) -> Date {
         return Date(timeIntervalSince1970: TimeInterval(timestamp))
