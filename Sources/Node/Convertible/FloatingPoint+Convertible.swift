@@ -20,7 +20,7 @@ extension NodeConvertibleFloatingPointType {
         return .number(Node.Number(doubleValue))
     }
 
-    public init(with node: Node, in context: Context) throws {
+    public init(node: Node, in context: Context) throws {
         guard let double = node.double else {
             throw ErrorFactory.unableToConvert(node, to: Self.self)
         }

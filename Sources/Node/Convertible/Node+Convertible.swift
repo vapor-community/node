@@ -1,5 +1,5 @@
 extension Node: NodeConvertible { // Can conform to both if non-throwing implementations
-    public init(with node: Node, in context: Context) {
+    public init(node: Node, in context: Context) {
         self = node
     }
 

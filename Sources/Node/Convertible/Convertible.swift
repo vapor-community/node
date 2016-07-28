@@ -16,15 +16,15 @@ public protocol NodeInitializable {
         This allows flexibility. for objects that might require access
         to a context outside of the node ecosystem
     */
-    init(with node: Node, in context: Context) throws
+    init(node: Node, in context: Context) throws
 }
 
 extension NodeInitializable {
     /**
         Default initializer for cases where a custom Context is not required
     */
-    public init(with node: Node) throws {
-        try self.init(with: node, in: EmptyNode)
+    public init(node: Node) throws {
+        try self.init(node: node, in: EmptyNode)
     }
 }
 
