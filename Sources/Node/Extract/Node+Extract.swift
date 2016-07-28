@@ -51,12 +51,9 @@ extension Node {
     public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> [[T]] {
-            guard let arrayOfArrays = self[keyType]?.arrayOfArrays else {
-                throw NodeError.unableToConvert(node: .null, expected: "\([[T]].self)")
-            }
-            return try arrayOfArrays.map { innerArray
-                in try innerArray.map { node in try T(node: node) }
-            }
+            let initial = self[keyType] ?? .null
+            let array = initial.nodeArray ?? [initial]
+            return try array.map { try [T](node: $0) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -90,30 +87,27 @@ extension Node {
 // MARK: Optional Extractions
 
 extension Node {
-
-    public func extract<T : NodeConvertible>(
+    public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> T? {
             return try self[keyType].flatMap { try T(node: $0) }
     }
 
-    public func extract<T : NodeConvertible>(
+    public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> [T]? {
             return try self[keyType].flatMap { try [T](node: $0) }
     }
 
-    public func extract<T : NodeConvertible>(
+    public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> [[T]]? {
-            return try self[keyType]?
-                .arrayOfArrays
-                .map { innerArray
-                    in try innerArray.map { node in try T(node: node) }
-                }
+            guard let initial = self[keyType] else { return nil }
+            let array = initial.nodeArray ?? [initial]
+            return try array.map { try [T](node: $0) }
     }
 
-    public func extract<T : NodeConvertible>(
+    public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> [String : T]? {
             return try self[keyType]?
@@ -121,7 +115,7 @@ extension Node {
                 .mapValues { return try T(node: $0) }
     }
 
-    public func extract<T : NodeConvertible>(
+    public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> [String : [T]]? {
             return try self[keyType]?
@@ -129,21 +123,11 @@ extension Node {
                 .mapValues { return try [T](node: $0) }
     }
 
-    public func extract<T : NodeConvertible>(
+    public func extract<T : NodeInitializable>(
         _ keyType: PathIndex...)
         throws -> Set<T>? {
             return try self[keyType]
                 .flatMap { try [T](node: $0) }
                 .flatMap { Set($0) }
-    }
-}
-
-extension Node {
-    internal var arrayOfArrays: [[Node]] {
-        let array = self.nodeArray ?? [self]
-        let possibleArrayOfArrays = array.flatMap { $0.nodeArray }
-        let isAlreadyAnArrayOfArrays = possibleArrayOfArrays.count == array.count
-        let arrayOfArrays: [[Node]] = isAlreadyAnArrayOfArrays ? possibleArrayOfArrays : [array]
-        return arrayOfArrays
     }
 }
