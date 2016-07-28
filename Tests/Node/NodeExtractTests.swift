@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Core
 @testable import Node
 
 struct NoNull: NodeInitializable, Hashable {
@@ -131,10 +130,14 @@ class NodeExtractTests: XCTestCase {
             innerArray.flatMap { $0.node.int }
         }
 
-        XCTAssert(numbers[safe: 0] ?? [] == [1])
-        XCTAssert(numbers[safe: 1] ?? [] == [2])
-        XCTAssert(numbers[safe: 2] ?? [] == [3])
-        XCTAssert(numbers[safe: 3] ?? [] == [4])
+        guard numbers.count == 4 else {
+            XCTFail("failed array of arrays")
+            return
+        }
+        XCTAssert(numbers[0] == [1])
+        XCTAssert(numbers[1] == [2])
+        XCTAssert(numbers[2] == [3])
+        XCTAssert(numbers[3] == [4])
     }
 
     func testExtractArrayOfArraysOptional() throws {
@@ -143,7 +146,15 @@ class NodeExtractTests: XCTestCase {
         let numbers = extracted?.map { innerArray in
             innerArray.flatMap { $0.node.int }
         } ?? []
-        XCTAssert(numbers == [[1],[2],[3],[4]])
+
+        guard numbers.count == 4 else {
+            XCTFail("failed array of arrays optional")
+            return
+        }
+        XCTAssert(numbers[0] == [1])
+        XCTAssert(numbers[1] == [2])
+        XCTAssert(numbers[2] == [3])
+        XCTAssert(numbers[3] == [4])
     }
 
     func testExtractArrayOfArraysThrows() throws {
