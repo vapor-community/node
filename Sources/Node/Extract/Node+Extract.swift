@@ -2,11 +2,11 @@
 extension Dictionary {
     func mapValues<T>(_ mapper: @noescape (value: Value) throws -> T)
         rethrows -> Dictionary<Key, T> {
-        var mapped: [Key: T] = [:]
-        try forEach { key, value in
-            mapped[key] = try mapper(value: value)
-        }
-        return mapped
+            var mapped: [Key: T] = [:]
+            try forEach { key, value in
+                mapped[key] = try mapper(value: value)
+            }
+            return mapped
     }
 }
 
@@ -97,10 +97,10 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [String : T] {
-            guard let object = self[path]?.nodeObject else {
-                throw NodeError.unableToConvert(node: .null, expected: "\([String: T].self)")
+            let value = self[path] ?? .null
+            guard let object = value.nodeObject else {
+                throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
             }
-
             return try object.mapValues { return try T(node: $0) }
     }
 
@@ -113,8 +113,9 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [String : [T]] {
-            guard let object = self[path]?.nodeObject else {
-                throw NodeError.unableToConvert(node: .null, expected: "\([String: [T]].self)")
+            let value = self[path] ?? .null
+            guard let object = value.nodeObject else {
+                throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
             }
             return try object.mapValues { return try [T](node: $0) }
     }
@@ -184,9 +185,11 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [String : T]? {
-            return try self[path]?
-                .nodeObject?
-                .mapValues { return try T(node: $0) }
+            guard let value = self[path] else { return nil }
+            guard let object = value.nodeObject else {
+                throw NodeError.unableToConvert(node: value, expected: "\([String: T].self)")
+            }
+            return try object.mapValues { return try T(node: $0) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -198,9 +201,11 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [String : [T]]? {
-            return try self[path]?
-                .nodeObject?
-                .mapValues { return try [T](node: $0) }
+            guard let value = self[path] else { return nil }
+            guard let object = value.nodeObject else {
+                throw NodeError.unableToConvert(node: value, expected: "\([String: T].self)")
+            }
+            return try object.mapValues { return try [T](node: $0) }
     }
 
     public func extract<T : NodeInitializable>(
