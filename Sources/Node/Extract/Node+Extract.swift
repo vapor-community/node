@@ -1,10 +1,10 @@
 
 extension Dictionary {
-    func mapValues<T>(_ mapper: @noescape (value: Value) throws -> T)
+    func mapValues<T>(_ mapper: (_ value: Value) throws -> T)
         rethrows -> Dictionary<Key, T> {
         var mapped: [Key: T] = [:]
         try forEach { key, value in
-            mapped[key] = try mapper(value: value)
+            mapped[key] = try mapper(value)
         }
         return mapped
     }

@@ -5,7 +5,7 @@ extension Bool: NodeConvertible {
 
     public init(node: Node, in context: Context) throws {
         guard let bool = node.bool else {
-            throw ErrorFactory.unableToConvert(node, to: self.dynamicType)
+            throw ErrorFactory.unableToConvert(node, to: type(of: self))
         }
         self = bool
     }
