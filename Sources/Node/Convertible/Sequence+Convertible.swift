@@ -40,7 +40,8 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: NodeRepresent
 public extension Array where Element : NodeInitializable {
     public init<T: NodeRepresentable>(
         node convertible: T,
-        in context: Context = EmptyNode) throws {
+        in context: Context = EmptyNode
+    ) throws {
         let node = try convertible.makeNode()
         let array = node.nodeArray ?? [node]
         try self.init(node: array, in: context)
@@ -68,7 +69,8 @@ public extension Array where Element : NodeInitializable {
 public extension Set where Element : NodeInitializable {
     public init<T: NodeRepresentable>(
         node convertible: T,
-        in context: Context = EmptyNode) throws {
+        in context: Context = EmptyNode
+    ) throws {
         let node = try convertible.makeNode()
         let array = node.nodeArray ?? [node]
         try self.init(node: array, in: context)

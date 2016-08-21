@@ -74,6 +74,8 @@ extension NodeInitializable {
     }
 }
 
+#if !os(Linux)
+
 // MARK: Homogenous
 
 extension NodeInitializable {
@@ -113,5 +115,7 @@ extension NodeInitializable {
     }
 
 }
+
+#endif
 
 
