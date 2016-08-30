@@ -12,5 +12,6 @@ XCTMain([
     testCase(NodeTests.allTests),
     testCase(SequenceConvertibleTests.allTests),
     testCase(NumberTests.allTests),
+    testCase(NodeBackedTests.allTests),
 ])
 #endif
