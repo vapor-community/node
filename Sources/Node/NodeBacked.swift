@@ -21,8 +21,18 @@ extension NodeBacked {
     public var double: Double? { return node.double }
     public var int: Int? { return node.int }
     public var string: String? { return node.string }
-    public var array: [Polymorphic]? { return node.array }
-    public var object: [String: Polymorphic]? { return node.object }
+    public var array: [Polymorphic]? {
+        return node.nodeArray?.map { Self($0) }
+    }
+    public var object: [String: Polymorphic]? {
+        return node.object.flatMap { ob in
+            var result = [String: Polymorphic]()
+            ob.forEach { k, v in
+                result[k] = v as Polymorphic
+            }
+            return result
+        }
+    }
 }
 
 // PathIndexable
