@@ -39,7 +39,10 @@ extension NodeBacked {
         path: [PathIndex],
         transform: (InputType) throws -> T)
         throws -> T {
-            let value = node[path] ?? .null
+            guard let value = node[path] else {
+                throw NodeError.unableToConvert(node: nil, expected: "\(T.self)")
+            }
+
             let input = try InputType(node: value)
             return try transform(input)
     }
@@ -72,7 +75,9 @@ extension NodeBacked {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> T {
-            let value = node[path] ?? .null
+            guard let value = node[path] else {
+                throw NodeError.unableToConvert(node: nil, expected: "\(T.self)")
+            }
             return try T(node: value)
     }
 
@@ -98,7 +103,9 @@ extension NodeBacked {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [[T]] {
-            let initial = node[path] ?? .null
+            guard let initial = node[path] else {
+                throw NodeError.unableToConvert(node: nil, expected: "\([[T]].self)")
+            }
             let array = initial.nodeArray ?? [initial]
             return try array.map { try [T](node: $0) }
     }
@@ -112,8 +119,8 @@ extension NodeBacked {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [String : T] {
-            let value = node[path] ?? .null
-            guard let object = value.nodeObject else {
+            let value = node[path]
+            guard let object = value?.nodeObject else {
                 throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
             }
             return try object.mapValues { return try T(node: $0) }
@@ -144,7 +151,9 @@ extension NodeBacked {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> Set<T> {
-            let value = node[path] ?? .null
+            guard let value = node[path] else {
+                throw NodeError.unableToConvert(node: nil, expected: "\(Set<T>.self)")
+            }
             let array = try [T](node: value)
             return Set(array)
     }
