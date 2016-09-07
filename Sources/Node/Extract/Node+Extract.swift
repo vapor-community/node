@@ -90,7 +90,9 @@ extension NodeBacked {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [T] {
-            let value = node[path] ?? .null
+            guard let value = node[path] else {
+                throw NodeError.unableToConvert(node: nil, expected: "\([T].self)")
+            }
             return try [T](node: value)
     }
 
