@@ -2,11 +2,11 @@
 extension Dictionary {
     func mapValues<T>(_ mapper: (_ value: Value) throws -> T)
         rethrows -> Dictionary<Key, T> {
-        var mapped: [Key: T] = [:]
-        try forEach { key, value in
-            mapped[key] = try mapper(value)
-        }
-        return mapped
+            var mapped: [Key: T] = [:]
+            try forEach { key, value in
+                mapped[key] = try mapper(value)
+            }
+            return mapped
     }
 }
 
@@ -123,7 +123,7 @@ extension NodeBacked {
         throws -> [String : T] {
             let value = node[path]
             guard let object = value?.nodeObject else {
-                throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
+                throw NodeError.unableToConvert(node: value, expected: "\([String: T].self)")
             }
             return try object.mapValues { return try T(node: $0) }
     }
@@ -171,7 +171,7 @@ extension NodeBacked {
     }
 
     public func extract<T : NodeInitializable>(
-       _  path: [PathIndex])
+        _  path: [PathIndex])
         throws -> T? {
             return try node[path].flatMap { try T(node: $0) }
     }
@@ -229,7 +229,7 @@ extension NodeBacked {
         throws -> [String : [T]]? {
             guard let value = node[path] else { return nil }
             guard let object = value.nodeObject else {
-                throw NodeError.unableToConvert(node: value, expected: "\([String: T].self)")
+                throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
             }
             return try object.mapValues { return try [T](node: $0) }
     }
