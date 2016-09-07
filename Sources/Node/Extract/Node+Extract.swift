@@ -10,9 +10,24 @@ extension Dictionary {
     }
 }
 
+extension Node: NodeBacked {
+    public var node: Node {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
+
+    public init(_ node: Node) {
+        self = node
+    }
+}
+
 // MARK: Transforming
 
-extension Node {
+extension NodeBacked {
     public func extract<T, InputType: NodeInitializable>(
         _ path: PathIndex...,
         transform: (InputType) throws -> T)
@@ -24,8 +39,8 @@ extension Node {
         path: [PathIndex],
         transform: (InputType) throws -> T)
         throws -> T {
-            let node = self[path] ?? .null
-            let input = try InputType(node: node)
+            let value = node[path] ?? .null
+            let input = try InputType(node: value)
             return try transform(input)
     }
 
@@ -40,7 +55,7 @@ extension Node {
         path: [PathIndex],
         transform: (InputType?) throws -> T)
         throws -> T {
-            let value = try self[path].flatMap { try InputType(node: $0) }
+            let value = try node[path].flatMap { try InputType(node: $0) }
             return try transform(value)
     }
 }
@@ -57,8 +72,8 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> T {
-            let node = self[path] ?? .null
-            return try T(node: node)
+            let value = node[path] ?? .null
+            return try T(node: value)
     }
 
     public func extract<T : NodeInitializable>(
@@ -70,8 +85,8 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [T] {
-            let node = self[path] ?? .null
-            return try [T](node: node)
+            let value = node[path] ?? .null
+            return try [T](node: value)
     }
 
     public func extract<T : NodeInitializable>(
@@ -83,7 +98,7 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [[T]] {
-            let initial = self[path] ?? .null
+            let initial = node[path] ?? .null
             let array = initial.nodeArray ?? [initial]
             return try array.map { try [T](node: $0) }
     }
@@ -97,7 +112,7 @@ extension Node {
     public func extract<T : NodeInitializable>(
         path: [PathIndex])
         throws -> [String : T] {
-            let value = self[path] ?? .null
+            let value = node[path] ?? .null
             guard let object = value.nodeObject else {
                 throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
             }

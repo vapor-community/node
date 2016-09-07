@@ -32,14 +32,14 @@ extension NodeBacked {
      If self is an array representation, return array
      */
     public var pathIndexableArray: [Self]? {
-        return node.pathIndexableArray?.map { Self($0) }
+        return node.nodeArray?.map { Self($0) }
     }
 
     /**
      If self is an object representation, return object
      */
     public var pathIndexableObject: [String: Self]? {
-        guard case let .object(o) = node else { return nil }
+        guard let o = node.nodeObject else { return nil }
         var object: [String: Self] = [:]
         for (key, val) in o {
             object[key] = Self(val)
