@@ -23,7 +23,8 @@ class DictionaryKeyPathTests: XCTestCase {
 
         var node = TestDictionary
 
-        let value: String! = node["one", "two"]?.string
+        let path: [String] = ["one", "two"]
+        let value: String! = node[path]?.string
         XCTAssert(value == "Found me!")
 
         node["path", "to", "new", "value"] = "Hello!"

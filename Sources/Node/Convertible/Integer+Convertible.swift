@@ -12,7 +12,7 @@ extension SignedInteger {
 
     public init(node: Node, in context: Context) throws {
         guard let int = node.int else {
-            throw ErrorFactory.unableToConvert(node, to: Self.self)
+            throw NodeError.unableToConvert(node: node, expected: "\(Self.self)")
         }
 
         self.init(int.toIntMax())

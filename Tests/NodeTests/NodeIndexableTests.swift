@@ -23,7 +23,8 @@ class NodeIndexableTests: XCTestCase {
         let array: Node = ["one",
                            "two",
                            "three"]
-        XCTAssert(array[1] == "two")
+        let path = [1]
+        XCTAssert(array[path] == "two")
     }
 
     func testString() {
