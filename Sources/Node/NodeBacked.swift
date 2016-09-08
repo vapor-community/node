@@ -25,10 +25,10 @@ extension NodeBacked {
         return node.nodeArray?.map { Self($0) }
     }
     public var object: [String: Polymorphic]? {
-        return node.object.flatMap { ob in
+        return node.nodeObject.flatMap { ob in
             var result = [String: Polymorphic]()
             ob.forEach { k, v in
-                result[k] = v as Polymorphic
+                result[k] = Self(v)
             }
             return result
         }
