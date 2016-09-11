@@ -44,6 +44,7 @@ extension NodeInitializable {
         var converted: [String: Node] = [:]
 
         for (key, val) in representable {
+            guard let val = val else { continue }
             converted[key] = try Node(node: val)
         }
 
@@ -66,6 +67,7 @@ extension NodeInitializable {
         var converted: [Node] = []
 
         for val in representable {
+            guard let val = val else { continue }
             converted.append(try Node(node: val))
         }
 
