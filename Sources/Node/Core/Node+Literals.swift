@@ -12,13 +12,13 @@ extension Node: ExpressibleByBooleanLiteral {
 
 extension Node: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
-        self = value.makeNode()
+        self = value.makeNode(context: EmptyNode)
     }
 }
 
 extension Node: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
-        self = value.makeNode()
+        self = value.makeNode(context: EmptyNode)
     }
 }
 
