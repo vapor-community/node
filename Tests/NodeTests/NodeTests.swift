@@ -48,8 +48,8 @@ class NodeTests: XCTestCase {
         XCTAssert(node == [1,2,3,4,5])
 
         let optionalArray: [String?] = ["a", "b", "c", nil, "d", nil]
-        let optionalNode = try Node(node: optionalArray)
-        XCTAssert(optionalNode == ["a", "b", "c", .null, "d", .null])
+        let optionalNode = try Node.init(node: optionalArray)
+        XCTAssertEqual(optionalNode, ["a", "b", "c", .null, "d", .null])
     }
 
     func testObjectInits() throws {
@@ -65,18 +65,18 @@ class NodeTests: XCTestCase {
             "goodbye": nil
         ]
         let optionalNode = try Node(node: optionalDict)
-        XCTAssert(optionalNode == ["hello": "world", "goodbye": .null])
+        XCTAssertEqual(optionalNode, ["hello": "world", "goodbye": .null])
     }
 
     func testNonHomogenousArrayInits() throws {
         let array: [NodeRepresentable] = [1, "hiya", Node.object(["a": "b"]), false]
         let node = try Node(node: array)
-        XCTAssert(node == [1, "hiya", Node.object(["a": "b"]), false])
+        XCTAssertEqual(node, [1, "hiya", Node.object(["a": "b"]), false])
 
 
         let optionalArray: [NodeRepresentable?] = [42, "bye", Node.array([1,2,3]), true, nil]
         let optionalNode = try Node(node: optionalArray)
-        XCTAssert(optionalNode == [42, "bye", Node.array([1,2,3]), true, .null])
+        XCTAssertEqual(optionalNode, [42, "bye", Node.array([1,2,3]), true, .null])
     }
 
     func testNonHomogenousObjectInits() throws {
@@ -85,7 +85,7 @@ class NodeTests: XCTestCase {
             "goodbye": 1
         ]
         let node = try Node(node: dict)
-        XCTAssert(node == ["hello": "world", "goodbye": 1])
+        XCTAssertEqual(node, ["hello": "world", "goodbye": 1])
 
         let optionalDict: [String: NodeRepresentable?] = [
             "hello": "world",
@@ -93,7 +93,7 @@ class NodeTests: XCTestCase {
             "ok": 1
         ]
         let optionalNode = try Node(node: optionalDict)
-        XCTAssert(optionalNode == ["hello": "world", "goodbye": .null, "ok": 1])
+        XCTAssertEqual(optionalNode, ["hello": "world", "goodbye": .null, "ok": 1])
     }
 
     func testLiterals() {

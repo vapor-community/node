@@ -5,7 +5,7 @@ extension UInt32: NodeConvertible {}
 extension UInt64: NodeConvertible {}
 
 extension UnsignedInteger {
-    public func makeNode() -> Node {
+    public func makeNode(context: Context = EmptyNode) -> Node {
         let number = Node.Number(self.toUIntMax())
         return .number(number)
     }

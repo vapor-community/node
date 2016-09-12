@@ -68,8 +68,8 @@ class BasicConvertibleTests: XCTestCase {
         try assert(Int.self, fails: fails)
     }
 
-    func testIntegerRepresent() {
-        let node = 124.makeNode()
+    func testIntegerRepresent() throws {
+        let node = try 124.makeNode()
         XCTAssert(node == .number(124))
     }
 
@@ -135,9 +135,9 @@ class BasicConvertibleTests: XCTestCase {
         try assert(UInt.self, fails: fails)
     }
 
-    func testUnsignedIntegerRepresent() {
+    func testUnsignedIntegerRepresent() throws {
         let uint = UInt(124)
-        let node = uint.makeNode()
+        let node = try uint.makeNode()
         XCTAssert(node == .number(124))
     }
 
