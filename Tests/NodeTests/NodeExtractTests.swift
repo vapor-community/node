@@ -212,7 +212,7 @@ class NodeExtractTests: XCTestCase {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let extracted = try node.extract("nest", "ed", "array") as Set<NoNull>
         let ints = [1,2,3,4]
-        let compare = try Set<NoNull>(node: ints)
+        let compare = try ints.map(to: NoNull.self).set
         XCTAssert(extracted == compare)
     }
 
@@ -220,7 +220,7 @@ class NodeExtractTests: XCTestCase {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let extracted: Set<NoNull>? = try node.extract("nest", "ed", "array")
         let ints = [1,2,3,4]
-        let compare = try Set<NoNull>(node: ints)
+        let compare = try ints.map(to: NoNull.self).set
         XCTAssert(extracted == compare)
     }
 

@@ -1,5 +1,22 @@
+public protocol KeyAccessible {
+    associatedtype Key: Hashable
+    associatedtype Value
+    var allItems: [(Key, Value)] { get }
+    subscript(key: Key) -> Value? { get set }
+    init(dictionary: [Key: Value])
+}
+
+extension Dictionary: KeyAccessible {
+    public var allItems: [(Key, Value)] { return Array(self) }
+    public init(dictionary: [Key: Value]) {
+        self = dictionary
+    }
+}
+
+// MARK: Arrays
+
 extension Sequence where Iterator.Element: NodeRepresentable {
-    public func makeNode() throws -> Node {
+    public func makeNode(context: Context = EmptyNode) throws -> Node {
         let array = try map { try $0.makeNode() }
         return Node(array)
     }
@@ -10,7 +27,7 @@ extension Sequence where Iterator.Element: NodeRepresentable {
 }
 
 extension Sequence where Iterator.Element == NodeRepresentable {
-    public func makeNode() throws -> Node {
+    public func makeNode(context: Context = EmptyNode) throws -> Node {
         let array = try map { try $0.makeNode() }
         return Node(array)
     }
@@ -20,12 +37,25 @@ extension Sequence where Iterator.Element == NodeRepresentable {
     }
 }
 
-extension Dictionary where Key: ExpressibleByStringLiteral, Value: NodeRepresentable {
-//extension Sequence where Iterator.Element == (Key: String, Value: String) {
-    public func makeNode() throws -> Node {
+extension KeyAccessible where Key == String, Value: NodeRepresentable {
+    public func makeNode(context: Context = EmptyNode) throws -> Node {
         var mutable: [String : Node] = [:]
-        try self.forEach { key, value in
-            mutable["\(key)"] = try value.makeNode()
+        try allItems.forEach { key, value in
+            mutable[key] = try value.makeNode()
+        }
+        return .object(mutable)
+    }
+
+    public func converted<T: NodeInitializable>(to type: T.Type = T.self) throws -> T {
+        return try makeNode().converted()
+    }
+}
+
+extension KeyAccessible where Key == String, Value == NodeRepresentable {
+    public func makeNode(context: Context = EmptyNode) throws -> Node {
+        var mutable: [String : Node] = [:]
+        try allItems.forEach { key, value in
+            mutable[key] = try value.makeNode()
         }
         return .object(mutable)
     }
@@ -37,62 +67,53 @@ extension Dictionary where Key: ExpressibleByStringLiteral, Value: NodeRepresent
 
 // MARK: From Node
 
-public extension Array where Element : NodeInitializable {
-    public init<T: NodeRepresentable>(
-        node convertible: T,
-        in context: Context = EmptyNode
-    ) throws {
-        let node = try convertible.makeNode()
+extension Array where Element: NodeInitializable {
+    public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
+        let node = try node.makeNode(context: context)
         let array = node.nodeArray ?? [node]
-        try self.init(node: array, in: context)
-    }
-
-    public init<S: Sequence>(
-        node convertible: S,
-        in context: Context = EmptyNode
-    ) throws where S.Iterator.Element: NodeRepresentable {
-        self = try convertible
-            .map { try $0.makeNode() }
+        self = try array
             .map { try Element(node: $0, in: context) }
     }
 
-    public init<S: Sequence>(
-        node convertible: S,
-        in context: Context = EmptyNode
-    ) throws where S.Iterator.Element == NodeRepresentable {
-        self = try convertible
-            .map { try $0.makeNode() }
-            .map { try Element(node: $0, in: context) }
+}
+
+extension Set where Element: NodeInitializable {
+    public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
+        let node = try node.makeNode(context: context)
+        let array = try [Element](node: node, in: context)
+        self = Set(array)
     }
 }
 
-public extension Set where Element : NodeInitializable {
-    public init<T: NodeRepresentable>(
-        node convertible: T,
-        in context: Context = EmptyNode
-    ) throws {
-        let node = try convertible.makeNode()
-        let array = node.nodeArray ?? [node]
-        try self.init(node: array, in: context)
-    }
+extension KeyAccessible where Key == String, Value: NodeInitializable {
+    public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
+        let node = try node.makeNode(context: context)
+        guard let object = node.nodeObject else {
+            throw NodeError.unableToConvert(node: node, expected: "\([Key: Value].self)")
+        }
 
-    public init<S: Sequence>(
-        node convertible: S,
-        in context: Context = EmptyNode
-    ) throws where S.Iterator.Element: NodeRepresentable {
-        let array = try convertible
-            .map { try $0.makeNode() }
-            .map { try Element(node: $0, in: context) }
-        self.init(array)
+        var mapped: [String: Value] = [:]
+        try object.forEach { key, value in
+            mapped[key] = try Value(node: value, in: context)
+        }
+        self.init(dictionary: mapped)
     }
+}
 
-    public init<S: Sequence>(
-        node convertible: S,
-        in context: Context = EmptyNode
-    ) throws where S.Iterator.Element == NodeRepresentable {
-        let array = try convertible
-            .map { try $0.makeNode() }
-            .map { try Element(node: $0, in: context) }
-        self.init(array)
+// MARK: Mappings
+
+extension Sequence where Iterator.Element: NodeRepresentable {
+    public func map<N: NodeInitializable>(to type: N.Type, in context: Context = EmptyNode) throws -> [N] {
+        return try map { try N(node: $0, in: context) }
     }
+}
+
+extension Sequence where Iterator.Element == NodeRepresentable {
+    public func map<N: NodeInitializable>(to type: N.Type, in context: Context = EmptyNode) throws -> [N] {
+        return try map { try N(node: $0, in: context) }
+    }
+}
+
+extension Sequence where Iterator.Element: Hashable {
+    public var set: Set<Iterator.Element> { return Set(self) }
 }
