@@ -1,7 +1,5 @@
 # Node
 
-> a point at which lines or pathways intersect or branch; a central or connecting point.
-
 ![Swift](http://img.shields.io/badge/swift-3.0-brightgreen.svg)
 [![Build Status](https://travis-ci.org/vapor/node.svg?branch=master)](https://travis-ci.org/vapor/node)
 [![CircleCI](https://circleci.com/gh/vapor/node.svg?style=shield)](https://circleci.com/gh/vapor/node)
@@ -10,6 +8,8 @@
 [![Slack Status](http://vapor.team/badge.svg)](http://vapor.team)
 
 The purpose of this package is to be an intermediary data layer that can allow transformation between unrelated formats. In this way any node convertible object can be converted to any other node convertible object and vice versa.
+
+> a point at which lines or pathways intersect or branch; a central or connecting point.
 
 ## 📖 Documentation
 
