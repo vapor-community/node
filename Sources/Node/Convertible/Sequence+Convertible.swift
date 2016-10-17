@@ -17,7 +17,7 @@ extension Dictionary: KeyAccessible {
 
 extension Sequence where Iterator.Element: NodeRepresentable {
     public func makeNode(context: Context = EmptyNode) throws -> Node {
-        let array = try map { try $0.makeNode() }
+        let array = try map { try $0.makeNode(context: context) }
         return Node(array)
     }
 
@@ -28,7 +28,7 @@ extension Sequence where Iterator.Element: NodeRepresentable {
 
 extension Sequence where Iterator.Element == NodeRepresentable {
     public func makeNode(context: Context = EmptyNode) throws -> Node {
-        let array = try map { try $0.makeNode() }
+        let array = try map { try $0.makeNode(context: context) }
         return Node(array)
     }
 

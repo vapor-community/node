@@ -19,12 +19,14 @@ class TestInitializable: NodeInitializable {
 
 final class Foo: NodeConvertible {
     var node: Node
+    var contextMakeNode: Context?
 
     init(node: Node, in context: Context) throws {
         self.node = node
     }
 
     func makeNode(context: Context = EmptyNode) throws -> Node {
+        self.contextMakeNode = context
         return node
     }
 }
@@ -53,6 +55,32 @@ class SequenceConvertibleTests: XCTestCase {
         let models2 = try representables.converted(to: [TestInitializable].self)
         let backInts2 = models2.map { $0.node } .flatMap { $0.int }
         XCTAssert(backInts2 == ints)
+
+
+        // This tests whether the context is passed to the sequence
+        let foo1 = try Foo(node: [
+            "hello"
+        ])
+        let foo2 = try Foo(node: [
+            "goodbye"
+        ])
+
+        XCTAssertNil(foo1.contextMakeNode)
+        XCTAssertNil(foo2.contextMakeNode)
+
+        let context = ["isContext": true]
+
+        let _ = try [foo1, foo2].makeNode(context: context)
+
+        guard let foo1Context = foo1.contextMakeNode as? [String: Bool], 
+            let foo2Context = foo1.contextMakeNode as? [String: Bool] else {
+            XCTFail()
+            return
+        }
+
+        XCTAssert(foo1Context == context)
+        XCTAssert(foo2Context == context)
+
     }
 
     func testDictionary() throws {
