@@ -1,3 +1,5 @@
+import Foundation
+
 extension Node {
     public init(_ value: Bool) {
         self = .bool(value)
@@ -34,5 +36,9 @@ extension Node {
 
     public init(bytes: [UInt8]) {
         self = .bytes(bytes)
+    }
+    
+    public init(_ date: Date) {
+        self = .date(date)
     }
 }

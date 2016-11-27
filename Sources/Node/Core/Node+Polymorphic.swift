@@ -1,3 +1,5 @@
+import Foundation
+
 extension Node: Polymorphic {
     public var string: String? {
         switch self {
@@ -33,6 +35,15 @@ extension Node: Polymorphic {
             return number.uint
         case .bool(let bool):
             return bool ? 1 : 0
+        default:
+            return nil
+        }
+    }
+
+    public var date: Date? {
+        switch self {
+        case .date(let date):
+            return date
         default:
             return nil
         }
