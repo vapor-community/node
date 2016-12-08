@@ -1,6 +1,13 @@
 import Foundation
 
 extension Date: NodeConvertible {
+    
+    static fileprivate let dateFormatter = { () -> DateFormatter in
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.ssssss"
+        return dateFormatter
+    }()
+    
     /**
      Turn the Date into a node
      
@@ -8,9 +15,7 @@ extension Date: NodeConvertible {
      - returns: a node if possible
      */
     public func makeNode(context: Context) throws -> Node {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let string = dateFormatter.string(from:self)
+        let string = Date.dateFormatter.string(from:self)
         
         return Node(string)
     }
@@ -26,9 +31,8 @@ extension Date: NodeConvertible {
         
         switch (node) {
         case .string (let string):
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            guard let date = dateFormatter.date(from: string) else {
+            
+            guard let date = Date.dateFormatter.date(from: string) else {
                 throw NodeError.unableToConvert(node: node, expected: "\(String.self)")
             }
             self = date
