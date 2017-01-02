@@ -1,4 +1,5 @@
-import Foundation
+@_exported import struct Foundation.Decimal
+import class Foundation.NSDecimalNumber
 
 extension Node {
     public enum Number {
