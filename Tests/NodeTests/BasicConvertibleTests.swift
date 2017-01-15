@@ -8,6 +8,7 @@
 
 import XCTest
 import Node
+import Foundation
 
 class BasicConvertibleTests: XCTestCase {
     static let allTests = [

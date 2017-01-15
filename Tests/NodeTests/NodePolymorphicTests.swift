@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import Node
+import Foundation
 
 class NodePolymorphicTests: XCTestCase {
     static let allTests = [
@@ -19,6 +20,7 @@ class NodePolymorphicTests: XCTestCase {
         ("testPolymorphicNull", testPolymorphicNull),
         ("testPolymorphicBool", testPolymorphicBool),
         ("testPolymorphicArray", testPolymorphicArray),
+        ("testPolymorphicDate", testPolymorphicDate),
         ("testPolymorphicObject", testPolymorphicObject)
     ]
 
