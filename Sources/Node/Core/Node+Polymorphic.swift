@@ -107,6 +107,8 @@ extension Node: Polymorphic {
         switch self {
         case .string(let string):
             return Date.iso8601Formatter.date(from: string)
+        case .number(let number):
+            return Date.init(timeIntervalSince1970: TimeInterval(number.int))
         case .date(let date):
             return date
         default:
