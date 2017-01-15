@@ -105,6 +105,8 @@ extension Node: Polymorphic {
     
     public var date: Date? {
         switch self {
+        case .string(let string):
+            return Date.iso8601Formatter.date(from: string)
         case .date(let date):
             return date
         default:
