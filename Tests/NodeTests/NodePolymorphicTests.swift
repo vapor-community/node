@@ -215,6 +215,34 @@ class NodePolymorphicTests: XCTestCase {
         XCTAssertNil(bytes.array)
     }
 
+    func testPolymorphicDate() {
+        let null: Node = .null
+        let bool: Node = true
+        let int: Node = 1484478686
+        let double: Node = 1484478686.0
+        let string: Node = "2017-01-15T11:11:26.000Z"
+        let date = Date.init(timeIntervalSince1970: 1484478686)
+        let dateNode: Node = .date(date)
+        let ob: Node = .object(["key": "value"])
+        let arr: Node = .array([1,2,3])
+        let bytes: Node = .bytes([10, 20, 30, 40])
+        
+        XCTAssertNotNil(dateNode.date)
+        XCTAssert(dateNode.date == date)
+        XCTAssertNotNil(string.date)
+        XCTAssert(string.date == date)
+        XCTAssertNotNil(int.date)
+        XCTAssert(int.date == date)
+        XCTAssertNotNil(double.date)
+        XCTAssert(double.date == date)
+        
+        XCTAssertNil(null.date)
+        XCTAssertNil(bool.date)
+        XCTAssertNil(ob.date)
+        XCTAssertNil(arr.date)
+        XCTAssertNil(bytes.date)
+    }
+    
     func testPolymorphicObject() {
         let null: Node = .null
         let bool: Node = true
