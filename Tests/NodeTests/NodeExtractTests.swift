@@ -54,8 +54,16 @@ class NodeExtractTests: XCTestCase {
         ("testExtractSet", testExtractSet),
         ("testExtractSetOptional", testExtractSetOptional),
         ("testExtractSetThrows", testExtractSetThrows),
+        ("testExtractDate", testExtractDate),
     ]
 
+    func testExtractDate() throws {
+        let date = Date.init(timeIntervalSince1970: 250)
+        let node = try Node(node: ["date": date])
+        let extracted = try node.extract("date") as NoNull
+        XCTAssert(extracted.node.date == date)
+    }
+    
     func testExtractTransform() throws {
         let node = try Node(node: ["date": 250])
         let extracted = try node.extract("date", transform: Date.fromTimestamp)
