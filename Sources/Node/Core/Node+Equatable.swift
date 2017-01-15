@@ -16,6 +16,8 @@ public func ==(lhs: Node, rhs: Node) -> Bool {
         return l == r
     case let (.bytes(l), .bytes(r)):
         return l == r
+    case let (.date(l), .date(r)):
+        return l == r
     default:
         return false
     }
