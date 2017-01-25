@@ -231,6 +231,18 @@ class NodeExtractTests: XCTestCase {
             XCTFail("should throw node error unable to convert")
         } catch NodeError.unableToConvert {}
     }
+    
+    func testExtractDateRFC1123() throws {
+        let node = Node(["time": "Sun, 16 May 2010 15:20:00 GMT"])
+        let date: Date = try node.extract("time")
+        XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
+    }
+    
+    func testExtractDateMySQLDATETIME() throws {
+        let node = Node(["time": "2010-05-16 15:20:00"])
+        let date: Date = try node.extract("time")
+        XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
+    }
 }
 
 extension Date {
