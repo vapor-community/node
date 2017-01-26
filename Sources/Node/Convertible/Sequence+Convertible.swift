@@ -89,7 +89,7 @@ extension KeyAccessible where Key == String, Value: NodeInitializable {
     public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
         let node = try node.makeNode(context: context)
         guard let object = node.nodeObject else {
-            throw NodeError.unableToConvert(node: node, expected: "\([Key: Value].self)")
+            throw NodeError.unableToConvert(node: node, expected: "\([Key: Value].self)", key: nil)
         }
 
         var mapped: [String: Value] = [:]
