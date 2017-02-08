@@ -1,3 +1,5 @@
+import struct Foundation.Date
+
 /**
     Node is meant to be a transitive data structure that can be used to facilitate conversions
     between different types.
@@ -10,4 +12,5 @@ public enum Node {
     case array([Node])
     case object([String: Node])
     case bytes([UInt8])
+    case date(Date)
 }
