@@ -21,6 +21,8 @@ extension NodeBacked {
     public var double: Double? { return node.double }
     public var int: Int? { return node.int }
     public var string: String? { return node.string }
+    public var bytes: [UInt8]? { return node.bytes }
+
     public var array: [Polymorphic]? {
         return node.nodeArray?.map { Self($0) }
     }
@@ -39,15 +41,15 @@ extension NodeBacked {
 extension NodeBacked {
 
     /**
-     If self is an array representation, return array
-     */
+        If self is an array representation, return array
+    */
     public var pathIndexableArray: [Self]? {
         return node.nodeArray?.map { Self($0) }
     }
 
     /**
-     If self is an object representation, return object
-     */
+        If self is an object representation, return object
+    */
     public var pathIndexableObject: [String: Self]? {
         guard let o = node.nodeObject else { return nil }
         var object: [String: Self] = [:]
@@ -58,8 +60,8 @@ extension NodeBacked {
     }
 
     /**
-     Initialize json w/ array
-     */
+        Initialize json w/ array
+    */
     public init(_ array: [Self]) {
         let array = array.map { $0.node }
         let node = Node.array(array)
@@ -67,8 +69,8 @@ extension NodeBacked {
     }
 
     /**
-     Initialize json w/ object
-     */
+        Initialize json w/ object
+    */
     public init(_ o: [String: Self]) {
         var object: [String: Node] = [:]
         for (key, val) in o {

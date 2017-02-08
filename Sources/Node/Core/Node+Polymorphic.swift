@@ -111,4 +111,15 @@ extension Node: Polymorphic {
 
         return object
     }
+
+    public var bytes: [UInt8]? {
+        switch self {
+        case .bytes(let bytes):
+            return bytes
+        case .string(let string):
+            return string.bytes
+        default:
+            return nil
+        }
+    }
 }

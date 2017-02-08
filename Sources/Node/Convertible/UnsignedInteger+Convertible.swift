@@ -12,7 +12,7 @@ extension UnsignedInteger {
 
     public init(node: Node, in context: Context) throws {
         guard let int = node.uint else {
-            throw NodeError.unableToConvert(node: node, expected: "\(Self.self)", key: nil)
+            throw NodeError(node: node, expectation: "\(Self.self)", key: nil)
         }
 
         self.init(int.toUIntMax())

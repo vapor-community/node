@@ -40,7 +40,7 @@ extension NodeBacked {
         transform: (InputType) throws -> T)
         throws -> T {
             guard let value = node[path] else {
-                throw NodeError.unableToConvert(node: nil, expected: "\(T.self)", key: path)
+                throw NodeError(node: nil, expectation: "\(T.self)", key: path)
             }
 
             let input = try InputType(node: value)
@@ -75,7 +75,7 @@ extension NodeBacked {
         _ path: [PathIndex])
         throws -> T {
             guard let value = node[path] else {
-                throw NodeError.unableToConvert(node: nil, expected: "\(T.self)", key: path)
+                throw NodeError(node: nil, expectation: "\(T.self)", key: path)
             }
             return try T(node: value)
     }
@@ -90,7 +90,7 @@ extension NodeBacked {
         _ path: [PathIndex])
         throws -> [T] {
             guard let value = node[path] else {
-                throw NodeError.unableToConvert(node: nil, expected: "\([T].self)", key: path)
+                throw NodeError(node: nil, expectation: "\([T].self)", key: path)
             }
             return try [T](node: value)
     }
@@ -105,7 +105,7 @@ extension NodeBacked {
         _ path: [PathIndex])
         throws -> [[T]] {
             guard let initial = node[path] else {
-                throw NodeError.unableToConvert(node: nil, expected: "\([[T]].self)", key: path)
+                throw NodeError(node: nil, expectation: "\([[T]].self)", key: path)
             }
             let array = initial.nodeArray ?? [initial]
             return try array.map { try [T](node: $0) }
@@ -122,7 +122,7 @@ extension NodeBacked {
         throws -> [String : T] {
             let value = node[path]
             guard let object = value?.nodeObject else {
-                throw NodeError.unableToConvert(node: value, expected: "\([String: T].self)", key: path)
+                throw NodeError(node: value, expectation: "\([String: T].self)", key: path)
             }
             return try object.mapValues { return try T(node: $0) }
     }
@@ -138,7 +138,7 @@ extension NodeBacked {
         throws -> [String : [T]] {
             let value = node[path]
             guard let object = value?.nodeObject else {
-                throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)", key: path)
+                throw NodeError(node: value, expectation: "\([String: [T]].self)", key: path)
             }
             return try object.mapValues { return try [T](node: $0) }
     }
@@ -153,7 +153,7 @@ extension NodeBacked {
         _ path: [PathIndex])
         throws -> Set<T> {
             guard let value = node[path] else {
-                throw NodeError.unableToConvert(node: nil, expected: "\(Set<T>.self)", key: path)
+                throw NodeError(node: nil, expectation: "\(Set<T>.self)", key: path)
             }
             let array = try [T](node: value)
             return Set(array)
@@ -214,7 +214,7 @@ extension NodeBacked {
         throws -> [String : T]? {
             guard let node = node[path], node != .null else { return nil }
             guard let object = node.nodeObject else {
-                throw NodeError.unableToConvert(node: node, expected: "\([String: T].self)", key: path)
+                throw NodeError(node: node, expectation: "\([String: T].self)", key: path)
             }
             return try object.mapValues { return try T(node: $0) }
     }
@@ -230,7 +230,7 @@ extension NodeBacked {
         throws -> [String : [T]]? {
             guard let node = node[path], node != .null else { return nil }
             guard let object = node.nodeObject else {
-                throw NodeError.unableToConvert(node: node, expected: "\([String: [T]].self)", key: path)
+                throw NodeError(node: node, expectation: "\([String: [T]].self)", key: path)
             }
             return try object.mapValues { return try [T](node: $0) }
     }
