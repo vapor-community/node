@@ -1,26 +1,66 @@
 import Foundation
 
 extension Date: NodeConvertible {
+    /**
+        If a date receives a numbered node, it will use this closure
+        to convert that number into a Date as a timestamp
+     
+        By default, this timestamp uses seconds via timeIntervalSince1970.
+     
+        Override for custom implementations
+    */
     public static var incomingTimestamp: (Node.Number) throws -> Date = {
         return Date(timeIntervalSince1970: $0.double)
     }
 
+    /**
+        In default scenarios where a timestamp should be represented as a 
+        Number, this closure will be used.
+     
+        By default, uses seconds via timeIntervalSince1970.
+     
+        Override for custom implementations.
+    */
     public static var outgoingTimestamp: (Date) throws -> Node.Number = {
         return Node.Number($0.timeIntervalSince1970)
     }
 
+    /**
+        A prioritized list of date formatters to use when attempting
+        to parse a String into a Date.
+     
+        Override for custom implementations, or to remove supported formats
+    */
     public static var incomingDateFormatters: [DateFormatter] = [
         .iso8601,
         .mysql,
         .rfc1123
     ]
 
+    /**
+        A default formatter to use when serializing a Date object to 
+        a String.
+     
+        Defaults to ISO 8601
+     
+        Override for custom implementations.
+     
+        For complex scenarios where various string representations must be used,
+        the user is responsible for handling their date formatting manually.
+    */
     public static var outgoingDateFormatter: DateFormatter = .iso8601
 
+    /**
+        Creates a node representation of the date
+    */
     public func makeNode(context: Context = EmptyNode) throws -> Node {
         return .date(self)
     }
-    
+
+    /**
+        Initializes a Date object with another Node.date, a number representing a timestamp,
+        or a formatted date string corresponding to one of the `incomingDateFormatters`.
+    */
     public init(node: Node, in context: Context) throws {
         switch node {
         case let .date(date):
