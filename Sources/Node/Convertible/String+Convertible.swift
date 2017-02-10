@@ -5,7 +5,7 @@ extension String: NodeConvertible {
 
     public init(node: Node, in context: Context) throws {
         guard let string = node.string else {
-            throw NodeError.unableToConvert(node: node, expected: "\(String.self)")
+            throw NodeError(node: node, expectation: "\(String.self)", key: nil)
         }
         self = string
     }

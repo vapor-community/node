@@ -19,7 +19,7 @@ struct NoNull: NodeInitializable, Hashable {
 
     init(node: Node, in context: Context) throws {
         guard node != .null else {
-            throw NodeError.unableToConvert(node: node, expected: "something not null")
+            throw NodeError(node: node, expectation: "something not null", key: nil)
         }
         
         self.node = node
@@ -67,7 +67,7 @@ class NodeExtractTests: XCTestCase {
         do {
             _ = try node.extract("date", transform: Date.fromTimestamp)
             XCTFail("should throw error")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
     func testExtractTransformOptionalValue() throws {
@@ -99,7 +99,7 @@ class NodeExtractTests: XCTestCase {
         do {
             _ = try node.extract("nest", "ed", "hello") as NoNull
             XCTFail("should throw node error unable to convert")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
     func testExtractArray() throws {
@@ -121,7 +121,7 @@ class NodeExtractTests: XCTestCase {
         do {
             _ = try node.extract("nest", "ed", "array") as [NoNull]
             XCTFail("should throw node error unable to convert")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
     func testExtractArrayOfArrays() throws {
@@ -163,7 +163,7 @@ class NodeExtractTests: XCTestCase {
             let node = EmptyNode
             _ = try node.extract("nest", "ed", "array") as [[NoNull]]
             XCTFail("should throw node error unable to convert")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
     func testExtractObject() throws {
@@ -183,7 +183,7 @@ class NodeExtractTests: XCTestCase {
         do {
             _ = try node.extract("dont", "exist", 0) as [String: NoNull]
             XCTFail("should throw node error unable to convert")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
     func testExtractObjectOfArrays() throws {
@@ -205,7 +205,7 @@ class NodeExtractTests: XCTestCase {
         do {
             _ = try node.extract("dont", "exist", 0) as [String: [NoNull]]
             XCTFail("should throw node error unable to convert")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
     func testExtractSet() throws {
@@ -229,7 +229,19 @@ class NodeExtractTests: XCTestCase {
         do {
             _ = try node.extract("dont", "exist", 0) as Set<NoNull>
             XCTFail("should throw node error unable to convert")
-        } catch NodeError.unableToConvert {}
+        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+    }
+    
+    func testExtractDateRFC1123() throws {
+        let node = Node(["time": "Sun, 16 May 2010 15:20:00 GMT"])
+        let date: Date = try node.extract("time")
+        XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
+    }
+    
+    func testExtractDateMySQLDATETIME() throws {
+        let node = Node(["time": "2010-05-16 15:20:00"])
+        let date: Date = try node.extract("time")
+        XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
     }
 }
 

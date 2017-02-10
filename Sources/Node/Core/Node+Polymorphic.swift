@@ -7,6 +7,8 @@ extension Node: Polymorphic {
             return "\(number)"
         case .string(let string):
             return string
+        case .date(let date):
+            return Date.outgoingDateFormatter.string(from: date)
         default:
             return nil
         }
@@ -20,6 +22,8 @@ extension Node: Polymorphic {
             return number.int
         case .bool(let bool):
             return bool ? 1 : 0
+        case .date(let date):
+            return try? Date.outgoingTimestamp(date).int
         default:
             return nil
         }
@@ -33,6 +37,8 @@ extension Node: Polymorphic {
             return number.uint
         case .bool(let bool):
             return bool ? 1 : 0
+        case .date(let date):
+            return try? Date.outgoingTimestamp(date).uint
         default:
             return nil
         }
@@ -46,6 +52,8 @@ extension Node: Polymorphic {
             return string.double
         case .bool(let bool):
             return bool ? 1.0 : 0.0
+        case .date(let date):
+            return try? Date.outgoingTimestamp(date).double
         default:
             return nil
         }
@@ -85,6 +93,9 @@ extension Node: Polymorphic {
             return string.float
         case .bool(let bool):
             return bool ? 1.0 : 0.0
+        case .date(let date):
+            let double = try? Date.outgoingTimestamp(date).double
+            return double.flatMap { Float($0) }
         default:
             return nil
         }
@@ -110,5 +121,16 @@ extension Node: Polymorphic {
         }
 
         return object
+    }
+
+    public var bytes: [UInt8]? {
+        switch self {
+        case .bytes(let bytes):
+            return bytes
+        case .string(let string):
+            return string.bytes
+        default:
+            return nil
+        }
     }
 }

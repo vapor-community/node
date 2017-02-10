@@ -1,9 +1,17 @@
-public enum NodeError: Swift.Error {
-    /**
-        Unable to convert a given node to the target type.
+public struct NodeError: Swift.Error {
+    public let node: Node?
+    public let expectation: String
+    public let key: [PathIndex]?
 
-        - param node: the node that was unable to convert
-        - param expected: a description of the type Genome was trying to convert to
-    */
-    case unableToConvert(node: Node?, expected: String)
+    public let type: String = NodeError.unableToConvert // replacing the enum case to identify error type
+}
+
+extension NodeError {
+    static let unableToConvert = "unableToConvert"
+}
+
+extension NodeError: CustomStringConvertible {
+    public var description: String {
+        return "Expected \(expectation)\nGot: \(node)\nKey: \(key)"
+    }
 }

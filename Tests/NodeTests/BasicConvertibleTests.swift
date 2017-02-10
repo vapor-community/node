@@ -174,7 +174,7 @@ class BasicConvertibleTests: XCTestCase {
         try cases.forEach { fail in
             do {
                 _ = try N(node: fail)
-            } catch NodeError.unableToConvert(node: _, expected: _) {}
+            } catch is NodeError {}
         }
     }
 }
