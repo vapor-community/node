@@ -82,7 +82,7 @@ extension DateFormatter {
 
         http://stackoverflow.com/a/28016692/2611971
     */
-    public static let iso8601: DateFormatter = {
+    @nonobjc public static let iso8601: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -96,7 +96,7 @@ extension DateFormatter {
     /**
         A date formatter for mysql formatted types
     */
-    public static let mysql: DateFormatter = {
+    @nonobjc public static let mysql: DateFormatter = {
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone(abbreviation: "UTC")
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -108,7 +108,7 @@ extension DateFormatter {
     /**
         A date formatter conforming to RFC 1123 spec
     */
-    public static let rfc1123: DateFormatter = {
+    @nonobjc public static let rfc1123: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss z"
         return formatter
