@@ -25,6 +25,8 @@ class BasicConvertibleTests: XCTestCase {
         ("testStringInit", testStringInit),
         ("testStringRepresent", testStringRepresent),
         ("testNodeConvertible", testNodeConvertible),
+        ("testUUIDConvertible", testUUIDConvertible),
+        ("testUUIDConvertibleThrows", testUUIDConvertibleThrows),
     ]
 
     func testBoolInit() throws {
@@ -168,6 +170,26 @@ class BasicConvertibleTests: XCTestCase {
         let initted = try Node(node: node)
         let made = node.makeNode()
         XCTAssert(initted == made)
+    }
+
+    func testUUIDConvertible() throws {
+        let expectation = UUID()
+        let node = try expectation.makeNode()
+        XCTAssertEqual(expectation.uuidString, node.string)
+
+        let inverse = try node.converted(to: UUID.self)
+        XCTAssertEqual(inverse, expectation)
+    }
+
+    func testUUIDConvertibleThrows() throws {
+        let node = Node("I'm not a uuid :)")
+        do {
+            _ = try node.converted(to: UUID.self)
+            XCTFail("Should fail")
+        } catch is NodeError {
+            // ok, expected to fail
+        }
+
     }
 
     private func assert<N: NodeInitializable>(_ n: N.Type, fails cases: [Node]) throws {
