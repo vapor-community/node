@@ -165,6 +165,23 @@ class BasicConvertibleTests: XCTestCase {
         let node = "hello :)".makeNode()
         XCTAssert(node == .string("hello :)"))
     }
+    
+    func testDateInit() throws {
+        let date = Date(timeIntervalSince1970: 1484476298)
+        
+        try XCTAssert(Date(node: date) == date)
+        
+        let fails: [Node] = [
+            [1,2,3], ["key": "value"], .null
+        ]
+        try assert(Date.self, fails: fails)
+    }
+    
+    func testDateRepresent() {
+        let date = Date(timeIntervalSince1970: 1484476298)
+        let node = date.makeNode()
+        XCTAssert(node == .date(date))
+    }
 
     func testNodeConvertible() throws {
         let node = Node("hello node")

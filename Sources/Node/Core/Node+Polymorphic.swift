@@ -1,3 +1,5 @@
+import Foundation
+
 extension Node: Polymorphic {
     public var string: String? {
         switch self {
@@ -107,6 +109,19 @@ extension Node: Polymorphic {
             return array.map { $0 }
         case .string(let string):
             return string.array
+        default:
+            return nil
+        }
+    }
+    
+    public var date: Date? {
+        switch self {
+        case .string(let string):
+            return Date.iso8601Formatter.date(from: string)
+        case .number(let number):
+            return Date.init(timeIntervalSince1970: TimeInterval(number.int))
+        case .date(let date):
+            return date
         default:
             return nil
         }
