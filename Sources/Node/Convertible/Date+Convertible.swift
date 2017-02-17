@@ -76,6 +76,13 @@ extension Date: NodeConvertible {
     }
 }
 
+extension Node {
+    public var date: Date? {
+        guard case let .date(date) = self else { return try? Date(node: self) }
+        return date
+    }
+}
+
 extension DateFormatter {
     /**
         ISO8601 Date Formatter -- preferred in JSON
