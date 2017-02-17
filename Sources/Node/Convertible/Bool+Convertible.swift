@@ -1,5 +1,5 @@
 extension Bool: NodeConvertible {
-    public func makeNode(context: Context = EmptyNode) -> Node {
+    public func makeNode(context: Context = Context.default) -> Node {
         return .bool(self)
     }
 

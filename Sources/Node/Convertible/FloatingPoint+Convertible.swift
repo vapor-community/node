@@ -16,7 +16,7 @@ extension Double: NodeConvertibleFloatingPointType {
 }
 
 extension NodeConvertibleFloatingPointType {
-    public func makeNode(context: Context = EmptyNode) -> Node {
+    public func makeNode(context: Context = Context.default) -> Node {
         return .number(Node.Number(doubleValue))
     }
 
