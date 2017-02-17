@@ -31,6 +31,12 @@ class SettersTests: XCTestCase {
         let path = "path"
         try node.set("I.Live.Down.The.Road.At.0.Index", path)
 
+        let dictionaryWithDictionary = [
+            "person": [
+                "age": 13
+            ]
+        ]
+        try node.set("person", dictionaryWithDictionary)
         // ASSERTIONS
 
         try node.assert("singular", expectation: singular)
@@ -49,6 +55,8 @@ class SettersTests: XCTestCase {
         try node.assert("dictionaryWithArray", expectation: da)
 
         try node.assert("I.Live.Down.The.Road.At.0.Index", expectation: "path")
+
+        try node.assert("person", expectation: try Node(node: dictionaryWithDictionary))
     }
 }
 

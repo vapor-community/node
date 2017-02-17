@@ -57,7 +57,8 @@ class NodeExtractTests: XCTestCase {
     ]
 
     func testExtractTransform() throws {
-        let node = try Node(node: ["date": 250])
+        let dict = ["date": 250]
+        let node = try Node(node: dict)
         let extracted = try node.extract("date", transform: Date.fromTimestamp)
         XCTAssert(extracted.timeIntervalSince1970 == 250)
     }
