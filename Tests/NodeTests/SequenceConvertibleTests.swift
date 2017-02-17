@@ -137,8 +137,9 @@ class SequenceConvertibleTests: XCTestCase {
         ])
         XCTAssertEqual(foo.node, .object(["hello": 52]))
 
+        let empty: Node? = nil
         let fooWithNil = try Foo(node: [
-            "hello": nil
+            "hello": empty
         ])
         XCTAssertEqual(fooWithNil.node, .object(["hello": .null]))
     }
@@ -155,8 +156,9 @@ class SequenceConvertibleTests: XCTestCase {
         ])
         XCTAssertEqual(foo.node, .array(["hello"]))
 
+        let empty: Node? = nil
         let fooWithNil = try Foo(node: [
-            nil
+            empty
         ])
         XCTAssertEqual(fooWithNil.node, .array([.null]))
 

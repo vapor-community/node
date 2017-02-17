@@ -68,11 +68,22 @@ extension Date: NodeConvertible {
         case let .number(number):
             self = try Date.incomingTimestamp(number)
         case let .string(string):
-            guard let date = Date.incomingDateFormatters.lazy.flatMap({ $0.date(from: string) }).first else { fallthrough }
+            guard
+                let date = Date.incomingDateFormatters
+                    .lazy
+                    .flatMap({ $0.date(from: string) })
+                    .first
+                else { fallthrough }
             self = date
         default:
             throw NodeError(node: node, expectation: "\(Date.self), formatted time string, or timestamp", key: nil)
         }
+    }
+}
+
+extension Node {
+    public var date: Date? {
+        return try? Date(node: self)
     }
 }
 

@@ -15,61 +15,64 @@ extension NodeRepresentable {
 }
 
 extension NodeInitializable {
-    public init(node representable: NodeRepresentable, in context: Context = EmptyNode) throws {
-        let node = try representable.makeNode()
-        try self.init(node: node, in: context)
-    }
-
     public init(node representable: NodeRepresentable?, in context: Context = EmptyNode) throws {
         let node = try representable?.makeNode() ?? .null
         try self.init(node: node, in: context)
     }
 }
 
-// MARK: Non-Homogenous
-
 extension NodeInitializable {
-    public init(node representable: [String: NodeRepresentable], in context: Context = EmptyNode) throws {
-        var converted: [String: Node] = [:]
+    public init(node representable: [NodeRepresentable?]?, in context: Context = EmptyNode) throws {
+        var converted: [Node]? = representable == nil ? nil : []
 
-        for (key, val) in representable {
-            converted[key] = try Node(node: val)
+        try representable?.forEach { val in
+            converted?.append(try Node(node: val))
         }
 
-        let node = Node.object(converted)
+        let node = converted.flatMap(Node.init)
         try self.init(node: node, in: context)
     }
 
-    public init(node representable: [String: NodeRepresentable?], in context: Context = EmptyNode) throws {
-        var converted: [String: Node] = [:]
+    public init(node representable: [[NodeRepresentable?]?]?, in context: Context = EmptyNode) throws {
+        let mapped = try representable?.map { try $0.flatMap { try Node(node: $0, in: context) } }
+        try self.init(node: mapped, in: context)
+    }
 
-        for (key, val) in representable {
-            converted[key] = try Node(node: val)
+    public init(node representable: [[String: NodeRepresentable?]?]?, in context: Context = EmptyNode) throws {
+        let mapped = try representable?.map { try $0.flatMap { try Node(node: $0, in: context) } }
+        try self.init(node: mapped, in: context)
+    }
+
+    public init(node representable: [String: NodeRepresentable?]?, in context: Context = EmptyNode) throws {
+        var converted: [String: Node]? = representable == nil ? nil : [:]
+
+        try representable?.forEach { key, val in
+            converted?[key] = try Node(node: val)
         }
 
-        let node = Node.object(converted)
+        let node = converted.flatMap(Node.init)
         try self.init(node: node, in: context)
     }
 
-    public init(node representable: [NodeRepresentable], in context: Context = EmptyNode) throws {
-        var converted: [Node] = []
+    public init(node representable: [String: [NodeRepresentable?]?]?, in context: Context = EmptyNode) throws {
+        var converted: [String: Node]? = representable == nil ? nil : [:]
 
-        for val in representable {
-            converted.append(try Node(node: val))
+        try representable?.forEach { key, val in
+            converted?[key] = try Node(node: val)
         }
 
-        let node = Node.array(converted)
+        let node = converted.flatMap(Node.init)
         try self.init(node: node, in: context)
     }
 
-    public init(node representable: [NodeRepresentable?], in context: Context = EmptyNode) throws {
-        var converted: [Node] = []
+    public init(node representable: [String: [String: NodeRepresentable?]?]?, in context: Context = EmptyNode) throws {
+        var converted: [String: Node]? = representable == nil ? nil : [:]
 
-        for val in representable {
-            converted.append(try Node(node: val))
+        try representable?.forEach { key, val in
+            converted?[key] = try Node(node: val)
         }
 
-        let node = Node.array(converted)
+        let node = converted.flatMap(Node.init)
         try self.init(node: node, in: context)
     }
 }
