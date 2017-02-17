@@ -3,7 +3,7 @@ extension Node: NodeConvertible { // Can conform to both if non-throwing impleme
         self = node
     }
 
-    public func makeNode(context: Context = Context.default) -> Node {
+    public func makeNode(context: Context = .default) -> Node {
         return self
     }
 }

@@ -8,7 +8,7 @@ extension NodeRepresentable {
      */
     public func converted<T: NodeInitializable>(
         to type: T.Type = T.self,
-        in context: Context = Context.default) throws -> T {
+        in context: Context = .default) throws -> T {
         let node = try makeNode()
         return try type.init(node: node, in: context)
     }

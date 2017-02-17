@@ -53,7 +53,7 @@ extension Date: NodeConvertible {
     /**
         Creates a node representation of the date
     */
-    public func makeNode(context: Context = Context.default) throws -> Node {
+    public func makeNode(context: Context = .default) throws -> Node {
         return .date(self)
     }
 

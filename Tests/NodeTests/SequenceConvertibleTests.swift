@@ -25,7 +25,7 @@ final class Foo: NodeConvertible {
         self.node = node
     }
 
-    func makeNode(context: Context = Context.default) throws -> Node {
+    func makeNode(context: Context = .default) throws -> Node {
         self.contextMakeNode = context
         return node
     }
