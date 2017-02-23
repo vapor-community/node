@@ -76,7 +76,7 @@ extension Date: NodeConvertible {
                 else { fallthrough }
             self = date
         default:
-            throw NodeError(node: node, expectation: "\(Date.self), formatted time string, or timestamp", key: nil)
+            throw NodeError(node: node, expectation: "\(Date.self), formatted time string, or timestamp")
         }
     }
 }

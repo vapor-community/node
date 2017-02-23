@@ -80,3 +80,18 @@ extension NodeBacked {
         self.init(node)
     }
 }
+
+extension Node: NodeBacked {
+    public var node: Node {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
+
+    public init(_ node: Node) {
+        self = node
+    }
+}

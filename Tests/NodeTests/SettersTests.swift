@@ -63,7 +63,7 @@ class SettersTests: XCTestCase {
 extension Node {
     fileprivate func assert(_ key: String, expectation: NodeRepresentable?) throws {
         let expectation = try expectation?.makeNode()
-        let value = self[path: key]
+        let value = self[key]
         XCTAssertEqual(value, expectation)
     }
 }

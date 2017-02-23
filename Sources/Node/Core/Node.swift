@@ -15,6 +15,12 @@ public enum Node {
     case date(Date)
 }
 
+extension Node {
+    public init() {
+        self.init([:])
+    }
+}
+
 extension Node: CustomStringConvertible {
     public var description: String {
         switch self {

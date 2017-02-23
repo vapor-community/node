@@ -1,3 +1,5 @@
+import Bits
+
 extension Node: Polymorphic {
     public var string: String? {
         switch self {
@@ -9,6 +11,8 @@ extension Node: Polymorphic {
             return string
         case .date(let date):
             return Date.outgoingDateFormatter.string(from: date)
+        case .bytes(let bytes):
+            return bytes.string
         default:
             return nil
         }

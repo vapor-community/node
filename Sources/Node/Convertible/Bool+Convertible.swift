@@ -5,7 +5,7 @@ extension Bool: NodeConvertible {
 
     public init(node: Node, in context: Context) throws {
         guard let bool = node.bool else {
-            throw NodeError(node: node, expectation: "\(Bool.self)", key: nil)
+            throw NodeError(node: node, expectation: "\(Bool.self)")
         }
         self = bool
     }
