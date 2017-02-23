@@ -30,7 +30,7 @@ func == (l: NoNull, r: NoNull) -> Bool {
     return l.node == r.node
 }
 
-class NodegetTests: XCTestCase {
+class NodeGetterTests: XCTestCase {
     static let allTests = [
         ("testgetTransform", testgetTransform),
         ("testgetTransformThrows", testgetTransformThrows),
