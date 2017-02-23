@@ -37,3 +37,4 @@ Carthage/Build
 .build/
 Packages/
 *.xcodeproj
+Package.pins

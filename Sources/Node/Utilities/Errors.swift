@@ -12,6 +12,6 @@ extension NodeError {
 
 extension NodeError: CustomStringConvertible {
     public var description: String {
-        return "Expected \(expectation)\nGot: \(node)\nKey: \(key)"
+        return "Expected \(expectation) Got: \(node ?? .null) forKey: \(key ?? [])"
     }
 }
