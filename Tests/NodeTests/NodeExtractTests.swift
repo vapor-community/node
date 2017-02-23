@@ -30,105 +30,105 @@ func == (l: NoNull, r: NoNull) -> Bool {
     return l.node == r.node
 }
 
-class NodeExtractTests: XCTestCase {
+class NodegetTests: XCTestCase {
     static let allTests = [
-        ("testExtractTransform", testExtractTransform),
-        ("testExtractTransformThrows", testExtractTransformThrows),
-        ("testExtractTransformOptionalValue", testExtractTransformOptionalValue),
-        ("testExtractTransformOptionalNil", testExtractTransformOptionalNil),
-        ("testExtractSingle", testExtractSingle),
-        ("testExtractSingleOptional", testExtractSingleOptional),
-        ("testExtractSingleThrows", testExtractSingleThrows),
-        ("testExtractArray", testExtractArray),
-        ("testExtractArrayOptional", testExtractArrayOptional),
-        ("testExtractArrayThrows", testExtractArrayThrows),
-        ("testExtractArrayOfArrays", testExtractArrayOfArrays),
-        ("testExtractArrayOfArraysOptional", testExtractArrayOfArraysOptional),
-        ("testExtractArrayOfArraysThrows", testExtractArrayOfArraysThrows),
-        ("testExtractObject", testExtractObject),
-        ("testExtractObjectOptional", testExtractObjectOptional),
-        ("testExtractObjectThrows", testExtractObjectThrows),
-        ("testExtractObjectOfArrays", testExtractObjectOfArrays),
-        ("testExtractObjectOfArraysOptional", testExtractObjectOfArraysOptional),
-        ("testExtractObjectOfArraysThrows", testExtractObjectOfArraysThrows),
-        ("testExtractSet", testExtractSet),
-        ("testExtractSetOptional", testExtractSetOptional),
-        ("testExtractSetThrows", testExtractSetThrows),
+        ("testgetTransform", testgetTransform),
+        ("testgetTransformThrows", testgetTransformThrows),
+        ("testgetTransformOptionalValue", testgetTransformOptionalValue),
+        ("testgetTransformOptionalNil", testgetTransformOptionalNil),
+        ("testgetSingle", testgetSingle),
+        ("testgetSingleOptional", testgetSingleOptional),
+        ("testgetSingleThrows", testgetSingleThrows),
+        ("testgetArray", testgetArray),
+        ("testgetArrayOptional", testgetArrayOptional),
+        ("testgetArrayThrows", testgetArrayThrows),
+        ("testgetArrayOfArrays", testgetArrayOfArrays),
+        ("testgetArrayOfArraysOptional", testgetArrayOfArraysOptional),
+        ("testgetArrayOfArraysThrows", testgetArrayOfArraysThrows),
+        ("testgetObject", testgetObject),
+        ("testgetObjectOptional", testgetObjectOptional),
+        ("testgetObjectThrows", testgetObjectThrows),
+        ("testgetObjectOfArrays", testgetObjectOfArrays),
+        ("testgetObjectOfArraysOptional", testgetObjectOfArraysOptional),
+        ("testgetObjectOfArraysThrows", testgetObjectOfArraysThrows),
+        ("testgetSet", testgetSet),
+        ("testgetSetOptional", testgetSetOptional),
+        ("testgetSetThrows", testgetSetThrows),
     ]
 
-    func testExtractTransform() throws {
+    func testgetTransform() throws {
         let dict = ["date": 250]
         let node = try Node(node: dict)
-        let extracted = try node.extract("date", transform: Date.fromTimestamp)
-        XCTAssert(extracted.timeIntervalSince1970 == 250)
+        let geted = try node.get("date", transform: Date.fromTimestamp)
+        XCTAssert(geted.timeIntervalSince1970 == 250)
     }
 
-    func testExtractTransformThrows() throws {
+    func testgetTransformThrows() throws {
         let node = EmptyNode
         do {
-            _ = try node.extract("date", transform: Date.fromTimestamp)
+            _ = try node.get("date", transform: Date.fromTimestamp)
             XCTFail("should throw error")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
-    func testExtractTransformOptionalValue() throws {
+    func testgetTransformOptionalValue() throws {
         let node = try Node(node: ["date": 250])
-        let extracted = try node.extract("date", transform: Date.optionalFromTimestamp)
-        XCTAssert(extracted?.timeIntervalSince1970 == 250)
+        let geted = try node.get("date", transform: Date.optionalFromTimestamp)
+        XCTAssert(geted?.timeIntervalSince1970 == 250)
     }
 
-    func testExtractTransformOptionalNil() throws {
+    func testgetTransformOptionalNil() throws {
         let node = EmptyNode
-        let extracted = try node.extract("date", transform: Date.optionalFromTimestamp)
-        XCTAssertNil(extracted)
+        let geted = try node.get("date", transform: Date.optionalFromTimestamp)
+        XCTAssertNil(geted)
     }
 
-    func testExtractSingle() throws {
+    func testgetSingle() throws {
         let node = try Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
-        let extracted = try node.extract("nest", "ed", "hello") as NoNull
-        XCTAssert(extracted.node.string == "world")
+        let geted = try node.get("nest", "ed", "hello") as NoNull
+        XCTAssert(geted.node.string == "world")
     }
 
-    func testExtractSingleOptional() throws {
+    func testgetSingleOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
-        let extracted: NoNull? = try node.extract("nest", "ed", "hello")
-        XCTAssert(extracted?.node.string == "world")
+        let geted: NoNull? = try node.get("nest", "ed", "hello")
+        XCTAssert(geted?.node.string == "world")
     }
 
-    func testExtractSingleThrows() throws {
+    func testgetSingleThrows() throws {
         let node = EmptyNode
         do {
-            _ = try node.extract("nest", "ed", "hello") as NoNull
+            _ = try node.get("nest", "ed", "hello") as NoNull
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
-    func testExtractArray() throws {
+    func testgetArray() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
-        let extracted = try node.extract("nest", "ed", "array") as [NoNull]
-        let numbers = extracted.flatMap { $0.node.int }
+        let geted = try node.get("nest", "ed", "array") as [NoNull]
+        let numbers = geted.flatMap { $0.node.int }
         XCTAssert(numbers == [1,2,3,4])
     }
 
-    func testExtractArrayOptional() throws {
+    func testgetArrayOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
-        let extracted: [NoNull]? = try node.extract("nest", "ed", "array")
-        let numbers = extracted?.flatMap { $0.node.int } ?? []
+        let geted: [NoNull]? = try node.get("nest", "ed", "array")
+        let numbers = geted?.flatMap { $0.node.int } ?? []
         XCTAssert(numbers == [1,2,3,4])
     }
 
-    func testExtractArrayThrows() throws {
+    func testgetArrayThrows() throws {
         let node = EmptyNode
         do {
-            _ = try node.extract("nest", "ed", "array") as [NoNull]
+            _ = try node.get("nest", "ed", "array") as [NoNull]
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
-    func testExtractArrayOfArrays() throws {
+    func testgetArrayOfArrays() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
-        let extracted = try node.extract("nest", "ed", "array") as [[NoNull]]
-        let numbers = extracted.map { innerArray in
+        let geted = try node.get("nest", "ed", "array") as [[NoNull]]
+        let numbers = geted.map { innerArray in
             innerArray.flatMap { $0.node.int }
         }
 
@@ -142,10 +142,10 @@ class NodeExtractTests: XCTestCase {
         XCTAssert(numbers[3] == [4])
     }
 
-    func testExtractArrayOfArraysOptional() throws {
+    func testgetArrayOfArraysOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
-        let extracted: [[NoNull]]? = try node.extract("nest", "ed", "array")
-        let numbers = extracted?.map { innerArray in
+        let geted: [[NoNull]]? = try node.get("nest", "ed", "array")
+        let numbers = geted?.map { innerArray in
             innerArray.flatMap { $0.node.int }
         } ?? []
 
@@ -159,89 +159,89 @@ class NodeExtractTests: XCTestCase {
         XCTAssert(numbers[3] == [4])
     }
 
-    func testExtractArrayOfArraysThrows() throws {
+    func testgetArrayOfArraysThrows() throws {
         do {
             let node = EmptyNode
-            _ = try node.extract("nest", "ed", "array") as [[NoNull]]
+            _ = try node.get("nest", "ed", "array") as [[NoNull]]
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
-    func testExtractObject() throws {
+    func testgetObject() throws {
         let node = try Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
-        let extracted = try node.extract("nest", "ed", "object") as [String: NoNull]
-        XCTAssert(extracted["hello"]?.node.string == "world")
+        let geted = try node.get("nest", "ed", "object") as [String: NoNull]
+        XCTAssert(geted["hello"]?.node.string == "world")
     }
 
-    func testExtractObjectOptional() throws {
+    func testgetObjectOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
-        let extracted: [String: NoNull]? = try node.extract("nest", "ed", "object")
-        XCTAssert(extracted?["hello"]?.node.string == "world")
+        let geted: [String: NoNull]? = try node.get("nest", "ed", "object")
+        XCTAssert(geted?["hello"]?.node.string == "world")
     }
 
-    func testExtractObjectThrows() throws {
+    func testgetObjectThrows() throws {
         let node = EmptyNode
         do {
-            _ = try node.extract("dont", "exist", 0) as [String: NoNull]
+            _ = try node.get("dont", "exist", 0) as [String: NoNull]
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
-    func testExtractObjectOfArrays() throws {
+    func testgetObjectOfArrays() throws {
         let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
-        let extracted = try node.extract("nest", "ed", "object") as [String: [NoNull]]
-        let ints = extracted["hello"]?.flatMap({ $0.node.int }) ?? []
+        let geted = try node.get("nest", "ed", "object") as [String: [NoNull]]
+        let ints = geted["hello"]?.flatMap({ $0.node.int }) ?? []
         XCTAssert(ints == [1,2,3,4])
     }
 
-    func testExtractObjectOfArraysOptional() throws {
+    func testgetObjectOfArraysOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
-        let extracted: [String: [NoNull]]? = try node.extract("nest", "ed", "object")
-        let ints = extracted?["hello"]?.flatMap({ $0.node.int }) ?? []
+        let geted: [String: [NoNull]]? = try node.get("nest", "ed", "object")
+        let ints = geted?["hello"]?.flatMap({ $0.node.int }) ?? []
         XCTAssert(ints == [1,2,3,4])
     }
 
-    func testExtractObjectOfArraysThrows() throws {
+    func testgetObjectOfArraysThrows() throws {
         let node = EmptyNode
         do {
-            _ = try node.extract("dont", "exist", 0) as [String: [NoNull]]
+            _ = try node.get("dont", "exist", 0) as [String: [NoNull]]
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
 
-    func testExtractSet() throws {
+    func testgetSet() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
-        let extracted = try node.extract("nest", "ed", "array") as Set<NoNull>
+        let geted = try node.get("nest", "ed", "array") as Set<NoNull>
         let ints = [1,2,3,4]
         let compare = try ints.map(to: NoNull.self).set
-        XCTAssert(extracted == compare)
+        XCTAssert(geted == compare)
     }
 
-    func testExtractSetOptional() throws {
+    func testgetSetOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
-        let extracted: Set<NoNull>? = try node.extract("nest", "ed", "array")
+        let geted: Set<NoNull>? = try node.get("nest", "ed", "array")
         let ints = [1,2,3,4]
         let compare = try ints.map(to: NoNull.self).set
-        XCTAssert(extracted == compare)
+        XCTAssert(geted == compare)
     }
 
-    func testExtractSetThrows() throws {
+    func testgetSetThrows() throws {
         let node = EmptyNode
         do {
-            _ = try node.extract("dont", "exist", 0) as Set<NoNull>
+            _ = try node.get("dont", "exist", 0) as Set<NoNull>
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
     }
     
-    func testExtractDateRFC1123() throws {
+    func testgetDateRFC1123() throws {
         let node = Node(["time": "Sun, 16 May 2010 15:20:00 GMT"])
-        let date: Date = try node.extract("time")
+        let date: Date = try node.get("time")
         XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
     }
     
-    func testExtractDateMySQLDATETIME() throws {
+    func testgetDateMySQLDATETIME() throws {
         let node = Node(["time": "2010-05-16 15:20:00"])
-        let date: Date = try node.extract("time")
+        let date: Date = try node.get("time")
         XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
     }
 }

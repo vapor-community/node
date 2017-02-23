@@ -28,15 +28,15 @@ extension Node: NodeBacked {
 // MARK: Transforming
 
 extension NodeBacked {
-    public func extract<T, InputType: NodeInitializable>(
-        _ path: PathIndex...,
+    public func get<T, InputType: NodeInitializable>(
+        _ path: PathIndexer...,
         transform: (InputType) throws -> T)
         throws -> T {
-            return try extract(path: path, transform: transform)
+            return try get(path: path, transform: transform)
     }
 
-    public func extract<T, InputType: NodeInitializable>(
-        path: [PathIndex],
+    public func get<T, InputType: NodeInitializable>(
+        path: [PathIndexer],
         transform: (InputType) throws -> T)
         throws -> T {
             guard let value = node[path] else {
@@ -47,32 +47,32 @@ extension NodeBacked {
             return try transform(input)
     }
 
-    public func extract<T, InputType: NodeInitializable>(
-        _ path: PathIndex...,
+    public func get<T, InputType: NodeInitializable>(
+        _ path: PathIndexer...,
         transform: (InputType?) throws -> T)
         throws -> T {
-            return try extract(path: path, transform: transform)
+            return try get(path: path, transform: transform)
     }
 
-    public func extract<T, InputType: NodeInitializable>(
-        path: [PathIndex],
+    public func get<T, InputType: NodeInitializable>(
+        path: [PathIndexer],
         transform: (InputType?) throws -> T)
         throws -> T {
-            return try transform(extract(path))
+            return try transform(get(path))
     }
 }
 
 // MARK: Non-Optional
 
 extension NodeBacked {
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> T {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> T {
             guard let value = node[path] else {
                 throw NodeError(node: nil, expectation: "\(T.self)", key: path)
@@ -80,14 +80,14 @@ extension NodeBacked {
             return try T(node: value)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [T] {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [T] {
             guard let value = node[path] else {
                 throw NodeError(node: nil, expectation: "\([T].self)", key: path)
@@ -95,14 +95,14 @@ extension NodeBacked {
             return try [T](node: value)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [[T]] {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [[T]] {
             guard let initial = node[path] else {
                 throw NodeError(node: nil, expectation: "\([[T]].self)", key: path)
@@ -111,14 +111,14 @@ extension NodeBacked {
             return try array.map { try [T](node: $0) }
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [String : T] {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [String : T] {
             let value = node[path]
             guard let object = value?.nodeObject else {
@@ -127,14 +127,14 @@ extension NodeBacked {
             return try object.mapValues { return try T(node: $0) }
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [String : [T]] {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [String : [T]] {
             let value = node[path]
             guard let object = value?.nodeObject else {
@@ -143,14 +143,14 @@ extension NodeBacked {
             return try object.mapValues { return try [T](node: $0) }
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> Set<T> {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> Set<T> {
             guard let value = node[path] else {
                 throw NodeError(node: nil, expectation: "\(Set<T>.self)", key: path)
@@ -160,57 +160,57 @@ extension NodeBacked {
     }
 }
 
-// MARK: Optional Extractions
+// MARK: Optional getions
 
 extension NodeBacked {
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> T? {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _  path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _  path: [PathIndexer])
         throws -> T? {
             guard let node = node[path], node != .null else { return nil }
             return try T(node: node)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [T]? {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [T]? {
             guard let node = node[path], node != .null else { return nil }
             return try [T](node: node)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [[T]]? {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [[T]]? {
             guard let node = node[path], node != .null else { return nil }
             let array = node.nodeArray ?? [node]
             return try array.map { try [T](node: $0) }
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [String : T]? {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [String : T]? {
             guard let node = node[path], node != .null else { return nil }
             guard let object = node.nodeObject else {
@@ -219,14 +219,14 @@ extension NodeBacked {
             return try object.mapValues { return try T(node: $0) }
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> [String : [T]]? {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> [String : [T]]? {
             guard let node = node[path], node != .null else { return nil }
             guard let object = node.nodeObject else {
@@ -235,14 +235,14 @@ extension NodeBacked {
             return try object.mapValues { return try [T](node: $0) }
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: PathIndex...)
+    public func get<T : NodeInitializable>(
+        _ path: PathIndexer...)
         throws -> Set<T>? {
-            return try extract(path)
+            return try get(path)
     }
 
-    public func extract<T : NodeInitializable>(
-        _ path: [PathIndex])
+    public func get<T : NodeInitializable>(
+        _ path: [PathIndexer])
         throws -> Set<T>? {
             guard let node = node[path], node != .null else { return nil }
             let array = try [T](node: node)
