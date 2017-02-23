@@ -1,30 +1,3 @@
-
-extension Dictionary {
-    func mapValues<T>(_ mapper: (_ value: Value) throws -> T)
-        rethrows -> Dictionary<Key, T> {
-            var mapped: [Key: T] = [:]
-            try forEach { key, value in
-                mapped[key] = try mapper(value)
-            }
-            return mapped
-    }
-}
-
-extension Node: NodeBacked {
-    public var node: Node {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-
-    public init(_ node: Node) {
-        self = node
-    }
-}
-
 // MARK: Transforming
 
 extension NodeBacked {
@@ -247,5 +220,16 @@ extension NodeBacked {
             guard let node = node[indexers], node != .null else { return nil }
             let array = try [T](node: node)
             return Set(array)
+    }
+}
+
+
+extension Dictionary {
+    func mapValues<T>(_ mapper: (_ value: Value) throws -> T) rethrows -> Dictionary<Key, T> {
+        var mapped: [Key: T] = [:]
+        try forEach { key, value in
+            mapped[key] = try mapper(value)
+        }
+        return mapped
     }
 }
