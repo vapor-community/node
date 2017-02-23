@@ -19,7 +19,7 @@ struct NoNull: NodeInitializable, Hashable {
 
     init(node: Node, in context: Context) throws {
         guard node != .null else {
-            throw NodeError(node: node, expectation: "something not null", key: nil)
+            throw NodeError(node: node, expectation: "something not null")
         }
         
         self.node = node

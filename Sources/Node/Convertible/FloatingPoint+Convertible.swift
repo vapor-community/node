@@ -22,7 +22,7 @@ extension NodeConvertibleFloatingPointType {
 
     public init(node: Node, in context: Context) throws {
         guard let double = node.double else {
-            throw NodeError(node: node, expectation: "\(Self.self)", key: nil)
+            throw NodeError(node: node, expectation: "\(Self.self)")
         }
         self.init(double)
     }

@@ -10,11 +10,6 @@ public struct NodeError: Swift.Error {
         self.expectation = expectation
         self.path = indexers.path()
     }
-
-
-    internal init(node: Node?, expectation: String, key: [PathIndexer]?) {
-        self.init(node: node, expectation: expectation, indexers: key ?? [])
-    }
 }
 
 extension NodeError {

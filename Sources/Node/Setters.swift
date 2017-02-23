@@ -36,66 +36,66 @@ extension NodeBacked {
 }
 
 extension NodeBacked {
-    public mutating func set(_ path: PathIndexer..., to value: NodeRepresentable?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: NodeRepresentable?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: NodeRepresentable?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: NodeRepresentable?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node
+        self.node[indexers] = node
     }
 
-    public mutating func set(_ path: PathIndexer..., to value: [NodeRepresentable?]?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: [NodeRepresentable?]?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: [NodeRepresentable?]?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: [NodeRepresentable?]?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node
+        self.node[indexers] = node
     }
 
-    public mutating func set(_ path: PathIndexer..., to value: [[NodeRepresentable?]?]?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: [[NodeRepresentable?]?]?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: [[NodeRepresentable?]?]?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: [[NodeRepresentable?]?]?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node.flatMap(Node.init)
+        self.node[indexers] = node.flatMap(Node.init)
     }
 
-    public mutating func set(_ path: PathIndexer..., to value: [[String: NodeRepresentable?]?]?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: [[String: NodeRepresentable?]?]?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: [[String: NodeRepresentable?]?]?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: [[String: NodeRepresentable?]?]?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node.flatMap(Node.init)
+        self.node[indexers] = node.flatMap(Node.init)
     }
 
-    public mutating func set(_ path: PathIndexer..., to value: [String: NodeRepresentable?]?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: [String: NodeRepresentable?]?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: [String: NodeRepresentable?]?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: [String: NodeRepresentable?]?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node
+        self.node[indexers] = node
     }
 
-    public mutating func set(_ path: PathIndexer..., to value: [String: [NodeRepresentable?]?]?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: [String: [NodeRepresentable?]?]?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: [String: [NodeRepresentable?]?]?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: [String: [NodeRepresentable?]?]?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node
+        self.node[indexers] = node
     }
 
-    public mutating func set(_ path: PathIndexer..., to value: [String: [String: NodeRepresentable?]?]?) throws {
-        try set(path: path, to: value)
+    public mutating func set(_ indexers: PathIndexer..., to value: [String: [String: NodeRepresentable?]?]?) throws {
+        try set(path: indexers, to: value)
     }
 
-    public mutating func set(path: [PathIndexer], to value: [String: [String: NodeRepresentable?]?]?) throws {
+    public mutating func set(path indexers: [PathIndexer], to value: [String: [String: NodeRepresentable?]?]?) throws {
         let node = try value.flatMap { try Node(node: $0) }
-        self.node[path] = node
+        self.node[indexers] = node
     }
 }

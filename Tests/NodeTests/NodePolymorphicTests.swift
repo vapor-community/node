@@ -29,7 +29,7 @@ class NodePolymorphicTests: XCTestCase {
         let string: Node = "hi"
         let ob: Node = .object(["key": "value"])
         let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let bytes: Node = .bytes("foo.bar".makeBytes())
 
         XCTAssert(bool.string == "true")
         XCTAssert(int.string == "1")
@@ -37,7 +37,7 @@ class NodePolymorphicTests: XCTestCase {
         XCTAssert(string.string == "hi")
         XCTAssertNil(ob.string)
         XCTAssertNil(arr.string)
-        XCTAssertNil(bytes.string)
+        XCTAssertEqual(bytes.string, "foo.bar")
     }
 
     func testPolymorphicInt() {
