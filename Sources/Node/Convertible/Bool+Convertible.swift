@@ -1,4 +1,4 @@
-extension Bool: NodeConvertible {
+extension Bool: NodeConvertible, CustomDebugStringConvertible {
     public func makeNode(context: Context = .default) -> Node {
         return .bool(self)
     }

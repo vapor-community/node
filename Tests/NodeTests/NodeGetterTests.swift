@@ -64,7 +64,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetTransformThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("date", transform: Date.fromTimestamp)
             XCTFail("should throw error")
@@ -78,7 +78,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetTransformOptionalNil() throws {
-        let node = EmptyNode
+        let node = Node()
         let geted = try node.get("date", transform: Date.optionalFromTimestamp)
         XCTAssertNil(geted)
     }
@@ -96,7 +96,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSingleThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("nest", "ed", "hello") as NoNull
             XCTFail("should throw node error unable to convert")
@@ -118,7 +118,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetArrayThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("nest", "ed", "array") as [NoNull]
             XCTFail("should throw node error unable to convert")
@@ -161,7 +161,7 @@ class NodeGetterTests: XCTestCase {
 
     func testgetArrayOfArraysThrows() throws {
         do {
-            let node = EmptyNode
+            let node = Node()
             _ = try node.get("nest", "ed", "array") as [[NoNull]]
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
@@ -180,7 +180,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetObjectThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("dont", "exist", 0) as [String: NoNull]
             XCTFail("should throw node error unable to convert")
@@ -202,7 +202,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetObjectOfArraysThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("dont", "exist", 0) as [String: [NoNull]]
             XCTFail("should throw node error unable to convert")
@@ -226,7 +226,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSetThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("dont", "exist", 0) as Set<NoNull>
             XCTFail("should throw node error unable to convert")

@@ -3,17 +3,14 @@
      just a Node for why an operation is being performed.
 */
 public final class Context {
-    public static var `default` = Context(id: "default")
+    public static var `default`: Context { return Context() }
 
     public let id: String
     public var storage: [String: Any] = [:]
+    public internal(set) var path: String = "<>"
 
-    public init(id: String) {
+    public init(id: String = "default") {
         self.id = id
-    }
-
-    public func get<T>(_ key: String) -> T? {
-        return storage[key] as? T
     }
 }
 
