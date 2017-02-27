@@ -10,6 +10,7 @@ let package = Package(
     dependencies: [
         .Package(url: "https://github.com/vapor/path-indexable.git", alpha),
         .Package(url: "https://github.com/vapor/polymorphic.git", alpha),
-        .Package(url: "https://github.com/vapor/bits.git", majorVersion: 0)
+        .Package(url: "https://github.com/vapor/bits.git", majorVersion: 0),
+        .Package(url: "https://github.com/vapor/debugging.git", majorVersion: 0),
     ]
 )
