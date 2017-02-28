@@ -109,3 +109,47 @@ extension User: JSONConvertible {
     }
 }
 ```
+
+### Custom Types
+
+Users can declare their own `NodeConvertible` types to take advantage of the `Initializable` + `Representable` = `Convertible` pattern.
+
+```swift
+struct InternalFormat {
+    // proprietary stuff here
+}
+
+extension InternalFormat: NodeConvertible {
+   // only need to conform once 
+}
+```
+
+```swift
+protocol InternalFormatInitializable { 
+    init(internalFormat: InternalFormat) throws
+}
+
+protocol InternalFormatRepresentable { 
+    func makeInternalFormat() throws -> InternalFormat
+}
+
+protocol InternalFormatConvertible: InternalFormatInitializable, InternalFormatRepresentable { }
+```
+
+```swift
+extension User: InternalFormatConvertible {
+    init(internalFormat: InternalFormat) throws {
+        name = try internalFormat.get("name") // calls `Name.init(internalFormat: ...)` if exists, or `Name.init(..., context: InternalFormatContext())`
+        age = try internalFormat.get("age") // automatically converts InternalFormat to Int
+        organizationId = try internalFormat.get("orgId") // automatically converts InternalFormat to ID
+    }
+    
+    func makeInternalFormat() throws -> InternalFormat {
+        let i = InternalFormat()
+        try i.set("name", name) // calls `Name.makeInternalFormat()` if exists, or `Name.makeNode(in: InternalFormatContext())`
+        try i.set("age", age) // automatically converts Int to InternalFormat
+        try i.set("orgId", organizationId) // automatically converts ID to InternalFormat
+        return i
+    }
+}
+```
