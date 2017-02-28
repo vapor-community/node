@@ -77,15 +77,15 @@ final class User: Model {
 
     init(row: Row) throws {
         name = try row.get() // uses whole node to init Name
-        age = try row.get("age")
-        organizationId = try row.get(Organization.foreignIdKey)
+        age = try row.get("age") // converts row to Int
+        organizationId = try row.get(Organization.foreignIdKey) // converts row to ID
     }
 
     func makeRow() throws -> Row {
         var row = Row()
         try row.set(name) // merges Name row into current row
-        try row.set("age", age)
-        try row.set(Organization.foreignIdKey, organizationId)
+        try row.set("age", age) // converts Int to Row
+        try row.set(Organization.foreignIdKey, organizationId) // converts ID to Row
         return row
     }
 }
@@ -95,16 +95,16 @@ final class User: Model {
 extension User: JSONConvertible {
     init(json: JSON) throws {
         name = try json.get("name") // uses Node at key `"name"` to init Name with json init
-        age = try json.get("age")
-        organizationId = try json.get("organization.id")
+        age = try json.get("age") // converts JSON to Int
+        organizationId = try json.get("organization.id") // converts JSON to Id
     }
 
     func makeJSON() throws -> JSON {
         var json = JSON()
-        try json.set("id", id)
+        try json.set("id", id) // converts ID to JSON
         try json.set("name", name) // calls `makeJSON` on name and sets to key `"name"`
-        try json.set("age", age)
-        try json.set("organization", organization) // automatically calls `.get()`
+        try json.set("age", age) // converts Int to JSON
+        try json.set("organization", organization) // automatically calls `.get()` and converts organization to JSON
         return json
     }
 }
