@@ -25,7 +25,7 @@ final class Foo: NodeConvertible {
         self.node = node
     }
 
-    func makeNode(context: Context = EmptyNode) throws -> Node {
+    func makeNode(in context: Context = EmptyNode) throws -> Node {
         self.contextMakeNode = context
         return node
     }
@@ -70,7 +70,7 @@ class SequenceConvertibleTests: XCTestCase {
 
         let context = ["isContext": true]
 
-        let _ = try [foo1, foo2].makeNode(context: context)
+        let _ = try [foo1, foo2].makeNode(in: context)
 
         guard let foo1Context = foo1.contextMakeNode as? [String: Bool], 
             let foo2Context = foo1.contextMakeNode as? [String: Bool] else {

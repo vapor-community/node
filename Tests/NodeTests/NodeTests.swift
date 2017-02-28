@@ -137,5 +137,4 @@ class NodeTests: XCTestCase {
 
         falsyPairs.forEach { lhs, rhs in XCTAssert(lhs != rhs, "\(lhs) should equal \(rhs)") }
     }
-
 }
