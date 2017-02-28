@@ -16,8 +16,8 @@ extension Dictionary: KeyAccessible {
 // MARK: Arrays
 
 extension Sequence where Iterator.Element: NodeRepresentable {
-    public func makeNode(context: Context = EmptyNode) throws -> Node {
-        let array = try map { try $0.makeNode(context: context) }
+    public func makeNode(in context: Context = EmptyNode) throws -> Node {
+        let array = try map { try $0.makeNode(in: context) }
         return Node(array)
     }
 
@@ -27,8 +27,8 @@ extension Sequence where Iterator.Element: NodeRepresentable {
 }
 
 extension Sequence where Iterator.Element == NodeRepresentable {
-    public func makeNode(context: Context = EmptyNode) throws -> Node {
-        let array = try map { try $0.makeNode(context: context) }
+    public func makeNode(in context: Context = EmptyNode) throws -> Node {
+        let array = try map { try $0.makeNode(in: context) }
         return Node(array)
     }
 
@@ -38,7 +38,7 @@ extension Sequence where Iterator.Element == NodeRepresentable {
 }
 
 extension KeyAccessible where Key == String, Value: NodeRepresentable {
-    public func makeNode(context: Context = EmptyNode) throws -> Node {
+    public func makeNode(in context: Context = EmptyNode) throws -> Node {
         var mutable: [String : Node] = [:]
         try allItems.forEach { key, value in
             mutable[key] = try value.makeNode()
@@ -52,7 +52,7 @@ extension KeyAccessible where Key == String, Value: NodeRepresentable {
 }
 
 extension KeyAccessible where Key == String, Value == NodeRepresentable {
-    public func makeNode(context: Context = EmptyNode) throws -> Node {
+    public func makeNode(in context: Context = EmptyNode) throws -> Node {
         var mutable: [String : Node] = [:]
         try allItems.forEach { key, value in
             mutable[key] = try value.makeNode()
@@ -69,7 +69,7 @@ extension KeyAccessible where Key == String, Value == NodeRepresentable {
 
 extension Array where Element: NodeInitializable {
     public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
-        let node = try node.makeNode(context: context)
+        let node = try node.makeNode(in: context)
         let array = node.nodeArray ?? [node]
         self = try array
             .map { try Element(node: $0, in: context) }
@@ -79,7 +79,7 @@ extension Array where Element: NodeInitializable {
 
 extension Set where Element: NodeInitializable {
     public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
-        let node = try node.makeNode(context: context)
+        let node = try node.makeNode(in: context)
         let array = try [Element](node: node, in: context)
         self = Set(array)
     }
@@ -87,7 +87,7 @@ extension Set where Element: NodeInitializable {
 
 extension KeyAccessible where Key == String, Value: NodeInitializable {
     public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
-        let node = try node.makeNode(context: context)
+        let node = try node.makeNode(in: context)
         guard let object = node.nodeObject else {
             throw NodeError(node: node, expectation: "\([Key: Value].self)")
         }

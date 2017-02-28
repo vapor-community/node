@@ -5,7 +5,7 @@ extension Int32: NodeConvertible {}
 extension Int64: NodeConvertible {}
 
 extension SignedInteger {
-    public func makeNode(context: Context = EmptyNode) -> Node {
+    public func makeNode(in context: Context = EmptyNode) -> Node {
         let number = Node.Number(self.toIntMax())
         return .number(number)
     }
