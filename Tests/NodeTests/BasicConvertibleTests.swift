@@ -72,7 +72,7 @@ class BasicConvertibleTests: XCTestCase {
     }
 
     func testIntegerRepresent() throws {
-        let node = 124.makeNode()
+        let node = try 124.makeNode()
         XCTAssert(node == .number(124))
     }
 
