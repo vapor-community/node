@@ -10,7 +10,7 @@ public protocol NodeRepresentable {
 
 extension NodeRepresentable {
     public func makeNode() throws -> Node {
-        return try makeNode(context: EmptyNode)
+        return try makeNode(context: .default)
     }
 }
 
@@ -30,8 +30,12 @@ extension NodeInitializable {
         Default initializer for cases where a custom Context is not required
     */
     public init(node: Node) throws {
-        try self.init(node: node, in: EmptyNode)
+        try self.init(node: node, in: .default)
     }
+}
+
+extension NodeInitializable {
+//    public init(node: Node, )
 }
 
 /**

@@ -9,7 +9,7 @@ extension NodeBacked {
         self.init(node)
     }
 
-    public func makeNode(context: Context = EmptyNode) -> Node {
+    public func makeNode(context: Context = .default) -> Node {
         return node
     }
 }

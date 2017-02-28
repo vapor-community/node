@@ -25,7 +25,7 @@ final class Foo: NodeConvertible {
         self.node = node
     }
 
-    func makeNode(context: Context = EmptyNode) throws -> Node {
+    func makeNode(context: Context = .default) throws -> Node {
         self.contextMakeNode = context
         return node
     }
@@ -68,19 +68,20 @@ class SequenceConvertibleTests: XCTestCase {
         XCTAssertNil(foo1.contextMakeNode)
         XCTAssertNil(foo2.contextMakeNode)
 
-        let context = ["isContext": true]
+        let context = Context(["isContext": true])
 
         let _ = try [foo1, foo2].makeNode(context: context)
 
-        guard let foo1Context = foo1.contextMakeNode as? [String: Bool], 
-            let foo2Context = foo1.contextMakeNode as? [String: Bool] else {
-            XCTFail()
-            return
-        }
+        guard
+            let _ = foo1.contextMakeNode?.storage as? [String: Bool],
+            let _ = foo2.contextMakeNode?.storage as? [String: Bool]
+            else {
+                XCTFail()
+                return
+            }
 
-        XCTAssert(foo1Context == context)
-        XCTAssert(foo2Context == context)
-
+        XCTAssert(foo1.contextMakeNode === context)
+        XCTAssert(foo2.contextMakeNode === context)
     }
 
     func testDictionary() throws {
