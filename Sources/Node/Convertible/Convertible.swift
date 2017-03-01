@@ -5,7 +5,7 @@ public protocol NodeRepresentable {
         - throws: if convertible can not create a Node
         - returns: a node if possible
     */
-    func makeNode(in context: Context) throws -> Node
+    func makeNode(in context: Context?) throws -> Node
 }
 
 extension NodeRepresentable {
@@ -26,8 +26,8 @@ public protocol NodeInitializable {
 }
 
 extension NodeInitializable {
-    public init(node: Schema) throws {
-        let node = Node(node)
+    public init(node: Schema, in context: Context) throws {
+        let node = Node(schema: node, in: context)
         try self.init(node: node)
     }
 }
@@ -43,12 +43,12 @@ public struct Node: SchemaWrapper {
 }
 
 extension Node {
-    public var nodeArray: [Node]? { return schema.schemaArray?.map { Node($0) } }
+    public var nodeArray: [Node]? { return schema.schemaArray?.map { Node(schema: $0, in: context) } }
     public var nodeObject: [String: Node]? {
         guard let object = schema.schemaObject else { return nil }
         var new = [String: Node]()
         object.forEach { key, value in
-            new[key] = Node(value)
+            new[key] = Node(schema: value, in: context)
         }
         return new
     }

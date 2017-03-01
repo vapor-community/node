@@ -12,11 +12,13 @@ extension SchemaWrapper {
         path indexers: [PathIndexer],
         transform: (InputType) throws -> T)
         throws -> T {
+            guard let _ = self[indexers] else { fatalError() }
+
             guard let value = schema[indexers] else {
                 throw NodeError(node: nil, expectation: "\(T.self)", indexers: indexers)
             }
 
-            let input = try InputType(node: value)
+            let input = try InputType(node: value, in: context)
             return try transform(input)
     }
 
@@ -47,10 +49,12 @@ extension SchemaWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> T {
-            guard let value = schema[indexers] else {
+            guard let value = self[indexers] else {
                 throw NodeError(node: nil, expectation: "\(T.self)", indexers: indexers)
             }
-            return try T(node: value)
+
+            let node = Node(value)
+            return try T(node: node)
     }
 
     public func get<T : NodeInitializable>(
@@ -62,9 +66,10 @@ extension SchemaWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [T] {
-            guard let value = schema[indexers] else {
+            guard let value = self[indexers] else {
                 throw NodeError(node: nil, expectation: "\([T].self)", indexers: indexers)
             }
+
             return try [T](node: value)
     }
 

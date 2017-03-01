@@ -24,7 +24,8 @@ extension SchemaWrapper {
         self.init(schema: node.schema, in: node.context)
     }
     
-    public func makeNode(in context: Context = EmptyNode) -> Node {
+    public func makeNode(in context: Context? = nil) -> Node {
+        let context = context ?? self.context
         return Node(schema: schema, in: context)
     }
 }
@@ -59,7 +60,7 @@ extension SchemaWrapper {
         If self is an array representation, return array
     */
     public var pathIndexableArray: [Self]? {
-        return schema.schemaArray?.map { Self($0) }
+        return schema.schemaArray?.map { Self(schema: $0, in: context) }
     }
 
     /**
@@ -68,8 +69,8 @@ extension SchemaWrapper {
     public var pathIndexableObject: [String: Self]? {
         guard let o = schema.schemaObject else { return nil }
         var object: [String: Self] = [:]
-        for (key, val) in o {
-            object[key] = Self(val)
+        o.forEach { key, val in
+            object[key] = Self(schema: val, in: context)
         }
         return object
     }
