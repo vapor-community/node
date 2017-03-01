@@ -1,10 +1,12 @@
 import XCTest
 import Node
 
-struct JSON: NodeBacked {
-    var node: Node
-    init(_ node: Node) {
-        self.node = node
+struct JSON: SchemaWrapper {
+    var schema: Schema
+    var context: Context
+    init(schema: Schema, in context: Context) {
+        self.schema = schema
+        self.context = context
     }
 }
 
@@ -25,7 +27,6 @@ class NodeBackedTests: XCTestCase {
         )
 
         XCTAssertEqual(json["names", 2]?.string, "World")
-        XCTAssertEqual(json.makeNode(), json.node)
     }
 
     func testPolymorphic() throws {

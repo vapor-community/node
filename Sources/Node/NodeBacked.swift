@@ -1,7 +1,26 @@
-public protocol SchemaWrapper: NodeConvertible, PathIndexable, Polymorphic {
+public typealias NodeBacked = SchemaWrapper
+public protocol SchemaWrapper:
+    NodeConvertible,
+    PathIndexable,
+    Polymorphic,
+    Equatable,
+    ExpressibleByNilLiteral,
+    ExpressibleByBooleanLiteral,
+    ExpressibleByIntegerLiteral,
+    ExpressibleByFloatLiteral,
+    ExpressibleByStringLiteral,
+    ExpressibleByArrayLiteral,
+    ExpressibleByDictionaryLiteral
+{
     var schema: Schema { get set }
     var context: Context { get }
     init(schema: Schema, in context: Context)
+}
+
+extension SchemaWrapper {
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.schema == rhs.schema
+    }
 }
 
 extension SchemaWrapper {
@@ -15,6 +34,12 @@ extension SchemaWrapper {
 
     public init<S: SchemaWrapper>(_ wrapper: S) {
         self.init(schema: wrapper.schema, in: wrapper.context)
+    }
+}
+
+extension SchemaWrapper {
+    public init() {
+        self.init(schema: .object([:]), in: EmptyNode)
     }
 }
 
@@ -38,18 +63,13 @@ extension SchemaWrapper {
     public var int: Int? { return schema.int }
     public var string: String? { return schema.string }
     public var bytes: [UInt8]? { return schema.bytes }
+    public var date: Date? { return schema.date }
 
     public var array: [Polymorphic]? {
-        return schema.schemaArray?.map { Self($0) }
+        return schema.array
     }
     public var object: [String: Polymorphic]? {
-        return schema.schemaObject.flatMap { ob in
-            var result = [String: Polymorphic]()
-            ob.forEach { k, v in
-                result[k] = Self(v)
-            }
-            return result
-        }
+        return schema.object
     }
 }
 
@@ -94,5 +114,59 @@ extension SchemaWrapper {
         }
         let node = Schema.object(object)
         self.init(node)
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByNilLiteral {
+    public init(nilLiteral value: Void) {
+        self = Self(.null)
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByBooleanLiteral {
+    public init(booleanLiteral value: Bool) {
+        self = .bool(value)
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        self = .number(.init(value))
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByFloatLiteral {
+    public init(floatLiteral value: Double) {
+        self = .number(.init(value))
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByStringLiteral {
+    public init(unicodeScalarLiteral value: String) {
+        self = .string(value)
+    }
+
+    public init(extendedGraphemeClusterLiteral value: String) {
+        self = .string(value)
+    }
+
+    public init(stringLiteral value: String) {
+        self = .string(value)
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: Self...) {
+        self = .array(elements)
+    }
+}
+
+extension SchemaWrapper { // : ExpressibleByDictionaryLiteral {
+    public init(dictionaryLiteral elements: (String, Self)...) {
+        var new = [String: Self]()
+        elements.forEach { key, value in
+            new[key] = value
+        }
+        self = .object(new)
     }
 }

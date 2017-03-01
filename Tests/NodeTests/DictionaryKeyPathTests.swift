@@ -29,7 +29,7 @@ class DictionaryKeyPathTests: XCTestCase {
 
         node["path", "to", "new", "value"] = "Hello!"
         let setVal = node["path", "to", "new", "value"]
-        XCTAssert(setVal == "Hello!")
+        XCTAssertEqual(setVal, "Hello!")
     }
     
 }

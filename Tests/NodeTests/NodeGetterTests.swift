@@ -17,7 +17,7 @@ struct NoNull: NodeInitializable, Hashable {
         return "\(node)".hashValue
     }
 
-    init(node: Node, in context: Context) throws {
+    init(node: Node) throws {
         guard node != .null else {
             throw NodeError(node: node, expectation: "something not null")
         }
@@ -64,7 +64,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetTransformThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("date", transform: Date.fromTimestamp)
             XCTFail("should throw error")
@@ -78,7 +78,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetTransformOptionalNil() throws {
-        let node = EmptyNode
+        let node = Node()
         let geted = try node.get("date", transform: Date.optionalFromTimestamp)
         XCTAssertNil(geted)
     }
@@ -96,7 +96,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSingleThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("nest", "ed", "hello") as NoNull
             XCTFail("should throw node error unable to convert")
@@ -118,7 +118,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetArrayThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("nest", "ed", "array") as [NoNull]
             XCTFail("should throw node error unable to convert")
@@ -161,7 +161,7 @@ class NodeGetterTests: XCTestCase {
 
     func testgetArrayOfArraysThrows() throws {
         do {
-            let node = EmptyNode
+            let node = Node()
             _ = try node.get("nest", "ed", "array") as [[NoNull]]
             XCTFail("should throw node error unable to convert")
         } catch let error as NodeError where error.type == NodeError.unableToConvert {}
@@ -180,7 +180,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetObjectThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("dont", "exist", 0) as [String: NoNull]
             XCTFail("should throw node error unable to convert")
@@ -202,7 +202,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetObjectOfArraysThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("dont", "exist", 0) as [String: [NoNull]]
             XCTFail("should throw node error unable to convert")
@@ -226,7 +226,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSetThrows() throws {
-        let node = EmptyNode
+        let node = Node()
         do {
             _ = try node.get("dont", "exist", 0) as Set<NoNull>
             XCTFail("should throw node error unable to convert")
@@ -234,13 +234,13 @@ class NodeGetterTests: XCTestCase {
     }
     
     func testgetDateRFC1123() throws {
-        let node = Node(["time": "Sun, 16 May 2010 15:20:00 GMT"])
+        let node = try Node(node: ["time": "Sun, 16 May 2010 15:20:00 GMT"])
         let date: Date = try node.get("time")
         XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
     }
     
     func testgetDateMySQLDATETIME() throws {
-        let node = Node(["time": "2010-05-16 15:20:00"])
+        let node = try Node(node: ["time": "2010-05-16 15:20:00"])
         let date: Date = try node.get("time")
         XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
     }

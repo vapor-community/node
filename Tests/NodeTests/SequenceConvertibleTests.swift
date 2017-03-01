@@ -12,7 +12,7 @@ import Node
 class TestInitializable: NodeInitializable {
     let node: Node
 
-    required init(node: Node, in context: Context) {
+    required init(node: Node) {
         self.node = node
     }
 }
@@ -21,11 +21,11 @@ final class Foo: NodeConvertible {
     var node: Node
     var contextMakeNode: Context?
 
-    init(node: Node, in context: Context) throws {
+    init(node: Node) throws {
         self.node = node
     }
 
-    func makeNode(in context: Context = EmptyNode) throws -> Node {
+    func makeNode(in context: Context? = nil) throws -> Node {
         self.contextMakeNode = context
         return node
     }

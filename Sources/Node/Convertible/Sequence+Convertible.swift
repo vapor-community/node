@@ -16,7 +16,7 @@ extension Dictionary: KeyAccessible {
 // MARK: Arrays
 
 extension Sequence where Iterator.Element: NodeRepresentable {
-    public func makeNode(in context: Context = EmptyNode) throws -> Node {
+    public func makeNode(in context: Context? = nil) throws -> Node {
         let array = try map { try $0.makeNode(in: context) }
         return Node(array)
     }
@@ -27,7 +27,7 @@ extension Sequence where Iterator.Element: NodeRepresentable {
 }
 
 extension Sequence where Iterator.Element == NodeRepresentable {
-    public func makeNode(in context: Context = EmptyNode) throws -> Node {
+    public func makeNode(in context: Context? = nil) throws -> Node {
         let array = try map { try $0.makeNode(in: context) }
         return Node(array)
     }
@@ -38,7 +38,7 @@ extension Sequence where Iterator.Element == NodeRepresentable {
 }
 
 extension KeyAccessible where Key == String, Value: NodeRepresentable {
-    public func makeNode(in context: Context = EmptyNode) throws -> Node {
+    public func makeNode(in context: Context? = nil) throws -> Node {
         var mutable: [String : Node] = [:]
         try allItems.forEach { key, value in
             mutable[key] = try value.makeNode()
@@ -52,7 +52,7 @@ extension KeyAccessible where Key == String, Value: NodeRepresentable {
 }
 
 extension KeyAccessible where Key == String, Value == NodeRepresentable {
-    public func makeNode(in context: Context = EmptyNode) throws -> Node {
+    public func makeNode(in context: Context? = nil) throws -> Node {
         var mutable: [String : Node] = [:]
         try allItems.forEach { key, value in
             mutable[key] = try value.makeNode()
@@ -68,17 +68,17 @@ extension KeyAccessible where Key == String, Value == NodeRepresentable {
 // MARK: From Node
 
 extension Array where Element: NodeInitializable {
-    public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
+    public init(node: NodeRepresentable, in context: Context? = nil) throws {
         let node = try node.makeNode(in: context)
         let array = node.nodeArray ?? [node]
         self = try array
-            .map { try Element(node: $0, in: context) }
+            .map { try Element(node: $0) }
     }
 
 }
 
 extension Set where Element: NodeInitializable {
-    public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
+    public init(node: NodeRepresentable, in context: Context? = nil) throws {
         let node = try node.makeNode(in: context)
         let array = try [Element](node: node, in: context)
         self = Set(array)
@@ -86,7 +86,7 @@ extension Set where Element: NodeInitializable {
 }
 
 extension KeyAccessible where Key == String, Value: NodeInitializable {
-    public init(node: NodeRepresentable, in context: Context = EmptyNode) throws {
+    public init(node: NodeRepresentable, in context: Context? = nil) throws {
         let node = try node.makeNode(in: context)
         guard let object = node.nodeObject else {
             throw NodeError(node: node, expectation: "\([Key: Value].self)")
@@ -94,7 +94,7 @@ extension KeyAccessible where Key == String, Value: NodeInitializable {
 
         var mapped: [String: Value] = [:]
         try object.forEach { key, value in
-            mapped[key] = try Value(node: value, in: context)
+            mapped[key] = try Value(node: value)
         }
         self.init(dictionary: mapped)
     }
@@ -103,13 +103,13 @@ extension KeyAccessible where Key == String, Value: NodeInitializable {
 // MARK: Mappings
 
 extension Sequence where Iterator.Element: NodeRepresentable {
-    public func map<N: NodeInitializable>(to type: N.Type, in context: Context = EmptyNode) throws -> [N] {
-        return try map { try N(node: $0, in: context) }
+    public func map<N: NodeInitializable>(to type: N.Type, in context: Context? = nil) throws -> [N] {
+        return try map { try N.init(node: $0, in: context) }
     }
 }
 
 extension Sequence where Iterator.Element == NodeRepresentable {
-    public func map<N: NodeInitializable>(to type: N.Type, in context: Context = EmptyNode) throws -> [N] {
+    public func map<N: NodeInitializable>(to type: N.Type, in context: Context? = nil) throws -> [N] {
         return try map { try N(node: $0, in: context) }
     }
 }

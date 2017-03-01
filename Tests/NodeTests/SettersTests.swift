@@ -8,7 +8,7 @@ class SettersTests: XCTestCase {
     ]
 
     func testSetters() throws {
-        var node = Node([:])
+        var node = Node()
 
         let singular = 1
         try node.set("singular", singular)
