@@ -10,7 +10,7 @@ extension UnsignedInteger {
         return .number(number)
     }
 
-    public init(node: Node, in context: Context) throws {
+    public init(node: Node) throws {
         guard let int = node.uint else {
             throw NodeError(node: node, expectation: "\(Self.self)")
         }

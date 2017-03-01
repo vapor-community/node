@@ -1,33 +1,48 @@
-public protocol NodeBacked: NodeConvertible, PathIndexable, Polymorphic {
-    var node: Node { get set }
-    init(_ node: Node)
+public protocol SchemaWrapper: NodeConvertible, PathIndexable, Polymorphic {
+    var schema: Schema { get set }
+    var context: Context { get }
+    init(schema: Schema, in context: Context)
+}
+
+extension SchemaWrapper {
+    public init(_ schema: Schema) {
+        self.init(schema: schema, in: EmptyNode)
+    }
+
+    public init(_ context: Context) {
+        self.init(schema: Schema(), in: context)
+    }
+
+    public init<S: SchemaWrapper>(_ wrapper: S) {
+        self.init(schema: wrapper.schema, in: wrapper.context)
+    }
 }
 
 // Convertible
-extension NodeBacked {
-    public init(node: Node, in context: Context) throws {
-        self.init(node)
+extension SchemaWrapper {
+    public init(node: Node) {
+        self.init(schema: node.schema, in: node.context)
     }
-
+    
     public func makeNode(in context: Context = EmptyNode) -> Node {
-        return node
+        return Node(schema: schema, in: context)
     }
 }
 
 // Polymorphic
-extension NodeBacked {
-    public var isNull: Bool { return node.isNull }
-    public var bool: Bool? { return node.bool }
-    public var double: Double? { return node.double }
-    public var int: Int? { return node.int }
-    public var string: String? { return node.string }
-    public var bytes: [UInt8]? { return node.bytes }
+extension SchemaWrapper {
+    public var isNull: Bool { return schema.isNull }
+    public var bool: Bool? { return schema.bool }
+    public var double: Double? { return schema.double }
+    public var int: Int? { return schema.int }
+    public var string: String? { return schema.string }
+    public var bytes: [UInt8]? { return schema.bytes }
 
     public var array: [Polymorphic]? {
-        return node.nodeArray?.map { Self($0) }
+        return schema.schemaArray?.map { Self($0) }
     }
     public var object: [String: Polymorphic]? {
-        return node.nodeObject.flatMap { ob in
+        return schema.schemaObject.flatMap { ob in
             var result = [String: Polymorphic]()
             ob.forEach { k, v in
                 result[k] = Self(v)
@@ -38,20 +53,20 @@ extension NodeBacked {
 }
 
 // PathIndexable
-extension NodeBacked {
+extension SchemaWrapper {
 
     /**
         If self is an array representation, return array
     */
     public var pathIndexableArray: [Self]? {
-        return node.nodeArray?.map { Self($0) }
+        return schema.schemaArray?.map { Self($0) }
     }
 
     /**
         If self is an object representation, return object
     */
     public var pathIndexableObject: [String: Self]? {
-        guard let o = node.nodeObject else { return nil }
+        guard let o = schema.schemaObject else { return nil }
         var object: [String: Self] = [:]
         for (key, val) in o {
             object[key] = Self(val)
@@ -63,8 +78,8 @@ extension NodeBacked {
         Initialize json w/ array
     */
     public init(_ array: [Self]) {
-        let array = array.map { $0.node }
-        let node = Node.array(array)
+        let array = array.map { $0.schema }
+        let node = Schema.array(array)
         self.init(node)
     }
 
@@ -72,26 +87,11 @@ extension NodeBacked {
         Initialize json w/ object
     */
     public init(_ o: [String: Self]) {
-        var object: [String: Node] = [:]
+        var object: [String: Schema] = [:]
         for (key, val) in o {
-            object[key] = val.node
+            object[key] = val.schema
         }
-        let node = Node.object(object)
+        let node = Schema.object(object)
         self.init(node)
-    }
-}
-
-extension Node: NodeBacked {
-    public var node: Node {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-
-    public init(_ node: Node) {
-        self = node
     }
 }

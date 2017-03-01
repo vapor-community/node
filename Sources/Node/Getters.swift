@@ -1,6 +1,6 @@
 // MARK: Transforming
 
-extension NodeBacked {
+extension SchemaWrapper {
     public func get<T, InputType: NodeInitializable>(
         _ indexers: PathIndexer...,
         transform: (InputType) throws -> T)
@@ -12,7 +12,7 @@ extension NodeBacked {
         path indexers: [PathIndexer],
         transform: (InputType) throws -> T)
         throws -> T {
-            guard let value = node[indexers] else {
+            guard let value = schema[indexers] else {
                 throw NodeError(node: nil, expectation: "\(T.self)", indexers: indexers)
             }
 
@@ -37,7 +37,7 @@ extension NodeBacked {
 
 // MARK: Non-Optional
 
-extension NodeBacked {
+extension SchemaWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
         throws -> T {
@@ -47,7 +47,7 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> T {
-            guard let value = node[indexers] else {
+            guard let value = schema[indexers] else {
                 throw NodeError(node: nil, expectation: "\(T.self)", indexers: indexers)
             }
             return try T(node: value)
@@ -62,7 +62,7 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [T] {
-            guard let value = node[indexers] else {
+            guard let value = schema[indexers] else {
                 throw NodeError(node: nil, expectation: "\([T].self)", indexers: indexers)
             }
             return try [T](node: value)
@@ -77,10 +77,10 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [[T]] {
-            guard let initial = node[indexers] else {
+            guard let initial = schema[indexers] else {
                 throw NodeError(node: nil, expectation: "\([[T]].self)", indexers: indexers)
             }
-            let array = initial.nodeArray ?? [initial]
+            let array = initial.schemaArray ?? [initial]
             return try array.map { try [T](node: $0) }
     }
 
@@ -93,8 +93,8 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [String : T] {
-            let value = node[indexers]
-            guard let object = value?.nodeObject else {
+            let value = schema[indexers]
+            guard let object = value?.schemaObject else {
                 throw NodeError(node: value, expectation: "\([String: T].self)", indexers: indexers)
             }
             return try object.mapValues { return try T(node: $0) }
@@ -109,8 +109,8 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [String : [T]] {
-            let value = node[indexers]
-            guard let object = value?.nodeObject else {
+            let value = schema[indexers]
+            guard let object = value?.schemaObject else {
                 throw NodeError(node: value, expectation: "\([String: [T]].self)", indexers: indexers)
             }
             return try object.mapValues { return try [T](node: $0) }
@@ -125,7 +125,7 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> Set<T> {
-            guard let value = node[indexers] else {
+            guard let value = schema[indexers] else {
                 throw NodeError(node: nil, expectation: "\(Set<T>.self)", indexers: indexers)
             }
             let array = try [T](node: value)
@@ -135,7 +135,7 @@ extension NodeBacked {
 
 // MARK: Optional getions
 
-extension NodeBacked {
+extension SchemaWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
         throws -> T? {
@@ -145,7 +145,7 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _  indexers: [PathIndexer])
         throws -> T? {
-            guard let node = node[indexers], node != .null else { return nil }
+            guard let node = schema[indexers], node != .null else { return nil }
             return try T(node: node)
     }
 
@@ -158,7 +158,7 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [T]? {
-            guard let node = node[indexers], node != .null else { return nil }
+            guard let node = schema[indexers], node != .null else { return nil }
             return try [T](node: node)
     }
 
@@ -171,8 +171,8 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [[T]]? {
-            guard let node = node[indexers], node != .null else { return nil }
-            let array = node.nodeArray ?? [node]
+            guard let schema = schema[indexers], schema != .null else { return nil }
+            let array = schema.schemaArray ?? [schema]
             return try array.map { try [T](node: $0) }
     }
 
@@ -185,8 +185,8 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [String : T]? {
-            guard let node = node[indexers], node != .null else { return nil }
-            guard let object = node.nodeObject else {
+            guard let node = schema[indexers], node != .null else { return nil }
+            guard let object = node.schemaObject else {
                 throw NodeError(node: node, expectation: "\([String: T].self)", indexers: indexers)
             }
             return try object.mapValues { return try T(node: $0) }
@@ -201,8 +201,8 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> [String : [T]]? {
-            guard let node = node[indexers], node != .null else { return nil }
-            guard let object = node.nodeObject else {
+            guard let node = schema[indexers], node != .null else { return nil }
+            guard let object = node.schemaObject else {
                 throw NodeError(node: node, expectation: "\([String: [T]].self)", indexers: indexers)
             }
             return try object.mapValues { return try [T](node: $0) }
@@ -217,7 +217,7 @@ extension NodeBacked {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> Set<T>? {
-            guard let node = node[indexers], node != .null else { return nil }
+            guard let node = schema[indexers], node != .null else { return nil }
             let array = try [T](node: node)
             return Set(array)
     }

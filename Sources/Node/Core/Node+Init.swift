@@ -1,4 +1,4 @@
-extension Node {
+extension Schema {
     public init(_ value: Bool) {
         self = .bool(value)
     }
@@ -23,16 +23,20 @@ extension Node {
         self = .number(number)
     }
 
-    public init(_ value: [Node]) {
-        let array = [Node](value)
+    public init(_ value: [Schema]) {
+        let array = [Schema](value)
         self = .array(array)
     }
 
-    public init(_ value: [String : Node]) {
+    public init(_ value: [String : Schema]) {
         self = .object(value)
     }
 
     public init(bytes: [UInt8]) {
         self = .bytes(bytes)
+    }
+
+    public init<S: SchemaWrapper>(_ wrapper: S) {
+        self = wrapper.schema
     }
 }

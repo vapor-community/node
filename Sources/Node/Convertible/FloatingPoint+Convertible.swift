@@ -17,10 +17,10 @@ extension Double: NodeConvertibleFloatingPointType {
 
 extension NodeConvertibleFloatingPointType {
     public func makeNode(in context: Context = EmptyNode) -> Node {
-        return .number(Node.Number(doubleValue))
+        return Node(.number(Schema.Number(doubleValue)))
     }
 
-    public init(node: Node, in context: Context) throws {
+    public init(node: Node) throws {
         guard let double = node.double else {
             throw NodeError(node: node, expectation: "\(Self.self)")
         }

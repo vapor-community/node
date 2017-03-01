@@ -1,6 +1,6 @@
 import Bits
 
-extension Node: Polymorphic {
+extension Schema: Polymorphic {
     public var string: String? {
         switch self {
         case .bool(let bool):

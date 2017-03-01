@@ -3,7 +3,7 @@ extension Bool: NodeConvertible {
         return .bool(self)
     }
 
-    public init(node: Node, in context: Context) throws {
+    public init(node: Node) throws {
         guard let bool = node.bool else {
             throw NodeError(node: node, expectation: "\(Bool.self)")
         }

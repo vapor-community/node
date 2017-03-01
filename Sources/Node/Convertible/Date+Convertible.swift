@@ -61,8 +61,8 @@ extension Date: NodeConvertible {
         Initializes a Date object with another Node.date, a number representing a timestamp,
         or a formatted date string corresponding to one of the `incomingDateFormatters`.
     */
-    public init(node: Node, in context: Context) throws {
-        switch node {
+    public init(node: Node) throws {
+        switch node.schema {
         case let .date(date):
             self = date
         case let .number(number):
@@ -81,7 +81,7 @@ extension Date: NodeConvertible {
     }
 }
 
-extension Node {
+extension Schema {
     public var date: Date? {
         return try? Date(node: self)
     }

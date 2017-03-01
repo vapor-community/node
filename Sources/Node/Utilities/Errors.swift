@@ -7,11 +7,18 @@ public struct NodeError: Debuggable {
 
     public let type: String = NodeError.unableToConvert // replacing the enum case to identify error type
 
-    internal init(node: Node?, expectation: String, indexers: [PathIndexer] = []) {
-        self.node = node
-        self.expectation = expectation
-        self.path = indexers.path()
+    internal init(node: Any?, expectation: String, indexers: [PathIndexer] = []) {
+        fatalError()
+//        self.node = node
+//        self.expectation = expectation
+//        self.path = indexers.path()
     }
+//    internal init(node: Schema?, expectation: String, indexers: [PathIndexer] = []) {
+//        fatalError()
+////        self.node = node
+////        self.expectation = expectation
+////        self.path = indexers.path()
+//    }
 }
 
 extension NodeError {

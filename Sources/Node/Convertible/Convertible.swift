@@ -22,15 +22,51 @@ public protocol NodeInitializable {
         This allows flexibility. for objects that might require access
         to a context outside of the node ecosystem
     */
-    init(node: Node, in context: Context) throws
+    init(node: Node) throws
 }
 
 extension NodeInitializable {
-    /**
-        Default initializer for cases where a custom Context is not required
-    */
-    public init(node: Node) throws {
-        try self.init(node: node, in: EmptyNode)
+    public init(node: Schema) throws {
+        let node = Node(node)
+        try self.init(node: node)
+    }
+}
+
+public struct Node: SchemaWrapper {
+    public var schema: Schema
+    public let context: Context
+
+    public init(schema: Schema, in context: Context) {
+        self.schema = schema
+        self.context = context
+    }
+}
+
+extension Node {
+    public var nodeArray: [Node]? { return schema.schemaArray?.map { Node($0) } }
+    public var nodeObject: [String: Node]? {
+        guard let object = schema.schemaObject else { return nil }
+        var new = [String: Node]()
+        object.forEach { key, value in
+            new[key] = Node(value)
+        }
+        return new
+    }
+}
+extension SchemaWrapper {
+    public static var null: Self { return Self(.null) }
+    public static func bool(_ val: Bool) -> Self { return Self(.bool(val)) }
+    public static func date(_ val: Date) -> Self { return Self(.date(val)) }
+    public static func number(_ val: Schema.Number) -> Self { return Self(.number(val)) }
+    public static func string(_ val: String) -> Self { return Self(.string(val)) }
+    public static func object(_ val: [String: Schema]) -> Self { return Self(.object(val)) }
+    public static func object(_ val: [String: Node]) -> Self {
+        var new = [String: Schema]()
+        val.forEach { key, value in
+            new[key] = value.schema
+        }
+
+        return Self(.object(new))
     }
 }
 

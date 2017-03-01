@@ -4,24 +4,24 @@
     Node is meant to be a transitive data structure that can be used to facilitate conversions
     between different types.
 */
-public enum Node {
+public enum Schema {
     case null
     case bool(Bool)
     case number(Number)
     case string(String)
-    case array([Node])
-    case object([String: Node])
+    case array([Schema])
+    case object([String: Schema])
     case bytes([UInt8])
     case date(Date)
 }
 
-extension Node {
+extension Schema {
     public init() {
         self.init([:])
     }
 }
 
-extension Node: CustomStringConvertible {
+extension Schema: CustomStringConvertible {
     public var description: String {
         switch self {
         case .null:

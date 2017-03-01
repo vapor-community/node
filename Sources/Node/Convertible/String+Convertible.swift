@@ -3,7 +3,7 @@ extension String: NodeConvertible {
         return .string(self)
     }
 
-    public init(node: Node, in context: Context) throws {
+    public init(node: Node) throws {
         guard let string = node.string else {
             throw NodeError(node: node, expectation: "\(String.self)")
         }

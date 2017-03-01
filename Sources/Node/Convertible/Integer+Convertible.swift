@@ -6,11 +6,11 @@ extension Int64: NodeConvertible {}
 
 extension SignedInteger {
     public func makeNode(in context: Context = EmptyNode) -> Node {
-        let number = Node.Number(self.toIntMax())
+        let number = Schema.Number(self.toIntMax())
         return .number(number)
     }
 
-    public init(node: Node, in context: Context) throws {
+    public init(node: Node) throws {
         guard let int = node.int else {
             throw NodeError(node: node, expectation: "\(Self.self)")
         }

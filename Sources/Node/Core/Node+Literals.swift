@@ -1,28 +1,30 @@
-extension Node: ExpressibleByNilLiteral {
+extension Schema: ExpressibleByNilLiteral {
     public init(nilLiteral value: Void) {
         self = .null
     }
 }
 
-extension Node: ExpressibleByBooleanLiteral {
+extension Schema: ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: BooleanLiteralType) {
         self.init(value)
     }
 }
 
-extension Node: ExpressibleByIntegerLiteral {
+extension Schema: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
-        self = value.makeNode(in: EmptyNode)
+        fatalError()
+//        self = value.makeNode(in: EmptyNode)
     }
 }
 
-extension Node: ExpressibleByFloatLiteral {
+extension Schema: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
-        self = value.makeNode(in: EmptyNode)
+        fatalError()
+        //        self = value.makeNode(in: EmptyNode)
     }
 }
 
-extension Node: ExpressibleByStringLiteral {
+extension Schema: ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
         self.init(value)
     }
@@ -36,15 +38,15 @@ extension Node: ExpressibleByStringLiteral {
     }
 }
 
-extension Node: ExpressibleByArrayLiteral {
-    public init(arrayLiteral elements: Node...) {
+extension Schema: ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: Schema...) {
         self = .array(elements)
     }
 }
 
-extension Node: ExpressibleByDictionaryLiteral {
-    public init(dictionaryLiteral elements: (String, Node)...) {
-        var object = [String : Node](minimumCapacity: elements.count)
+extension Schema: ExpressibleByDictionaryLiteral {
+    public init(dictionaryLiteral elements: (String, Schema)...) {
+        var object = [String : Schema](minimumCapacity: elements.count)
         elements.forEach { key, value in
             object[key] = value
         }

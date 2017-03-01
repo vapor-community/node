@@ -6,8 +6,7 @@
 */
 public protocol Context {}
 
-extension Node : Context {}
 extension Array : Context {}
 extension Dictionary : Context {}
 
-public let EmptyNode = Node.object([:])
+public let EmptyNode = [String: Int]()

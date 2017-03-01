@@ -1,4 +1,4 @@
-extension Node {
+extension Schema {
     public enum Number {
         case int(Int)
         case uint(UInt)
@@ -6,9 +6,13 @@ extension Node {
     }
 }
 
+extension Node {
+    public typealias Number = Schema.Number
+}
+
 // MARK: Initializers
 
-extension Node.Number {
+extension Schema.Number {
     public init<I: Integer>(_ value: I) {
         let max = value.toIntMax()
         let int = Int(max)
@@ -37,7 +41,7 @@ extension UInt {
     static var intMax = UInt(Int.max)
 }
 
-extension Node.Number {
+extension Schema.Number {
     public var int: Int {
         switch self {
         case let .int(i):
@@ -74,7 +78,7 @@ extension Node.Number {
     }
 }
 
-extension Node.Number {
+extension Schema.Number {
     public var bool: Bool? {
         switch self {
         case let .int(i):
@@ -104,9 +108,9 @@ extension Node.Number {
 
 // MARK: Equatable
 
-extension Node.Number: Equatable {}
+extension Schema.Number: Equatable {}
 
-public func ==(lhs: Node.Number, rhs: Node.Number) -> Bool {
+public func ==(lhs: Schema.Number, rhs: Schema.Number) -> Bool {
     switch (lhs, rhs) {
     case let (.int(l), .int(r)):
         return l == r
@@ -137,13 +141,13 @@ public func ==(lhs: Node.Number, rhs: Node.Number) -> Bool {
 
 // MARK: Literals
 
-extension Node.Number: ExpressibleByIntegerLiteral {
+extension Schema.Number: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
         self.init(value)
     }
 }
 
-extension Node.Number: ExpressibleByFloatLiteral {
+extension Schema.Number: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
         self.init(value)
     }
@@ -151,7 +155,7 @@ extension Node.Number: ExpressibleByFloatLiteral {
 
 // MARK: String
 
-extension Node.Number: CustomStringConvertible {
+extension Schema.Number: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .int(i):

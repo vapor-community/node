@@ -1,5 +1,5 @@
-extension Node {
-    public var nodeArray: [Node]? {
+extension Schema {
+    public var schemaArray: [Schema]? {
         switch self {
         case let .array(array):
             return array
@@ -8,7 +8,7 @@ extension Node {
         }
     }
     
-    public var nodeObject: [String: Node]? {
+    public var schemaObject: [String: Schema]? {
         switch self {
         case let .object(ob):
             return ob
