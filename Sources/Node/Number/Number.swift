@@ -1,3 +1,7 @@
+extension Node {
+    public typealias Number = Schema.Number
+}
+
 extension Schema {
     /// A more comprehensive Number encapsulation to allow
     /// more nuanced number information to be stored
@@ -6,10 +10,6 @@ extension Schema {
         case uint(UInt)
         case double(Double)
     }
-}
-
-extension Node {
-    public typealias Number = Schema.Number
 }
 
 // MARK: Initializers
@@ -34,26 +34,6 @@ extension Schema.Number {
 
     public init(_ value: Double) {
         self = .double(value)
-    }
-}
-
-extension Schema.Number: NodeConvertible {
-    public init(node: Node) throws {
-        switch node.schema {
-        case .number(let number):
-            self = number
-        case .string(let string):
-            guard let number = string.number else {
-                throw NodeError(node: node, expectation: "\(Schema.Number.self)")
-            }
-            self = number
-        default:
-            throw NodeError(node: node, expectation: "\(Schema.Number.self)")
-        }
-    }
-
-    public func makeNode(in context: Context?) -> Node {
-        return Node(schema: .number(self), in: context)
     }
 }
 
