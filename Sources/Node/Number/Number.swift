@@ -35,6 +35,37 @@ extension Schema.Number {
     }
 }
 
+extension String {
+    var number: Schema.Number? {
+        if self.contains(".") {
+            return Double(self).flatMap { Schema.Number($0) }
+        }
+
+        guard hasPrefix("-") else { return UInt(self).flatMap { Schema.Number($0) } }
+        return Int(self).flatMap { Schema.Number($0) }
+    }
+}
+
+extension Schema.Number: NodeConvertible {
+    public init(node: Node) throws {
+        switch node.schema {
+        case .number(let number):
+            self = number
+        case .string(let string):
+            guard let number = string.number else {
+                throw NodeError(node: node, expectation: "\(Schema.Number.self)")
+            }
+            self = number
+        default:
+            throw NodeError(node: node, expectation: "\(Schema.Number.self)")
+        }
+    }
+
+    public func makeNode(in context: Context?) -> Node {
+        return Node(schema: .number(self), in: context)
+    }
+}
+
 // MARK: Accessors
 
 extension UInt {

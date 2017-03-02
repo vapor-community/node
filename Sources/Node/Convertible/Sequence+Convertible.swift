@@ -67,23 +67,23 @@ extension KeyAccessible where Key == String, Value == NodeRepresentable {
 
 // MARK: From Node
 
-extension Array where Element: NodeInitializable {
-    public init(node: NodeRepresentable, in context: Context? = nil) throws {
-        let node = try node.makeNode(in: context)
-        let array = node.nodeArray ?? [node]
-        self = try array
-            .map { try Element(node: $0) }
-    }
+//extension Array where Element: NodeInitializable {
+//    public init(node: NodeRepresentable, in context: Context? = nil) throws {
+//        let node = try node.makeNode(in: context)
+//        let array = node.nodeArray ?? [node]
+//        self = try array
+//            .map { try Element(node: $0) }
+//    }
+//
+//}
 
-}
-
-extension Set where Element: NodeInitializable {
-    public init(node: NodeRepresentable, in context: Context? = nil) throws {
-        let node = try node.makeNode(in: context)
-        let array = try [Element](node: node, in: context)
-        self = Set(array)
-    }
-}
+//extension Set where Element: NodeInitializable {
+//    public init(node: NodeRepresentable, in context: Context? = nil) throws {
+//        let node = try node.makeNode(in: context)
+//        let array = try [Element](node: node, in: context)
+//        self = Set(array)
+//    }
+//}
 
 extension KeyAccessible where Key == String, Value: NodeInitializable {
     public init(node: NodeRepresentable, in context: Context? = nil) throws {
