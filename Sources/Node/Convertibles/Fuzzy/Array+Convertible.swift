@@ -6,23 +6,16 @@ public enum TypeError: Swift.Error {
 
 extension Array: NodeConvertible {
     public init(node: Node) throws {
-        fatalError()
-//        guard let element = Element.self as? NodeInitializable.Type else {
-//            throw TypeError.notValid
-//        }
-//
-//        let array = node.typeArray ?? [node]
-//        let mapped = try array.map { try element.init(node: $0) }
-//        self = mapped as! [Element]
+        guard Element.self is NodeInitializable.Type else { throw TypeError.notValid }
+        let element = Element.self as! NodeInitializable.Type
+        let array = node.typeArray ?? [node]
+        let mapped = try array.map { try element.init(node: $0) as! Element }
+        self = mapped
     }
 
     public func makeNode(in context: Context?) throws -> Node {
-        fatalError()
-//        guard let representable = self as? [NodeRepresentable] else {
-//            throw TypeError.notValid
-//        }
-//
-//        let mapped = try representable.map { try $0.makeNode(in: context) }
-//        return Node(mapped)
+        guard Element.self is NodeRepresentable.Type else { throw TypeError.notValid }
+        let mapped = try map { $0 as! NodeRepresentable } .map { try $0.makeNode(in: context) }
+        return Node(mapped)
     }
 }
