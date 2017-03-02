@@ -51,13 +51,6 @@ extension Date: NodeConvertible {
     public static var outgoingDateFormatter: DateFormatter = .iso8601
 
     /**
-        Creates a node representation of the date
-    */
-    public func makeNode(in context: Context? = nil) throws -> Node {
-        return .date(self)
-    }
-
-    /**
         Initializes a Date object with another Node.date, a number representing a timestamp,
         or a formatted date string corresponding to one of the `incomingDateFormatters`.
     */
@@ -78,6 +71,11 @@ extension Date: NodeConvertible {
         default:
             throw NodeError(node: node, expectation: "\(Date.self), formatted time string, or timestamp")
         }
+    }
+
+    /// Creates a node representation of the date
+    public func makeNode(in context: Context? = nil) throws -> Node {
+        return .date(self)
     }
 }
 
