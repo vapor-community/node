@@ -30,7 +30,7 @@ class NodeBackedTests: XCTestCase {
     }
 
     func testPolymorphic() throws {
-        let node = try JSON(
+        let node = JSON(
             node: [
                 "string": "Hello!",
                 "int": 3,

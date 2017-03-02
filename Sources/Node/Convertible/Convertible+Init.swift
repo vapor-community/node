@@ -8,7 +8,8 @@ extension NodeRepresentable {
      */
     public func converted<T: NodeInitializable>(
         to type: T.Type = T.self,
-        in context: Context? = nil) throws -> T {
+        in context: Context? = nil
+    ) throws -> T {
         let node = try makeNode(in: context)
         return try type.init(node: node)
     }
@@ -16,18 +17,17 @@ extension NodeRepresentable {
 
 extension NodeInitializable {
     public init(node representable: NodeRepresentable?, in context: Context? = nil) throws {
-        let node = try representable?.makeNode(in: context) ?? .null
+        let node = try representable?.makeNode(in: context) ?? Node(schema: .null, in: context)
         try self.init(node: node)
     }
-}
 
-extension NodeInitializable {
     public init(node representable: [NodeRepresentable?]?, in context: Context? = nil) throws {
         var converted: [Node]? = representable == nil ? nil : []
 
         try representable?.forEach { val in
             converted?.append(try Node(node: val, in: context))
         }
+
 
         let node = converted.flatMap(Node.init)
         try self.init(node: node)
@@ -47,7 +47,7 @@ extension NodeInitializable {
         var converted: [String: Node]? = representable == nil ? nil : [:]
 
         try representable?.forEach { key, val in
-            converted?[key] = try Node(node: val)
+            converted?[key] = try Node(node: val, in: context)
         }
 
         let node = converted.flatMap(Node.init)
@@ -58,7 +58,7 @@ extension NodeInitializable {
         var converted: [String: Node]? = representable == nil ? nil : [:]
 
         try representable?.forEach { key, val in
-            converted?[key] = try Node(node: val)
+            converted?[key] = try Node(node: val, in: context)
         }
 
         let node = converted.flatMap(Node.init)
@@ -69,7 +69,7 @@ extension NodeInitializable {
         var converted: [String: Node]? = representable == nil ? nil : [:]
 
         try representable?.forEach { key, val in
-            converted?[key] = try Node(node: val)
+            converted?[key] = try Node(node: val, in: context)
         }
 
         let node = converted.flatMap(Node.init)

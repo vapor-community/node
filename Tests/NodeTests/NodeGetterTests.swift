@@ -84,13 +84,13 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSingle() throws {
-        let node = try Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
+        let node = Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
         let geted = try node.get("nest", "ed", "hello") as NoNull
         XCTAssert(geted.node.string == "world")
     }
 
     func testgetSingleOptional() throws {
-        let node = try Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
+        let node = Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
         let geted: NoNull? = try node.get("nest", "ed", "hello")
         XCTAssert(geted?.node.string == "world")
     }
@@ -104,14 +104,14 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetArray() throws {
-        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try node.get("nest", "ed", "array") as [NoNull]
         let numbers = geted.flatMap { $0.node.int }
         XCTAssert(numbers == [1,2,3,4])
     }
 
     func testgetArrayOptional() throws {
-        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: [NoNull]? = try node.get("nest", "ed", "array")
         let numbers = geted?.flatMap { $0.node.int } ?? []
         XCTAssert(numbers == [1,2,3,4])
@@ -126,7 +126,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetArrayOfArrays() throws {
-        let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
+        let node = Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
         let geted = try node.get("nest", "ed", "array") as [[NoNull]]
         let numbers = geted.map { innerArray in
             innerArray.flatMap { $0.node.int }
@@ -143,7 +143,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetArrayOfArraysOptional() throws {
-        let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
+        let node = Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
         let geted: [[NoNull]]? = try node.get("nest", "ed", "array")
         let numbers = geted?.map { innerArray in
             innerArray.flatMap { $0.node.int }
@@ -168,13 +168,13 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetObject() throws {
-        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
+        let node = Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
         let geted = try node.get("nest", "ed", "object") as [String: NoNull]
         XCTAssert(geted["hello"]?.node.string == "world")
     }
 
     func testgetObjectOptional() throws {
-        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
+        let node = Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
         let geted: [String: NoNull]? = try node.get("nest", "ed", "object")
         XCTAssert(geted?["hello"]?.node.string == "world")
     }
@@ -188,14 +188,14 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetObjectOfArrays() throws {
-        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
+        let node = Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
         let geted = try node.get("nest", "ed", "object") as [String: [NoNull]]
         let ints = geted["hello"]?.flatMap({ $0.node.int }) ?? []
         XCTAssert(ints == [1,2,3,4])
     }
 
     func testgetObjectOfArraysOptional() throws {
-        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
+        let node = Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
         let geted: [String: [NoNull]]? = try node.get("nest", "ed", "object")
         let ints = geted?["hello"]?.flatMap({ $0.node.int }) ?? []
         XCTAssert(ints == [1,2,3,4])
@@ -210,7 +210,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSet() throws {
-        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try node.get("nest", "ed", "array") as Set<NoNull>
         let ints = [1,2,3,4]
         let compare = try ints.map(to: NoNull.self).set
@@ -218,7 +218,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSetOptional() throws {
-        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: Set<NoNull>? = try node.get("nest", "ed", "array")
         let ints = [1,2,3,4]
         let compare = try ints.map(to: NoNull.self).set

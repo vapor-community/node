@@ -103,9 +103,12 @@ extension SchemaWrapper {
         Initialize json w/ array
     */
     public init(_ array: [Self]) {
-        let array = array.map { $0.schema }
-        let node = Schema.array(array)
-        self.init(node)
+        let schema = array.map { $0.schema }
+        let node = Schema.array(schema)
+
+        // take first context to attempt inference, should all be same
+        let context = array.lazy.flatMap { $0.context } .first
+        self.init(schema: node, in: context)
     }
 
     /**
@@ -116,8 +119,11 @@ extension SchemaWrapper {
         for (key, val) in o {
             object[key] = val.schema
         }
-        let node = Schema.object(object)
-        self.init(node)
+        let schema = Schema.object(object)
+
+        // take first context to attempt inference, should all be same
+        let context = o.values.lazy.flatMap { $0.context } .first
+        self.init(schema: schema, in: context)
     }
 }
 

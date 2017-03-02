@@ -168,14 +168,14 @@ class BasicConvertibleTests: XCTestCase {
 
     func testNodeConvertible() throws {
         let node = Node("hello node")
-        let initted = try Node(node: node)
+        let initted = Node(node: node)
         let made = node.makeNode()
         XCTAssert(initted == made)
     }
 
     func testUUIDConvertible() throws {
         let expectation = UUID()
-        let node = try expectation.makeNode()
+        let node = expectation.makeNode()
         XCTAssertEqual(expectation.uuidString, node.string)
 
         let inverse = try node.converted(to: UUID.self)
