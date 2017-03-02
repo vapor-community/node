@@ -7,3 +7,13 @@ public struct Node: SchemaWrapper {
         self.context = context
     }
 }
+
+extension Node: NodeConvertible {
+    public init(node: Node) {
+        self = node
+    }
+
+    public func makeNode(in context: Context?) -> Node {
+        return self
+    }
+}
