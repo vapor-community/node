@@ -19,7 +19,7 @@ struct NoNull: NodeInitializable, Hashable {
 
     init(node: Node) throws {
         guard node != .null else {
-            throw NodeError(node: node, expectation: "something not null")
+            throw Error.unableToConvert(input: node, expectation: "something not null", path: [])
         }
         
         self.node = node
@@ -68,7 +68,7 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("date", transform: Date.fromTimestamp)
             XCTFail("should throw error")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetTransformOptionalValue() throws {
@@ -100,7 +100,7 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("nest", "ed", "hello") as NoNull
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetArray() throws {
@@ -122,7 +122,7 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("nest", "ed", "array") as [NoNull]
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetArrayOfArrays() throws {
@@ -164,7 +164,7 @@ class NodeGetterTests: XCTestCase {
             let node = Node()
             _ = try node.get("nest", "ed", "array") as [[NoNull]]
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetObject() throws {
@@ -230,7 +230,7 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("dont", "exist", 0) as Set<NoNull>
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
     
     func testgetDateRFC1123() throws {

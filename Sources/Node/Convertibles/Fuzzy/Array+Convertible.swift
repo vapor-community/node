@@ -1,12 +1,11 @@
 import Foundation
 
-public enum TypeError: Swift.Error {
-    case notValid
-}
-
 extension Array: NodeConvertible {
     public init(node: Node) throws {
-        guard Element.self is NodeInitializable.Type else { throw TypeError.notValid }
+        guard Element.self is NodeInitializable.Type else {
+            throw Error.invalidContainer(container: "\(Array.self)", element: "\(Element.self)")
+        }
+
         let element = Element.self as! NodeInitializable.Type
         let array = node.typeArray ?? [node]
         let mapped = try array.map { try element.init(node: $0) as! Element }
@@ -22,8 +21,11 @@ extension Array: NodeConvertible {
 extension Array {
     /// this is a work around to casting limitations on Linux
     fileprivate func representable() throws -> [NodeRepresentable] {
-        let mapped = self.flatMap { $0 as? NodeRepresentable }
-        guard mapped.count == count else { throw TypeError.notValid }
-        return mapped
+        return try self.map {
+            guard let representable = $0 as? NodeRepresentable else {
+                throw Error.invalidContainer(container: "\(Array.self)", element: "\(String(describing: $0))")
+            }
+            return representable
+        }
     }
 }

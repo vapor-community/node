@@ -1,7 +1,7 @@
 extension String: NodeConvertible {
     public init(node: Node) throws {
         guard let string = node.string else {
-            throw NodeError(node: node, expectation: "\(String.self)")
+            throw Error.unableToConvert(input: node, expectation: "\(String.self)", path: [])
         }
         self = string
     }

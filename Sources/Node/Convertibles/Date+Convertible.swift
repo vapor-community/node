@@ -69,7 +69,11 @@ extension Date: NodeConvertible {
                 else { fallthrough }
             self = date
         default:
-            throw NodeError(node: node, expectation: "\(Date.self), formatted time string, or timestamp")
+            throw Error.unableToConvert(
+                input: node,
+                expectation: "\(Date.self), formatted time string, or timestamp",
+                path: []
+            )
         }
     }
 

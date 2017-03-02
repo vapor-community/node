@@ -7,7 +7,7 @@ extension Int64: NodeConvertible {}
 extension SignedInteger {
     public init(node: Node) throws {
         guard let int = node.int else {
-            throw NodeError(node: node, expectation: "\(Self.self)")
+            throw Error.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
         }
 
         self.init(int.toIntMax())
