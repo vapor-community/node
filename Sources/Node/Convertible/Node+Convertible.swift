@@ -1,4 +1,4 @@
-extension Schema: NodeConvertible { // Can conform to both if non-throwing implementations
+extension Schema: NodeConvertible {
     public init(node: Node) {
         self = node.schema
     }

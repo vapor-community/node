@@ -1,4 +1,6 @@
 extension Schema {
+    /// A more comprehensive Number encapsulation to allow
+    /// more nuanced number information to be stored
     public enum Number {
         case int(Int)
         case uint(UInt)
@@ -35,17 +37,6 @@ extension Schema.Number {
     }
 }
 
-extension String {
-    var number: Schema.Number? {
-        if self.contains(".") {
-            return Double(self).flatMap { Schema.Number($0) }
-        }
-
-        guard hasPrefix("-") else { return UInt(self).flatMap { Schema.Number($0) } }
-        return Int(self).flatMap { Schema.Number($0) }
-    }
-}
-
 extension Schema.Number: NodeConvertible {
     public init(node: Node) throws {
         switch node.schema {
@@ -66,10 +57,21 @@ extension Schema.Number: NodeConvertible {
     }
 }
 
+extension String {
+    fileprivate var number: Schema.Number? {
+        if self.contains(".") {
+            return Double(self).flatMap { Schema.Number($0) }
+        }
+
+        guard hasPrefix("-") else { return UInt(self).flatMap { Schema.Number($0) } }
+        return Int(self).flatMap { Schema.Number($0) }
+    }
+}
+
 // MARK: Accessors
 
 extension UInt {
-    static var intMax = UInt(Int.max)
+    internal static var intMax = UInt(Int.max)
 }
 
 extension Schema.Number {

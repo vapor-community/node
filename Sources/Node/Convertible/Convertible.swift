@@ -37,17 +37,6 @@ public struct Node: SchemaWrapper {
     }
 }
 
-extension Node {
-    public var nodeArray: [Node]? { return schema.schemaArray?.map { Node(schema: $0, in: context) } }
-    public var nodeObject: [String: Node]? {
-        guard let object = schema.schemaObject else { return nil }
-        var new = [String: Node]()
-        object.forEach { key, value in
-            new[key] = Node(schema: value, in: context)
-        }
-        return new
-    }
-}
 extension SchemaWrapper {
     public static var null: Self { return Self(.null) }
     public static func bool(_ val: Bool) -> Self { return Self(.bool(val)) }

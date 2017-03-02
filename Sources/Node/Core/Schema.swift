@@ -1,9 +1,8 @@
 @_exported import struct Foundation.Date
 
-/**
-    Node is meant to be a transitive data structure that can be used to facilitate conversions
-    between different types.
-*/
+
+/// Schema is meant a data structure that can be used to facilitate different
+/// structured data formats
 public enum Schema {
     case null
     case bool(Bool)

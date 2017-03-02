@@ -9,6 +9,6 @@ extension UUID: NodeConvertible {
     }
 
     public func makeNode(in context: Context? = nil) -> Node {
-        return uuidString.makeNode()
+        return uuidString.makeNode(in: context)
     }
 }
