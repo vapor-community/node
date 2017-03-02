@@ -1,6 +1,6 @@
 extension SchemaWrapper {
     public init() {
-        self.init(schema: .object([:]), in: EmptyNode)
+        self.init(schema: Schema(), in: nil)
     }
 
     public init(_ schema: Schema) {
@@ -16,6 +16,6 @@ extension SchemaWrapper {
     }
 
     public init(schema: Schema, in context: Context?) {
-        self.init(schema: schema, in: context ?? EmptyNode)
+        self.init(schema: schema, in: context ?? [String: Int]())
     }
 }

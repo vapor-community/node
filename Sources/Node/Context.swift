@@ -8,5 +8,3 @@ public protocol Context {}
 
 extension Array: Context {}
 extension Dictionary: Context {}
-
-public let EmptyNode = [String: Int]()
