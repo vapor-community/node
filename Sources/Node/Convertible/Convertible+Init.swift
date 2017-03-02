@@ -76,3 +76,19 @@ extension NodeInitializable {
         try self.init(node: node, in: context)
     }
 }
+
+public enum ArrayError: Swift.Error {
+    case arrayNotInitializable
+}
+
+extension Array: NodeInitializable {
+    public init(node: Node) throws {
+        guard let element = Element.self as? NodeInitializable.Type else {
+            // TODO: BETTER ERROR
+            throw ArrayError.arrayNotInitializable
+        }
+        let array = node.typeArray ?? [node]
+        let mapped = try array.map { try element.init(node: $0) }
+        self = mapped as! [Element]
+    }
+}

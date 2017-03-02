@@ -54,37 +54,37 @@ extension SchemaWrapper {
             return try T(node: value)
     }
 
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> [T] {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> [T] {
-            guard let value = self[indexers] else {
-                throw NodeError(node: nil, expectation: "\([T].self)", indexers: indexers)
-            }
-
-            return try [T](node: value)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> [[T]] {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> [[T]] {
-            guard let initial = self[indexers] else {
-                throw NodeError(node: nil, expectation: "\([[T]].self)", indexers: indexers)
-            }
-            let array = initial.typeArray ?? [initial]
-            return try array.map { try [T].init(node: $0) }
-    }
+//    public func get<T : NodeInitializable>(
+//        _ indexers: PathIndexer...)
+//        throws -> [T] {
+//            return try get(indexers)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: [PathIndexer])
+//        throws -> [T] {
+//            guard let value = self[indexers] else {
+//                throw NodeError(node: nil, expectation: "\([T].self)", indexers: indexers)
+//            }
+//
+//            return try [T](node: value)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: PathIndexer...)
+//        throws -> [[T]] {
+//            return try get(indexers)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: [PathIndexer])
+//        throws -> [[T]] {
+//            guard let initial = self[indexers] else {
+//                throw NodeError(node: nil, expectation: "\([[T]].self)", indexers: indexers)
+//            }
+//            let array = initial.typeArray ?? [initial]
+//            return try array.map { try [T].init(node: $0) }
+//    }
 
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
@@ -102,21 +102,21 @@ extension SchemaWrapper {
             return try object.mapValues { return try T(node: $0) }
     }
 
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> [String : [T]] {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> [String : [T]] {
-            let value = self[indexers]
-            guard let object = value?.typeObject else {
-                throw NodeError(node: value, expectation: "\([String: [T]].self)", indexers: indexers)
-            }
-            return try object.mapValues { return try [T](node: $0) }
-    }
+//    public func get<T : NodeInitializable>(
+//        _ indexers: PathIndexer...)
+//        throws -> [String : [T]] {
+//            return try get(indexers)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: [PathIndexer])
+//        throws -> [String : [T]] {
+//            let value = self[indexers]
+//            guard let object = value?.typeObject else {
+//                throw NodeError(node: value, expectation: "\([String: [T]].self)", indexers: indexers)
+//            }
+//            return try object.mapValues { return try [T](node: $0) }
+//    }
 
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
@@ -151,32 +151,32 @@ extension SchemaWrapper {
             return try T(node: node)
     }
 
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> [T]? {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> [T]? {
-            guard let node = self[indexers], node != .null else { return nil }
-            return try [T](node: node)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> [[T]]? {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> [[T]]? {
-            guard let schema = self[indexers], schema != .null else { return nil }
-            let array = schema.typeArray ?? [schema]
-            return try array.map { try [T](node: $0) }
-    }
+//    public func get<T : NodeInitializable>(
+//        _ indexers: PathIndexer...)
+//        throws -> [T]? {
+//            return try get(indexers)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: [PathIndexer])
+//        throws -> [T]? {
+//            guard let node = self[indexers], node != .null else { return nil }
+//            return try [T](node: node)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: PathIndexer...)
+//        throws -> [[T]]? {
+//            return try get(indexers)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: [PathIndexer])
+//        throws -> [[T]]? {
+//            guard let schema = self[indexers], schema != .null else { return nil }
+//            let array = schema.typeArray ?? [schema]
+//            return try array.map { try [T](node: $0) }
+//    }
 
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
@@ -194,21 +194,21 @@ extension SchemaWrapper {
             return try object.mapValues { return try T(node: $0) }
     }
 
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> [String : [T]]? {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> [String : [T]]? {
-            guard let node = self[indexers], node != .null else { return nil }
-            guard let object = node.typeObject else {
-                throw NodeError(node: node, expectation: "\([String: [T]].self)", indexers: indexers)
-            }
-            return try object.mapValues { return try [T](node: $0) }
-    }
+//    public func get<T : NodeInitializable>(
+//        _ indexers: PathIndexer...)
+//        throws -> [String : [T]]? {
+//            return try get(indexers)
+//    }
+//
+//    public func get<T : NodeInitializable>(
+//        _ indexers: [PathIndexer])
+//        throws -> [String : [T]]? {
+//            guard let node = self[indexers], node != .null else { return nil }
+//            guard let object = node.typeObject else {
+//                throw NodeError(node: node, expectation: "\([String: [T]].self)", indexers: indexers)
+//            }
+//            return try object.mapValues { return try [T](node: $0) }
+//    }
 
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
