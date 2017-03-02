@@ -12,7 +12,7 @@ public protocol NodeRepresentable {
 
 extension NodeRepresentable {
     public func makeNode() throws -> Node {
-        return try makeNode(in: EmptyNode)
+        return try makeNode(in: nil)
     }
 }
 
@@ -27,16 +27,9 @@ public protocol NodeInitializable {
     init(node: Node) throws
 }
 
-extension NodeInitializable {
-    public init(node: Schema, in context: Context) throws {
-        let node = Node(schema: node, in: context)
-        try self.init(node: node)
-    }
-}
-
 public struct Node: SchemaWrapper {
     public var schema: Schema
-    public let context: Context
+    public var context: Context
 
     public init(schema: Schema, in context: Context) {
         self.schema = schema
@@ -68,7 +61,7 @@ extension SchemaWrapper {
             new[key] = value.schema
         }
 
-        return Self(schema: .object(new), in: val.values.first?.context ?? EmptyNode) // context should be same for all
+        return Self(schema: .object(new), in: val.values.first?.context) // context should be same for all
     }
     public static func object(_ val: [String: Self]) -> Self {
         var new = [String: Schema]()
@@ -76,15 +69,15 @@ extension SchemaWrapper {
             new[key] = value.schema
         }
 
-        return Self(schema: .object(new), in: val.values.first?.context ?? EmptyNode) // context should be same for all
+        return Self(schema: .object(new), in: val.values.first?.context) // context should be same for all
     }
     public static func array<S: SchemaWrapper>(_ val: [S]) -> Self {
         let new = val.map { $0.schema }
-        return Self(schema: .array(new), in: val.first?.context ?? EmptyNode) // context should be same for all
+        return Self(schema: .array(new), in: val.first?.context) // context should be same for all
     }
     public static func array(_ val: [Self]) -> Self {
         let new = val.map { $0.schema }
-        return Self(schema: .array(new), in: val.first?.context ?? EmptyNode) // context should be same for all
+        return Self(schema: .array(new), in: val.first?.context) // context should be same for all
     }
 }
 

@@ -10,3 +10,7 @@ extension Array : Context {}
 extension Dictionary : Context {}
 
 public let EmptyNode = [String: Int]()
+
+extension Context {
+    public static var `default`: Context { return [String: Int]() }
+}
