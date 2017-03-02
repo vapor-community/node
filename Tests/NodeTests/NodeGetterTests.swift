@@ -213,7 +213,7 @@ class NodeGetterTests: XCTestCase {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try node.get("nest", "ed", "array") as Set<NoNull>
         let ints = [1,2,3,4]
-        let compare = try ints.map(to: NoNull.self).set
+        let compare = try ints.converted(to: Set<NoNull>.self)//, in: <#T##Context?#>)//.map(to: NoNull.self).set
         XCTAssert(geted == compare)
     }
 
@@ -221,7 +221,7 @@ class NodeGetterTests: XCTestCase {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: Set<NoNull>? = try node.get("nest", "ed", "array")
         let ints = [1,2,3,4]
-        let compare = try ints.map(to: NoNull.self).set
+        let compare = try ints.converted(to: Set<NoNull>.self)//, in: <#T##Context?#>)//.map(to: NoNull.self).set
         XCTAssert(geted == compare)
     }
 
