@@ -22,6 +22,7 @@ extension SchemaWrapper {
     public var typeArray: [Self]? {
         return schema.schemaArray?.map { Self(schema: $0, in: context) }
     }
+    
     public var typeObject: [String: Self]? {
         guard let o = schema.schemaObject else { return nil }
         var new = [String: Self]()
