@@ -14,8 +14,16 @@ extension Array: NodeConvertible {
     }
 
     public func makeNode(in context: Context?) throws -> Node {
-        guard Element.self is NodeRepresentable.Type else { throw TypeError.notValid }
-        let mapped = try map { $0 as! NodeRepresentable } .map { try $0.makeNode(in: context) }
+        let mapped = try representable() .map { try $0.makeNode(in: context) }
         return Node(mapped)
+    }
+}
+
+extension Array {
+    /// this is a work around to casting limitations on Linux
+    fileprivate func representable() throws -> [NodeRepresentable] {
+        let mapped = self.flatMap { $0 as? NodeRepresentable }
+        guard mapped.count == count else { throw TypeError.notValid }
+        return mapped
     }
 }

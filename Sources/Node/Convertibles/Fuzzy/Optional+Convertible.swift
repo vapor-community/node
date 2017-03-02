@@ -12,10 +12,8 @@ extension Optional: NodeConvertible {
     }
 
     public func makeNode(in context: Context?) throws -> Node {
-        guard Wrapped.self is NodeRepresentable.Type else { throw TypeError.notValid }
         guard let value = self else { return .null }
-
-        let representable = value as! NodeRepresentable
+        guard let representable = value as? NodeRepresentable else { throw TypeError.notValid }
         return try representable.makeNode(in: context)
     }
 }
