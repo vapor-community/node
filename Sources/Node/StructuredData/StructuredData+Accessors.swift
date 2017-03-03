@@ -1,5 +1,5 @@
-extension Schema {
-    public var schemaArray: [Schema]? {
+extension StructuredData {
+    public var structuredArray: [StructuredData]? {
         switch self {
         case let .array(array):
             return array
@@ -8,7 +8,7 @@ extension Schema {
         }
     }
     
-    public var schemaObject: [String: Schema]? {
+    public var structuredObject: [String: StructuredData]? {
         switch self {
         case let .object(ob):
             return ob
@@ -18,15 +18,16 @@ extension Schema {
     }
 }
 
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public var typeArray: [Self]? {
-        return schema.schemaArray?.map { Self(schema: $0, in: context) }
+        return wrapped.structuredArray?.map { Self($0, in: context) }
     }
+    
     public var typeObject: [String: Self]? {
-        guard let o = schema.schemaObject else { return nil }
+        guard let o = wrapped.structuredObject else { return nil }
         var new = [String: Self]()
         o.forEach { key, val in
-            new[key] = Self(schema: val, in: context)
+            new[key] = Self(val, in: context)
         }
         return new
     }

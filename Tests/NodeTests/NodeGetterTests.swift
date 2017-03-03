@@ -19,7 +19,7 @@ struct NoNull: NodeInitializable, Hashable {
 
     init(node: Node) throws {
         guard node != .null else {
-            throw NodeError(node: node, expectation: "something not null")
+            throw NodeError.unableToConvert(input: node, expectation: "something not null", path: [])
         }
         
         self.node = node
@@ -58,7 +58,7 @@ class NodeGetterTests: XCTestCase {
 
     func testgetTransform() throws {
         let dict = ["date": 250]
-        let node = try Node(node: dict)
+        let node = try Node(node: dict, in: nil)
         let geted = try node.get("date", transform: Date.fromTimestamp)
         XCTAssert(geted.timeIntervalSince1970 == 250)
     }
@@ -68,11 +68,11 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("date", transform: Date.fromTimestamp)
             XCTFail("should throw error")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetTransformOptionalValue() throws {
-        let node = try Node(node: ["date": 250])
+        let node = try Node(node: ["date": 250], in: nil)
         let geted = try node.get("date", transform: Date.optionalFromTimestamp)
         XCTAssert(geted?.timeIntervalSince1970 == 250)
     }
@@ -84,13 +84,13 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetSingle() throws {
-        let node = Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
+        let node = try Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
         let geted = try node.get("nest", "ed", "hello") as NoNull
         XCTAssert(geted.node.string == "world")
     }
 
     func testgetSingleOptional() throws {
-        let node = Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
+        let node = try Node(node: ["nest": [ "ed": ["hello": "world", "pi": 3.14159]]])
         let geted: NoNull? = try node.get("nest", "ed", "hello")
         XCTAssert(geted?.node.string == "world")
     }
@@ -100,18 +100,18 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("nest", "ed", "hello") as NoNull
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetArray() throws {
-        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try node.get("nest", "ed", "array") as [NoNull]
         let numbers = geted.flatMap { $0.node.int }
         XCTAssert(numbers == [1,2,3,4])
     }
 
     func testgetArrayOptional() throws {
-        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: [NoNull]? = try node.get("nest", "ed", "array")
         let numbers = geted?.flatMap { $0.node.int } ?? []
         XCTAssert(numbers == [1,2,3,4])
@@ -122,11 +122,11 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("nest", "ed", "array") as [NoNull]
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetArrayOfArrays() throws {
-        let node = Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
+        let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
         let geted = try node.get("nest", "ed", "array") as [[NoNull]]
         let numbers = geted.map { innerArray in
             innerArray.flatMap { $0.node.int }
@@ -143,7 +143,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetArrayOfArraysOptional() throws {
-        let node = Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
+        let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
         let geted: [[NoNull]]? = try node.get("nest", "ed", "array")
         let numbers = geted?.map { innerArray in
             innerArray.flatMap { $0.node.int }
@@ -164,17 +164,17 @@ class NodeGetterTests: XCTestCase {
             let node = Node()
             _ = try node.get("nest", "ed", "array") as [[NoNull]]
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
 
     func testgetObject() throws {
-        let node = Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
+        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
         let geted = try node.get("nest", "ed", "object") as [String: NoNull]
         XCTAssert(geted["hello"]?.node.string == "world")
     }
 
     func testgetObjectOptional() throws {
-        let node = Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
+        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": "world"]]]])
         let geted: [String: NoNull]? = try node.get("nest", "ed", "object")
         XCTAssert(geted?["hello"]?.node.string == "world")
     }
@@ -184,18 +184,18 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("dont", "exist", 0) as [String: NoNull]
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch {}
     }
 
     func testgetObjectOfArrays() throws {
-        let node = Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
+        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
         let geted = try node.get("nest", "ed", "object") as [String: [NoNull]]
         let ints = geted["hello"]?.flatMap({ $0.node.int }) ?? []
         XCTAssert(ints == [1,2,3,4])
     }
 
     func testgetObjectOfArraysOptional() throws {
-        let node = Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
+        let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
         let geted: [String: [NoNull]]? = try node.get("nest", "ed", "object")
         let ints = geted?["hello"]?.flatMap({ $0.node.int }) ?? []
         XCTAssert(ints == [1,2,3,4])
@@ -206,22 +206,22 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("dont", "exist", 0) as [String: [NoNull]]
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch {}
     }
 
     func testgetSet() throws {
-        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try node.get("nest", "ed", "array") as Set<NoNull>
         let ints = [1,2,3,4]
-        let compare = try ints.map(to: NoNull.self).set
+        let compare = try ints.converted(to: Set<NoNull>.self, in: nil)
         XCTAssert(geted == compare)
     }
 
     func testgetSetOptional() throws {
-        let node = Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
+        let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: Set<NoNull>? = try node.get("nest", "ed", "array")
         let ints = [1,2,3,4]
-        let compare = try ints.map(to: NoNull.self).set
+        let compare = try ints.converted(to: Set<NoNull>.self, in: nil)
         XCTAssert(geted == compare)
     }
 
@@ -230,7 +230,7 @@ class NodeGetterTests: XCTestCase {
         do {
             _ = try node.get("dont", "exist", 0) as Set<NoNull>
             XCTFail("should throw node error unable to convert")
-        } catch let error as NodeError where error.type == NodeError.unableToConvert {}
+        } catch is NodeError {}
     }
     
     func testgetDateRFC1123() throws {

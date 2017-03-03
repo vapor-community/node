@@ -51,18 +51,11 @@ extension Date: NodeConvertible {
     public static var outgoingDateFormatter: DateFormatter = .iso8601
 
     /**
-        Creates a node representation of the date
-    */
-    public func makeNode(in context: Context? = nil) throws -> Node {
-        return .date(self)
-    }
-
-    /**
         Initializes a Date object with another Node.date, a number representing a timestamp,
         or a formatted date string corresponding to one of the `incomingDateFormatters`.
     */
     public init(node: Node) throws {
-        switch node.schema {
+        switch node.wrapped {
         case let .date(date):
             self = date
         case let .number(number):
@@ -76,14 +69,23 @@ extension Date: NodeConvertible {
                 else { fallthrough }
             self = date
         default:
-            throw NodeError(node: node, expectation: "\(Date.self), formatted time string, or timestamp")
+            throw NodeError.unableToConvert(
+                input: node,
+                expectation: "\(Date.self), formatted time string, or timestamp",
+                path: []
+            )
         }
+    }
+
+    /// Creates a node representation of the date
+    public func makeNode(in context: Context?) throws -> Node {
+        return .date(self, in: context)
     }
 }
 
-extension Schema {
+extension StructuredData {
     public var date: Date? {
-        return try? Date(node: self)
+        return try? Date(node: self, in: nil)
     }
 }
 

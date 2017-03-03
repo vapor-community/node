@@ -5,16 +5,16 @@ extension Int32: NodeConvertible {}
 extension Int64: NodeConvertible {}
 
 extension SignedInteger {
-    public func makeNode(in context: Context? = nil) -> Node {
-        let number = Schema.Number(self.toIntMax())
-        return .number(number)
-    }
-
     public init(node: Node) throws {
         guard let int = node.int else {
-            throw NodeError(node: node, expectation: "\(Self.self)")
+            throw NodeError.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
         }
 
         self.init(int.toIntMax())
+    }
+
+    public func makeNode(in context: Context?) -> Node {
+        let number = StructuredData.Number(self.toIntMax())
+        return .number(number, in: context)
     }
 }

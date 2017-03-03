@@ -1,4 +1,10 @@
-extension Schema {
+extension Node {
+    public typealias Number = StructuredData.Number
+}
+
+extension StructuredData {
+    /// A more comprehensive Number encapsulation to allow
+    /// more nuanced number information to be stored
     public enum Number {
         case int(Int)
         case uint(UInt)
@@ -6,13 +12,9 @@ extension Schema {
     }
 }
 
-extension Node {
-    public typealias Number = Schema.Number
-}
-
 // MARK: Initializers
 
-extension Schema.Number {
+extension StructuredData.Number {
     public init<I: Integer>(_ value: I) {
         let max = value.toIntMax()
         let int = Int(max)
@@ -35,13 +37,24 @@ extension Schema.Number {
     }
 }
 
+extension String {
+    fileprivate var number: StructuredData.Number? {
+        if self.contains(".") {
+            return Double(self).flatMap { StructuredData.Number($0) }
+        }
+
+        guard hasPrefix("-") else { return UInt(self).flatMap { StructuredData.Number($0) } }
+        return Int(self).flatMap { StructuredData.Number($0) }
+    }
+}
+
 // MARK: Accessors
 
 extension UInt {
-    static var intMax = UInt(Int.max)
+    internal static var intMax = UInt(Int.max)
 }
 
-extension Schema.Number {
+extension StructuredData.Number {
     public var int: Int {
         switch self {
         case let .int(i):
@@ -78,7 +91,7 @@ extension Schema.Number {
     }
 }
 
-extension Schema.Number {
+extension StructuredData.Number {
     public var bool: Bool? {
         switch self {
         case let .int(i):
@@ -108,9 +121,9 @@ extension Schema.Number {
 
 // MARK: Equatable
 
-extension Schema.Number: Equatable {}
+extension StructuredData.Number: Equatable {}
 
-public func ==(lhs: Schema.Number, rhs: Schema.Number) -> Bool {
+public func ==(lhs: StructuredData.Number, rhs: StructuredData.Number) -> Bool {
     switch (lhs, rhs) {
     case let (.int(l), .int(r)):
         return l == r
@@ -141,13 +154,13 @@ public func ==(lhs: Schema.Number, rhs: Schema.Number) -> Bool {
 
 // MARK: Literals
 
-extension Schema.Number: ExpressibleByIntegerLiteral {
+extension StructuredData.Number: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: IntegerLiteralType) {
         self.init(value)
     }
 }
 
-extension Schema.Number: ExpressibleByFloatLiteral {
+extension StructuredData.Number: ExpressibleByFloatLiteral {
     public init(floatLiteral value: FloatLiteralType) {
         self.init(value)
     }
@@ -155,7 +168,7 @@ extension Schema.Number: ExpressibleByFloatLiteral {
 
 // MARK: String
 
-extension Schema.Number: CustomStringConvertible {
+extension StructuredData.Number: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .int(i):

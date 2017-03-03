@@ -1,12 +1,12 @@
 import XCTest
 import Node
 
-struct JSON: SchemaWrapper {
-    var schema: Schema
+struct JSON: StructuredDataWrapper {
+    var wrapped: StructuredData
     var context: Context
-    init(schema: Schema, in context: Context) {
-        self.schema = schema
-        self.context = context
+    init(_ wrapped: StructuredData, in context: Context?) {
+        self.wrapped = wrapped
+        self.context = context ?? [String: Int]()
     }
 }
 
@@ -30,7 +30,7 @@ class NodeBackedTests: XCTestCase {
     }
 
     func testPolymorphic() throws {
-        let node = JSON(
+        let node = try JSON(
             node: [
                 "string": "Hello!",
                 "int": 3,
@@ -61,9 +61,9 @@ class NodeBackedTests: XCTestCase {
         XCTAssertEqual(ob?["name"]?.string, "World")
         XCTAssertNil(node["int", "foo"]?.object)
 
-        let jsArr: [JSON] = try [0, 1].map { try $0.converted() }
+        let jsArr: [JSON] = try [0, 1].map { try $0.converted(in: nil) }
         _ = JSON(jsArr)
-        let jsOb: [String: JSON] = ["key": JSON(.string("val"))]
+        let jsOb: [String: JSON] = ["key": JSON(.string("val"), in: nil)]
         _ = JSON(jsOb)
     }
 }
