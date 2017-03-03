@@ -8,11 +8,6 @@ public protocol NodeInitializable {
 }
 
 extension NodeInitializable {
-    public init<W: StructuredDataWrapper>(node: W) throws {
-        let node = Node(node.wrapped, in: node.context)
-        try self.init(node: node)
-    }
-
     public init(node representable: NodeRepresentable?, in context: Context? = nil) throws {
         let node = try representable?.makeNode(in: context) ?? Node(.null, in: context)
         try self.init(node: node)
