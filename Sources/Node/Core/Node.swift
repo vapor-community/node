@@ -1,10 +1,12 @@
 public struct Node: StructuredDataWrapper {
+    public static let defaultContext = emptyContext
+    
     public var wrapped: StructuredData
     public var context: Context
 
     public init(_ wrapped: StructuredData, in context: Context?) {
         self.wrapped = wrapped
-        self.context = context ?? [String: Int]()
+        self.context = context ?? emptyContext
     }
 }
 
