@@ -6,7 +6,7 @@ struct JSON: StructuredDataWrapper {
     var context: Context
     init(_ wrapped: StructuredData, in context: Context?) {
         self.wrapped = wrapped
-        self.context = context ?? [String: Int]()
+        self.context = context ?? emptyContext
     }
 }
 

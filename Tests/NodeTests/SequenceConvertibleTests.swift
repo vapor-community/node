@@ -68,18 +68,18 @@ class SequenceConvertibleTests: XCTestCase {
         XCTAssertNil(foo1.contextMakeNode)
         XCTAssertNil(foo2.contextMakeNode)
 
-        let context = ["isContext": true]
+        let context = ObjectContext(["isContext": true])
 
         let _ = try [foo1, foo2].makeNode(in: context)
 
-        guard let foo1Context = foo1.contextMakeNode as? [String: Bool], 
-            let foo2Context = foo1.contextMakeNode as? [String: Bool] else {
+        guard let foo1Context = foo1.contextMakeNode as? ObjectContext<String, Bool>,
+            let foo2Context = foo1.contextMakeNode as? ObjectContext<String, Bool> else {
             XCTFail()
             return
         }
 
-        XCTAssert(foo1Context == context)
-        XCTAssert(foo2Context == context)
+        XCTAssert(foo1Context === context)
+        XCTAssert(foo2Context === context)
 
     }
 

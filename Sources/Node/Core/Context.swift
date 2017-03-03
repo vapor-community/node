@@ -6,5 +6,11 @@
 */
 public protocol Context {}
 
-extension Array: Context {}
-extension Dictionary: Context {}
+public final class ObjectContext<K: Hashable, V>: Context {
+    public let object: [K: V]
+    public init(_ object: [K: V]) {
+        self.object = object
+    }
+}
+
+public let emptyContext = ObjectContext<String, Int>([:])
