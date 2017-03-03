@@ -6,8 +6,5 @@
 */
 public protocol Context {}
 
-extension Node : Context {}
-extension Array : Context {}
-extension Dictionary : Context {}
-
-public let EmptyNode = Node.object([:])
+extension Array: Context {}
+extension Dictionary: Context {}

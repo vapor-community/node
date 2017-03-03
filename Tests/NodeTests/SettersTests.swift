@@ -2,13 +2,19 @@ import Foundation
 import XCTest
 import Node
 
+extension Node {
+    internal init() {
+        self.init([:], in: nil)
+    }
+}
+
 class SettersTests: XCTestCase {
     static let allTests = [
         ("testSetters", testSetters)
     ]
 
     func testSetters() throws {
-        var node = Node([:])
+        var node = Node()
 
         let singular = 1
         try node.set("singular", singular)
@@ -41,15 +47,15 @@ class SettersTests: XCTestCase {
 
         try node.assert("singular", expectation: singular)
 
-        try node.assert("array", expectation: array.makeNode())
+        try node.assert("array", expectation: array.makeNode(in: nil))
 
-        let na = try nestedArray.map { try $0.makeNode() }
+        let na = try nestedArray.map { try $0.makeNode(in: nil) }
         try node.assert("nestedArray", expectation: Node(na))
 
-        let ao = try arrayOfObjects.map { try $0.makeNode() }
+        let ao = try arrayOfObjects.map { try $0.makeNode(in: nil) }
         try node.assert("arrayOfObjects", expectation: Node(ao))
 
-        try node.assert("dictionary", expectation: Node(node: dictionary))
+        try node.assert("dictionary", expectation: Node(node: dictionary, in: nil))
 
         let da = ["hello": ["a", "b", "c"]] as Node
         try node.assert("dictionaryWithArray", expectation: da)
@@ -62,7 +68,7 @@ class SettersTests: XCTestCase {
 
 extension Node {
     fileprivate func assert(_ key: String, expectation: NodeRepresentable?) throws {
-        let expectation = try expectation?.makeNode()
+        let expectation = try expectation?.makeNode(in: nil)
         let value = self[key]
         XCTAssertEqual(value, expectation)
     }

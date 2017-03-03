@@ -1,6 +1,6 @@
-extension Node: Equatable {}
+extension StructuredData: Equatable {}
 
-public func ==(lhs: Node, rhs: Node) -> Bool {
+public func ==(lhs: StructuredData, rhs: StructuredData) -> Bool {
     switch (lhs, rhs) {
     case (.null, .null):
         return true
@@ -16,6 +16,8 @@ public func ==(lhs: Node, rhs: Node) -> Bool {
         return l == r
     case let (.bytes(l), .bytes(r)):
         return l == r
+    case let (.date(l), .date(r)):
+        return l.timeIntervalSince1970 == r.timeIntervalSince1970
     default:
         return false
     }

@@ -16,14 +16,14 @@ extension Double: NodeConvertibleFloatingPointType {
 }
 
 extension NodeConvertibleFloatingPointType {
-    public func makeNode(in context: Context = EmptyNode) -> Node {
-        return .number(Node.Number(doubleValue))
-    }
-
-    public init(node: Node, in context: Context) throws {
+    public init(node: Node) throws {
         guard let double = node.double else {
-            throw NodeError(node: node, expectation: "\(Self.self)")
+            throw NodeError.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
         }
         self.init(double)
+    }
+
+    public func makeNode(in context: Context?) -> Node {
+        return .number(StructuredData.Number(doubleValue), in: context)
     }
 }

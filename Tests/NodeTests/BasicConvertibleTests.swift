@@ -48,10 +48,10 @@ class BasicConvertibleTests: XCTestCase {
     }
 
     func testBoolRepresent() {
-        let truthy = true.makeNode()
-        let falsy = false.makeNode()
-        XCTAssert(truthy == .bool(true))
-        XCTAssert(falsy == .bool(false))
+        let truthy = true.makeNode(in: nil)
+        let falsy = false.makeNode(in: nil)
+        XCTAssert(truthy == .bool(true, in: nil))
+        XCTAssert(falsy == .bool(false, in: nil))
     }
 
     func testIntegerInit() throws {
@@ -72,8 +72,8 @@ class BasicConvertibleTests: XCTestCase {
     }
 
     func testIntegerRepresent() throws {
-        let node = try 124.makeNode()
-        XCTAssert(node == .number(124))
+        let node = 124.makeNode(in: nil)
+        XCTAssert(node == .number(124, in: nil))
     }
 
     func testDoubleInit() throws {
@@ -94,8 +94,8 @@ class BasicConvertibleTests: XCTestCase {
     }
 
     func testDoubleRepresent() {
-        let node = 124.534.makeNode()
-        XCTAssert(node == .number(124.534))
+        let node = 124.534.makeNode(in: nil)
+        XCTAssert(node == .number(124.534, in: nil))
     }
 
     func testFloatInit() throws {
@@ -117,8 +117,8 @@ class BasicConvertibleTests: XCTestCase {
 
     func testFloatRepresent() {
         let float = Float(123.0)
-        let node = float.makeNode()
-        XCTAssert(node == .number(123.0))
+        let node = float.makeNode(in: nil)
+        XCTAssert(node == .number(123.0, in: nil))
     }
 
     func testUnsignedIntegerInit() throws {
@@ -140,8 +140,8 @@ class BasicConvertibleTests: XCTestCase {
 
     func testUnsignedIntegerRepresent() throws {
         let uint = UInt(124)
-        let node = try uint.makeNode()
-        XCTAssert(node == .number(124))
+        let node = uint.makeNode(in: nil)
+        XCTAssert(node == .number(124, in: nil))
     }
 
     func testStringInit() throws {
@@ -162,30 +162,30 @@ class BasicConvertibleTests: XCTestCase {
     }
 
     func testStringRepresent() {
-        let node = "hello :)".makeNode()
-        XCTAssert(node == .string("hello :)"))
+        let node = "hello :)".makeNode(in: nil)
+        XCTAssert(node == .string("hello :)", in: nil))
     }
 
     func testNodeConvertible() throws {
         let node = Node("hello node")
-        let initted = try Node(node: node)
-        let made = node.makeNode()
+        let initted = Node(node: node)
+        let made = node.makeNode(in: nil)
         XCTAssert(initted == made)
     }
 
     func testUUIDConvertible() throws {
         let expectation = UUID()
-        let node = try expectation.makeNode()
+        let node = expectation.makeNode(in: nil)
         XCTAssertEqual(expectation.uuidString, node.string)
 
-        let inverse = try node.converted(to: UUID.self)
+        let inverse = try node.converted(to: UUID.self, in: nil)
         XCTAssertEqual(inverse, expectation)
     }
 
     func testUUIDConvertibleThrows() throws {
         let node = Node("I'm not a uuid :)")
         do {
-            _ = try node.converted(to: UUID.self)
+            _ = try node.converted(to: UUID.self, in: nil)
             XCTFail("Should fail")
         } catch is NodeError {
             // ok, expected to fail

@@ -44,8 +44,8 @@ class NodeTests: XCTestCase {
 
     func testArrayInits() throws {
         let array: [Int] = [1,2,3,4,5]
-        let node = try Node(node: array)
-        XCTAssert(node == [1,2,3,4,5])
+        let node = try Node.init(node: array)
+        XCTAssertEqual(node, [1,2,3,4,5])
 
         let optionalArray: [String?] = ["a", "b", "c", nil, "d", nil]
         let optionalNode = try Node.init(node: optionalArray)

@@ -27,9 +27,9 @@ class NodePolymorphicTests: XCTestCase {
         let int: Node = 1
         let double: Node = 3.14
         let string: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes("foo.bar".makeBytes())
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes("foo.bar".makeBytes(), in: nil)
 
         XCTAssert(bool.string == "true")
         XCTAssert(int.string == "1")
@@ -48,9 +48,9 @@ class NodePolymorphicTests: XCTestCase {
         let intString: Node = "123"
 
         let histring: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssert(boolTrue.int == 1)
         XCTAssert(boolFalse.int == 0)
@@ -71,9 +71,9 @@ class NodePolymorphicTests: XCTestCase {
         let intString: Node = "123"
 
         let histring: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssert(boolTrue.uint == 1)
         XCTAssert(boolFalse.uint == 0)
@@ -95,9 +95,9 @@ class NodePolymorphicTests: XCTestCase {
         let doubleString: Node = "42.5997"
 
         let histring: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssert(boolTrue.float == 1)
         XCTAssert(boolFalse.float == 0)
@@ -120,9 +120,9 @@ class NodePolymorphicTests: XCTestCase {
         let doubleString: Node = "42.5997"
 
         let histring: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssert(boolTrue.double == 1)
         XCTAssert(boolFalse.double == 0)
@@ -145,9 +145,9 @@ class NodePolymorphicTests: XCTestCase {
         let int: Node = 42
         let double: Node = 3.14
         let string: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssertTrue(null.isNull)
         XCTAssertTrue(lowerNullString.isNull)
@@ -171,9 +171,9 @@ class NodePolymorphicTests: XCTestCase {
         let boolDouble: Node = 1.0
         let string: Node = "hi"
         let boolString: Node = "true"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssert(null.bool == false)
         XCTAssert(bool.bool == true)
@@ -195,9 +195,9 @@ class NodePolymorphicTests: XCTestCase {
         let double: Node = 3.14
         let string: Node = "hi"
         let arrayString: Node = "hi, there, array"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssertNil(null.array)
         XCTAssertNil(bool.array)
@@ -205,9 +205,9 @@ class NodePolymorphicTests: XCTestCase {
         XCTAssertNil(double.array)
 
         let single = string.array?.flatMap { $0.string } ?? []
-        XCTAssert(single == ["hi"])
+        XCTAssertEqual(single, ["hi"])
         let fetched = arrayString.array?.flatMap { $0.string } ?? []
-        XCTAssert(fetched == ["hi", "there", "array"])
+        XCTAssertEqual(fetched, ["hi", "there", "array"])
         let array = arr.array?.flatMap { $0.int } ?? []
         XCTAssert(array == [1, 2, 3])
 
@@ -221,9 +221,9 @@ class NodePolymorphicTests: XCTestCase {
         let int: Node = 42
         let double: Node = 3.14
         let string: Node = "hi"
-        let ob: Node = .object(["key": "value"])
-        let arr: Node = .array([1,2,3])
-        let bytes: Node = .bytes([10, 20, 30, 40])
+        let ob: Node = .object(["key": "value"], in: nil)
+        let arr: Node = .array([1,2,3], in: nil)
+        let bytes: Node = .bytes([10, 20, 30, 40], in: nil)
 
         XCTAssertNotNil(ob.object)
         XCTAssert(ob.object?["key"]?.string == "value")
