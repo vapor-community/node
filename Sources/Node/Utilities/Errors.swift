@@ -1,13 +1,11 @@
 @_exported import Debugging
 
-public protocol NodeError: Debuggable {}
-
-public enum Error: NodeError {
+public enum NodeError: Debuggable {
     case invalidContainer(container: String, element: String)
     case unableToConvert(input: Node?, expectation: String, path: [PathIndexer])
 }
 
-extension Error {
+extension NodeError {
     public var identifier: String {
         switch self {
         case .invalidContainer:

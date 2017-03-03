@@ -7,7 +7,7 @@ extension UInt64: NodeConvertible {}
 extension UnsignedInteger {
     public init(node: Node) throws {
         guard let int = node.uint else {
-            throw Error.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
+            throw NodeError.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
         }
 
         self.init(int.toUIntMax())

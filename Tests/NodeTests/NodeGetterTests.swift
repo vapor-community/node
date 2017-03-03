@@ -19,7 +19,7 @@ struct NoNull: NodeInitializable, Hashable {
 
     init(node: Node) throws {
         guard node != .null else {
-            throw Error.unableToConvert(input: node, expectation: "something not null", path: [])
+            throw NodeError.unableToConvert(input: node, expectation: "something not null", path: [])
         }
         
         self.node = node

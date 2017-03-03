@@ -1,10 +1,10 @@
 extension Dictionary: NodeConvertible {
     public init(node: Node) throws {
         guard Key.self is String.Type, Value.self is NodeInitializable.Type else {
-            throw Error.invalidContainer(container: "\(Dictionary.self)", element: "\(Value.self)")
+            throw NodeError.invalidContainer(container: "\(Dictionary.self)", element: "\(Value.self)")
         }
         guard let object = node.typeObject else {
-            throw Error.unableToConvert(input: node, expectation: "\([Key: Value].self)", path: [])
+            throw NodeError.unableToConvert(input: node, expectation: "\([Key: Value].self)", path: [])
         }
 
         let value = Value.self as! NodeInitializable.Type
@@ -34,7 +34,7 @@ extension Dictionary: NodeConvertible {
 extension Dictionary {
     fileprivate func representable() throws -> [String: NodeRepresentable] {
         guard Key.self is String.Type else {
-            throw Error.invalidContainer(
+            throw NodeError.invalidContainer(
                 container: "\(Dictionary.self)",
                 element: "Key(\(Key.self)) (expected String)"
             )
@@ -44,7 +44,7 @@ extension Dictionary {
         try forEach { key, value in
             let key = key as! String
             guard let rep = value as? NodeRepresentable else {
-                throw Error.invalidContainer(container: "\(Dictionary.self)", element: "\(String(describing: value))")
+                throw NodeError.invalidContainer(container: "\(Dictionary.self)", element: "\(String(describing: value))")
             }
             object[key] = rep
         }

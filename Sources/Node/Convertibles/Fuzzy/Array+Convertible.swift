@@ -3,7 +3,7 @@ import Foundation
 extension Array: NodeConvertible {
     public init(node: Node) throws {
         guard Element.self is NodeInitializable.Type else {
-            throw Error.invalidContainer(container: "\(Array.self)", element: "\(Element.self)")
+            throw NodeError.invalidContainer(container: "\(Array.self)", element: "\(Element.self)")
         }
 
         let element = Element.self as! NodeInitializable.Type
@@ -23,7 +23,7 @@ extension Array {
     fileprivate func representable() throws -> [NodeRepresentable] {
         return try self.map {
             guard let representable = $0 as? NodeRepresentable else {
-                throw Error.invalidContainer(container: "\(Array.self)", element: "\(String(describing: $0))")
+                throw NodeError.invalidContainer(container: "\(Array.self)", element: "\(String(describing: $0))")
             }
             return representable
         }

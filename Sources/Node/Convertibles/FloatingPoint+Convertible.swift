@@ -18,7 +18,7 @@ extension Double: NodeConvertibleFloatingPointType {
 extension NodeConvertibleFloatingPointType {
     public init(node: Node) throws {
         guard let double = node.double else {
-            throw Error.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
+            throw NodeError.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
         }
         self.init(double)
     }
