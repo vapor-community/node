@@ -9,7 +9,7 @@ public protocol NodeInitializable {
 
 extension NodeInitializable {
     public init<W: StructuredDataWrapper>(node: W) throws {
-        let node = Node(node)
+        let node = Node(node.wrapped, in: node.context)
         try self.init(node: node)
     }
 
