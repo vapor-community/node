@@ -20,7 +20,12 @@ extension NodeError {
         case .invalidContainer(let container, let element):
             return "Unable to use container '\(container)' with element '\(element)' expected a \(NodeConvertible.self) type"
         case .unableToConvert(let node, let expectation, let path):
-            return "Unable to convert: `\(node ?? .null)` to expectation: `\(expectation)` forPath: `\(path)`"
+            let path = path.map { "\($0)" } .joined(separator: ".")
+            if let node = node, node != .null {
+                return "Unable to convert '\(node)' to '\(expectation)' for path '\(path)'"
+            } else {
+                return "No value found at path '\(path)', expected '\(expectation)'"
+            }
         }
     }
 
