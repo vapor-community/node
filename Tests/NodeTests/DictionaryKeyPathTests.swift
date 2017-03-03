@@ -34,7 +34,7 @@ class DictionaryKeyPathTests: XCTestCase {
     }
 
     func testGarbage() throws {
-        let node = try [1, 2, "3", "4", ["hello": "world"]].converted(to: Node.self)
+        let node = try [1, 2, "3", "4", ["hello": "world"]].converted(to: Node.self, in: nil)
         XCTAssertEqual(node[0], 1)
         XCTAssertEqual(node[1], 2)
         XCTAssertEqual(node[2], "3")

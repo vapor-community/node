@@ -23,7 +23,7 @@ extension NodeConvertibleFloatingPointType {
         self.init(double)
     }
 
-    public func makeNode(in context: Context? = nil) -> Node {
-        return Node(.number(StructuredData.Number(doubleValue)))
+    public func makeNode(in context: Context?) -> Node {
+        return .number(StructuredData.Number(doubleValue), in: context)
     }
 }

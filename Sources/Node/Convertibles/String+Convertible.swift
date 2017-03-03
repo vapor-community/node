@@ -6,7 +6,7 @@ extension String: NodeConvertible {
         self = string
     }
 
-    public func makeNode(in context: Context? = nil) -> Node {
-        return .string(self)
+    public func makeNode(in context: Context?) -> Node {
+        return .string(self, in: context)
     }
 }

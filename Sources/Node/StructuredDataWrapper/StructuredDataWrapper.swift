@@ -11,12 +11,15 @@ public protocol StructuredDataWrapper:
     ExpressibleByArrayLiteral,
     ExpressibleByDictionaryLiteral
 {
+    static var defaultContext: Context? { get }
+
     var wrapped: StructuredData { get set }
     var context: Context { get }
-    init(_ wrapped: StructuredData, in context: Context)
+    init(_ wrapped: StructuredData, in context: Context?)
 }
 
 extension StructuredDataWrapper {
+    public static var defaultContext: Context? { return nil }
     public init(node: Node) {
         self.init(node.wrapped, in: node.context)
     }

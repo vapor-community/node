@@ -78,14 +78,14 @@ extension Date: NodeConvertible {
     }
 
     /// Creates a node representation of the date
-    public func makeNode(in context: Context? = nil) throws -> Node {
-        return .date(self)
+    public func makeNode(in context: Context?) throws -> Node {
+        return .date(self, in: context)
     }
 }
 
 extension StructuredData {
     public var date: Date? {
-        return try? Date(node: self)
+        return try? Date(node: self, in: nil)
     }
 }
 

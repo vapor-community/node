@@ -13,8 +13,8 @@ extension SignedInteger {
         self.init(int.toIntMax())
     }
 
-    public func makeNode(in context: Context? = nil) -> Node {
+    public func makeNode(in context: Context?) -> Node {
         let number = StructuredData.Number(self.toIntMax())
-        return .number(number)
+        return .number(number, in: context)
     }
 }

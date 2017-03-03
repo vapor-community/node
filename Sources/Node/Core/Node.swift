@@ -2,9 +2,9 @@ public struct Node: StructuredDataWrapper {
     public var wrapped: StructuredData
     public var context: Context
 
-    public init(_ wrapped: StructuredData, in context: Context) {
+    public init(_ wrapped: StructuredData, in context: Context?) {
         self.wrapped = wrapped
-        self.context = context
+        self.context = context ?? [String: Int]()
     }
 }
 

@@ -13,8 +13,8 @@ extension UnsignedInteger {
         self.init(int.toUIntMax())
     }
 
-    public func makeNode(in context: Context? = nil) -> Node {
+    public func makeNode(in context: Context?) -> Node {
         let number = Node.Number(self.toUIntMax())
-        return .number(number)
+        return .number(number, in: context)
     }
 }

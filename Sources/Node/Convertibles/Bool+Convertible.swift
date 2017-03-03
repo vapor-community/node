@@ -6,7 +6,7 @@ extension Bool: NodeConvertible {
         self = bool
     }
 
-    public func makeNode(in context: Context? = nil) -> Node {
-        return .bool(self)
+    public func makeNode(in context: Context?) -> Node {
+        return .bool(self, in: context)
     }
 }

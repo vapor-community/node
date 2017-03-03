@@ -1,7 +1,7 @@
 extension StructuredDataWrapper {
     public mutating func set(_ path: String, _ value: NodeRepresentable?) throws {
-        let data = try value.flatMap { try StructuredData(node: $0) }
-        self.wrapped[path] = data
+        let node = try value.flatMap { try $0.makeNode(in: context) }
+        self.wrapped[path] = node?.wrapped
     }
 }
 
@@ -11,7 +11,7 @@ extension StructuredDataWrapper {
     }
 
     public mutating func set(path indexers: [PathIndexer], to value: NodeRepresentable?) throws {
-        let data = try value.flatMap { try StructuredData(node: $0) }
-        self.wrapped[indexers] = data
+        let node = try value.flatMap { try $0.makeNode(in: context) }
+        self.wrapped[indexers] = node?.wrapped
     }
 }

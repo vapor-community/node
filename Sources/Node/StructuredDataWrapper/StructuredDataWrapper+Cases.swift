@@ -5,54 +5,58 @@ import Bits
 /// `.null` or `.object(foo)`
 extension StructuredDataWrapper {
     public static var null: Self {
-        return Self(.null)
+        return Self(.null, in: nil)
     }
 
-    public static func bool(_ val: Bool) -> Self {
-        return Self(.bool(val))
+    public static func bool(_ val: Bool, in context: Context? = Self.defaultContext) -> Self {
+        return Self(.bool(val), in: context)
     }
 
-    public static func date(_ val: Date) -> Self {
-        return Self(.date(val))
+    public static func date(_ val: Date, in context: Context? = Self.defaultContext) -> Self {
+        return Self(.date(val), in: context)
     }
 
-    public static func number(_ val: StructuredData.Number) -> Self {
-        return Self(.number(val))
+    public static func number(_ val: StructuredData.Number, in context: Context? = Self.defaultContext) -> Self {
+        return Self(.number(val), in: context)
     }
 
-    public static func string(_ val: String) -> Self {
-        return Self(.string(val))
+    public static func string(_ val: String, in context: Context? = Self.defaultContext) -> Self {
+        return Self(.string(val), in: context)
     }
 
-    public static func bytes(_ val: Bytes) -> Self {
-        return Self(.bytes(val))
+    public static func bytes(_ val: Bytes, in context: Context? = Self.defaultContext) -> Self {
+        return Self(.bytes(val), in: context)
     }
 
-    public static func object<S: StructuredDataWrapper>(_ val: [String: S]) -> Self {
+    public static func object<S: StructuredDataWrapper>(_ val: [String: S], in context: Context? = Self.defaultContext) -> Self {
         var new = [String: StructuredData]()
         val.forEach { key, value in
             new[key] = value.wrapped
         }
 
-        return Self(.object(new), in: val.values.first?.context) // context should be same for all
+        // context should be same for all
+        return Self(.object(new), in: context ?? val.values.first?.context)
     }
 
-    public static func object(_ val: [String: Self]) -> Self {
+    public static func object(_ val: [String: Self], in context: Context? = Self.defaultContext) -> Self {
         var new = [String: StructuredData]()
         val.forEach { key, value in
             new[key] = value.wrapped
         }
 
-        return Self(.object(new), in: val.values.first?.context) // context should be same for all
+        // context should be same for all
+        return Self(.object(new), in: context ?? val.values.first?.context)
     }
 
-    public static func array<S: StructuredDataWrapper>(_ val: [S]) -> Self {
+    public static func array<S: StructuredDataWrapper>(_ val: [S], in context: Context? = Self.defaultContext) -> Self {
         let new = val.map { $0.wrapped }
-        return Self(.array(new), in: val.first?.context) // context should be same for all
+        // context should be same for all
+        return Self(.array(new), in: context ?? val.first?.context)
     }
 
-    public static func array(_ val: [Self]) -> Self {
+    public static func array(_ val: [Self], in context: Context? = Self.defaultContext) -> Self {
         let new = val.map { $0.wrapped }
-        return Self(.array(new), in: val.first?.context) // context should be same for all
+        // context should be same for all
+        return Self(.array(new), in: context ?? val.first?.context)
     }
 }

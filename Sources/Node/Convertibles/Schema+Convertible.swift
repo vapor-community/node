@@ -3,7 +3,7 @@ extension StructuredData: NodeConvertible {
         self = node.wrapped
     }
 
-    public func makeNode(in context: Context? = nil) -> Node {
-        return Node(self)
+    public func makeNode(in context: Context?) -> Node {
+        return Node(self, in: context)
     }
 }

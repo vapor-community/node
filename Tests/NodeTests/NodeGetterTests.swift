@@ -58,7 +58,7 @@ class NodeGetterTests: XCTestCase {
 
     func testgetTransform() throws {
         let dict = ["date": 250]
-        let node = try Node(node: dict)
+        let node = try Node(node: dict, in: nil)
         let geted = try node.get("date", transform: Date.fromTimestamp)
         XCTAssert(geted.timeIntervalSince1970 == 250)
     }
@@ -72,7 +72,7 @@ class NodeGetterTests: XCTestCase {
     }
 
     func testgetTransformOptionalValue() throws {
-        let node = try Node(node: ["date": 250])
+        let node = try Node(node: ["date": 250], in: nil)
         let geted = try node.get("date", transform: Date.optionalFromTimestamp)
         XCTAssert(geted?.timeIntervalSince1970 == 250)
     }
@@ -213,7 +213,7 @@ class NodeGetterTests: XCTestCase {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try node.get("nest", "ed", "array") as Set<NoNull>
         let ints = [1,2,3,4]
-        let compare = try ints.converted(to: Set<NoNull>.self)//, in: <#T##Context?#>)//.map(to: NoNull.self).set
+        let compare = try ints.converted(to: Set<NoNull>.self, in: nil)
         XCTAssert(geted == compare)
     }
 
@@ -221,7 +221,7 @@ class NodeGetterTests: XCTestCase {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: Set<NoNull>? = try node.get("nest", "ed", "array")
         let ints = [1,2,3,4]
-        let compare = try ints.converted(to: Set<NoNull>.self)//, in: <#T##Context?#>)//.map(to: NoNull.self).set
+        let compare = try ints.converted(to: Set<NoNull>.self, in: nil)
         XCTAssert(geted == compare)
     }
 

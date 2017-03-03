@@ -7,12 +7,6 @@ public protocol NodeRepresentable {
 }
 
 extension NodeRepresentable {
-    public func makeNode() throws -> Node {
-        return try makeNode(in: nil)
-    }
-}
-
-extension NodeRepresentable {
     /**
      Map the node back to a convertible type
 
@@ -22,7 +16,7 @@ extension NodeRepresentable {
      */
     public func converted<T: NodeInitializable>(
         to type: T.Type = T.self,
-        in context: Context? = nil
+        in context: Context?
         ) throws -> T {
         let node = try makeNode(in: context)
         return try type.init(node: node)

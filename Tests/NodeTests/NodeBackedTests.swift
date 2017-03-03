@@ -4,9 +4,9 @@ import Node
 struct JSON: StructuredDataWrapper {
     var wrapped: StructuredData
     var context: Context
-    init(_ wrapped: StructuredData, in context: Context) {
+    init(_ wrapped: StructuredData, in context: Context?) {
         self.wrapped = wrapped
-        self.context = context
+        self.context = context ?? [String: Int]()
     }
 }
 
@@ -61,9 +61,9 @@ class NodeBackedTests: XCTestCase {
         XCTAssertEqual(ob?["name"]?.string, "World")
         XCTAssertNil(node["int", "foo"]?.object)
 
-        let jsArr: [JSON] = try [0, 1].map { try $0.converted() }
+        let jsArr: [JSON] = try [0, 1].map { try $0.converted(in: nil) }
         _ = JSON(jsArr)
-        let jsOb: [String: JSON] = ["key": JSON(.string("val"))]
+        let jsOb: [String: JSON] = ["key": JSON(.string("val"), in: nil)]
         _ = JSON(jsOb)
     }
 }
