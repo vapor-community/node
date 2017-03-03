@@ -1,4 +1,4 @@
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...)
         throws -> T {
@@ -15,7 +15,7 @@ extension SchemaWrapper {
 
 // MARK: Transformers
 
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public func get<T, InputType: NodeInitializable>(
         _ indexers: PathIndexer...,
         transform: (InputType) throws -> T

@@ -1,21 +1,22 @@
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public init() {
-        self.init(schema: Schema(), in: nil)
+        self.init(StructuredData(), in: nil)
     }
 
-    public init(_ schema: Schema) {
-        self.init(schema: schema, in: nil)
+    public init(_ schema: StructuredData) {
+        self.init(schema, in: nil)
     }
 
     public init(_ context: Context) {
-        self.init(schema: Schema(), in: context)
+        self.init(StructuredData(), in: context)
     }
 
-    public init<S: SchemaWrapper>(_ wrapper: S) {
-        self.init(schema: wrapper.schema, in: wrapper.context)
+    public init<S: StructuredDataWrapper>(_ wrapper: S) {
+        self.init(wrapper.wrapped, in: wrapper.context)
     }
 
-    public init(schema: Schema, in context: Context?) {
-        self.init(schema: schema, in: context ?? [String: Int]())
+    public init(_ data: StructuredData, in context: Context?) {
+        let context = context ?? [String: Int]()
+        self.init(data, in: context)
     }
 }

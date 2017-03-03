@@ -1,9 +1,9 @@
 import Bits
 
-/// This allows schema wrappers to function a bit more like Schema
+/// This allows schema wrappers to function a bit more like StructuredData
 /// slightly like their enum counterparts passing things like
 /// `.null` or `.object(foo)`
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public static var null: Self {
         return Self(.null)
     }
@@ -16,7 +16,7 @@ extension SchemaWrapper {
         return Self(.date(val))
     }
 
-    public static func number(_ val: Schema.Number) -> Self {
+    public static func number(_ val: StructuredData.Number) -> Self {
         return Self(.number(val))
     }
 
@@ -28,31 +28,31 @@ extension SchemaWrapper {
         return Self(.bytes(val))
     }
 
-    public static func object<S: SchemaWrapper>(_ val: [String: S]) -> Self {
-        var new = [String: Schema]()
+    public static func object<S: StructuredDataWrapper>(_ val: [String: S]) -> Self {
+        var new = [String: StructuredData]()
         val.forEach { key, value in
-            new[key] = value.schema
+            new[key] = value.wrapped
         }
 
-        return Self(schema: .object(new), in: val.values.first?.context) // context should be same for all
+        return Self(.object(new), in: val.values.first?.context) // context should be same for all
     }
 
     public static func object(_ val: [String: Self]) -> Self {
-        var new = [String: Schema]()
+        var new = [String: StructuredData]()
         val.forEach { key, value in
-            new[key] = value.schema
+            new[key] = value.wrapped
         }
 
-        return Self(schema: .object(new), in: val.values.first?.context) // context should be same for all
+        return Self(.object(new), in: val.values.first?.context) // context should be same for all
     }
 
-    public static func array<S: SchemaWrapper>(_ val: [S]) -> Self {
-        let new = val.map { $0.schema }
-        return Self(schema: .array(new), in: val.first?.context) // context should be same for all
+    public static func array<S: StructuredDataWrapper>(_ val: [S]) -> Self {
+        let new = val.map { $0.wrapped }
+        return Self(.array(new), in: val.first?.context) // context should be same for all
     }
 
     public static func array(_ val: [Self]) -> Self {
-        let new = val.map { $0.schema }
-        return Self(schema: .array(new), in: val.first?.context) // context should be same for all
+        let new = val.map { $0.wrapped }
+        return Self(.array(new), in: val.first?.context) // context should be same for all
     }
 }

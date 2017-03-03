@@ -1,9 +1,9 @@
-public struct Node: SchemaWrapper {
-    public var schema: Schema
+public struct Node: StructuredDataWrapper {
+    public var wrapped: StructuredData
     public var context: Context
 
-    public init(schema: Schema, in context: Context) {
-        self.schema = schema
+    public init(_ wrapped: StructuredData, in context: Context) {
+        self.wrapped = wrapped
         self.context = context
     }
 }

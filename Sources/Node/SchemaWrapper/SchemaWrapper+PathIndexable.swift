@@ -1,20 +1,20 @@
-extension SchemaWrapper {
+extension StructuredDataWrapper {
 
     /**
      If self is an array representation, return array
      */
     public var pathIndexableArray: [Self]? {
-        return schema.schemaArray?.map { Self(schema: $0, in: context) }
+        return wrapped.structuredArray?.map { Self($0, in: context) }
     }
 
     /**
      If self is an object representation, return object
      */
     public var pathIndexableObject: [String: Self]? {
-        guard let o = schema.schemaObject else { return nil }
+        guard let o = wrapped.structuredObject else { return nil }
         var object: [String: Self] = [:]
         o.forEach { key, val in
-            object[key] = Self(schema: val, in: context)
+            object[key] = Self(val, in: context)
         }
         return object
     }
@@ -23,26 +23,26 @@ extension SchemaWrapper {
      Initialize json w/ array
      */
     public init(_ array: [Self]) {
-        let schema = array.map { $0.schema }
-        let node = Schema.array(schema)
+        let schema = array.map { $0.wrapped }
+        let node = StructuredData.array(schema)
 
         // take first context to attempt inference, should all be same
         let context = array.lazy.flatMap { $0.context } .first
-        self.init(schema: node, in: context)
+        self.init(node, in: context)
     }
 
     /**
      Initialize json w/ object
      */
     public init(_ o: [String: Self]) {
-        var object: [String: Schema] = [:]
+        var object: [String: StructuredData] = [:]
         for (key, val) in o {
-            object[key] = val.schema
+            object[key] = val.wrapped
         }
-        let schema = Schema.object(object)
+        let schema = StructuredData.object(object)
 
         // take first context to attempt inference, should all be same
         let context = o.values.lazy.flatMap { $0.context } .first
-        self.init(schema: schema, in: context)
+        self.init(schema, in: context)
     }
 }

@@ -1,29 +1,29 @@
 
-extension SchemaWrapper { // : ExpressibleByNilLiteral {
+extension StructuredDataWrapper { // : ExpressibleByNilLiteral {
     public init(nilLiteral value: Void) {
         self = Self(.null)
     }
 }
 
-extension SchemaWrapper { // : ExpressibleByBooleanLiteral {
+extension StructuredDataWrapper { // : ExpressibleByBooleanLiteral {
     public init(booleanLiteral value: Bool) {
         self = .bool(value)
     }
 }
 
-extension SchemaWrapper { // : ExpressibleByIntegerLiteral {
+extension StructuredDataWrapper { // : ExpressibleByIntegerLiteral {
     public init(integerLiteral value: Int) {
         self = .number(.init(value))
     }
 }
 
-extension SchemaWrapper { // : ExpressibleByFloatLiteral {
+extension StructuredDataWrapper { // : ExpressibleByFloatLiteral {
     public init(floatLiteral value: Double) {
         self = .number(.init(value))
     }
 }
 
-extension SchemaWrapper { // : ExpressibleByStringLiteral {
+extension StructuredDataWrapper { // : ExpressibleByStringLiteral {
     public init(unicodeScalarLiteral value: String) {
         self = .string(value)
     }
@@ -37,13 +37,13 @@ extension SchemaWrapper { // : ExpressibleByStringLiteral {
     }
 }
 
-extension SchemaWrapper { // : ExpressibleByArrayLiteral {
+extension StructuredDataWrapper { // : ExpressibleByArrayLiteral {
     public init(arrayLiteral elements: Self...) {
         self = .array(elements)
     }
 }
 
-extension SchemaWrapper { // : ExpressibleByDictionaryLiteral {
+extension StructuredDataWrapper { // : ExpressibleByDictionaryLiteral {
     public init(dictionaryLiteral elements: (String, Self)...) {
         var new = [String: Self]()
         elements.forEach { key, value in

@@ -24,6 +24,6 @@ extension NodeConvertibleFloatingPointType {
     }
 
     public func makeNode(in context: Context? = nil) -> Node {
-        return Node(.number(Schema.Number(doubleValue)))
+        return Node(.number(StructuredData.Number(doubleValue)))
     }
 }

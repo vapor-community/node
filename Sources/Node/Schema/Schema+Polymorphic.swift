@@ -1,6 +1,6 @@
 import Bits
 
-extension Schema: Polymorphic {
+extension StructuredData: Polymorphic {
     public var string: String? {
         switch self {
         case .bool(let bool):

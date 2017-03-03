@@ -66,7 +66,7 @@ extension Error {
 //
 //    public let type: String = NodeError.unableToConvert // replacing the enum case to identify error type
 //
-//    internal init<S: SchemaWrapper>(node: S?, expectation: String, indexers: [PathIndexer] = []) {
+//    internal init<S: StructuredDataWrapper>(node: S?, expectation: String, indexers: [PathIndexer] = []) {
 //        self.node = node.flatMap { Node($0) }
 //        self.expectation = expectation
 //        self.path = indexers.path()

@@ -1,5 +1,5 @@
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.schema == rhs.schema
+        return lhs.wrapped == rhs.wrapped
     }
 }

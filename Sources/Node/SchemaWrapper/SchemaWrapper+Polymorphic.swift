@@ -1,37 +1,37 @@
-extension SchemaWrapper {
+extension StructuredDataWrapper {
     public var isNull: Bool {
-        return schema.isNull
+        return wrapped.isNull
     }
 
     public var bool: Bool? {
-        return schema.bool
+        return wrapped.bool
     }
 
     public var double: Double? {
-        return schema.double
+        return wrapped.double
     }
 
     public var int: Int? {
-        return schema.int
+        return wrapped.int
     }
 
     public var string: String? {
-        return schema.string
+        return wrapped.string
     }
 
     public var bytes: [UInt8]? {
-        return schema.bytes
+        return wrapped.bytes
     }
 
     public var date: Date? {
-        return schema.date
+        return wrapped.date
     }
 
     public var array: [Polymorphic]? {
-        return schema.array
+        return wrapped.array
     }
 
     public var object: [String: Polymorphic]? {
-        return schema.object
+        return wrapped.object
     }
 }

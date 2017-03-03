@@ -14,7 +14,7 @@ extension SignedInteger {
     }
 
     public func makeNode(in context: Context? = nil) -> Node {
-        let number = Schema.Number(self.toIntMax())
+        let number = StructuredData.Number(self.toIntMax())
         return .number(number)
     }
 }

@@ -1,4 +1,4 @@
-public protocol SchemaWrapper:
+public protocol StructuredDataWrapper:
     NodeConvertible,
     PathIndexable,
     Polymorphic,
@@ -11,7 +11,13 @@ public protocol SchemaWrapper:
     ExpressibleByArrayLiteral,
     ExpressibleByDictionaryLiteral
 {
-    var schema: Schema { get set }
+    var wrapped: StructuredData { get set }
     var context: Context { get }
-    init(schema: Schema, in context: Context)
+    init(_ wrapped: StructuredData, in context: Context)
+}
+
+extension StructuredDataWrapper {
+    public init(node: Node) {
+        self.init(node.wrapped, in: node.context)
+    }
 }

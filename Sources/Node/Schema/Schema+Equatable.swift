@@ -1,6 +1,6 @@
-extension Schema: Equatable {}
+extension StructuredData: Equatable {}
 
-public func ==(lhs: Schema, rhs: Schema) -> Bool {
+public func ==(lhs: StructuredData, rhs: StructuredData) -> Bool {
     switch (lhs, rhs) {
     case (.null, .null):
         return true
