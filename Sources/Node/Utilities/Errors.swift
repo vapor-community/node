@@ -55,7 +55,9 @@ extension NodeError {
             ]
         case .unableToConvert:
             return [
-                "ensure that key path matches expectation",
+                "called `get(...)` on a key or key path that does not exist in the data",
+                "the data being parsed is missing required values or is incorrectly formatted",
+                "found unconvertible data, e.g., got a string of letters when an integer is required",
                 "if you have keys containing a '.' that shouldn't be interpreted as a path, use 'DotKey(\"actual.key\")'",
             ]
         }
