@@ -10,6 +10,12 @@ public struct Node: StructuredDataWrapper {
     }
 }
 
+extension Node {
+    public init() {
+        self.init([:], in: nil)
+    }
+}
+
 extension Node: NodeConvertible {
     public init(node: Node) {
         self = node
