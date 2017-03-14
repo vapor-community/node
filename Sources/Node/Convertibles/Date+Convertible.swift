@@ -1,6 +1,8 @@
 import Foundation
 
 extension Date: NodeConvertible {
+    internal static let lock = NSLock()
+
     /**
         If a date receives a numbered node, it will use this closure
         to convert that number into a Date as a timestamp
@@ -61,6 +63,8 @@ extension Date: NodeConvertible {
         case let .number(number):
             self = try Date.incomingTimestamp(number)
         case let .string(string):
+            Date.lock.lock()
+            defer { Date.lock.unlock() }
             guard
                 let date = Date.incomingDateFormatters
                     .lazy

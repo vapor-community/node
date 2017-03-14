@@ -10,7 +10,10 @@ extension StructuredData: Polymorphic {
         case .string(let string):
             return string
         case .date(let date):
-            return Date.outgoingDateFormatter.string(from: date)
+            Date.lock.lock()
+            let string = Date.outgoingDateFormatter.string(from: date)
+            Date.lock.unlock()
+            return string
         case .bytes(let bytes):
             return bytes.string
         default:
