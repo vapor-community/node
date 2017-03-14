@@ -54,6 +54,8 @@ class NodeGetterTests: XCTestCase {
         ("testgetSet", testgetSet),
         ("testgetSetOptional", testgetSetOptional),
         ("testgetSetThrows", testgetSetThrows),
+        ("testgetDateRFC1123", testgetDateRFC1123),
+        ("testgetDateMySQLDATETIME", testgetDateMySQLDATETIME),
     ]
 
     func testgetTransform() throws {
