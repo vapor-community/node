@@ -1,6 +1,7 @@
 import Bits
+import Core
 
-extension StructuredData: Polymorphic {
+extension StructuredData {
     public var string: String? {
         switch self {
         case .bool(let bool):
@@ -15,7 +16,7 @@ extension StructuredData: Polymorphic {
             Date.lock.unlock()
             return string
         case .bytes(let bytes):
-            return bytes.string
+            return bytes.makeString()
         default:
             return nil
         }
@@ -108,26 +109,20 @@ extension StructuredData: Polymorphic {
         }
     }
 
-    public var array: [Polymorphic]? {
+    public var array: [StructuredData]? {
         switch self {
         case .array(let array):
-            return array.map { $0 }
+            return array
         case .string(let string):
-            return string.array
+            return string.array?.map(StructuredData.string)
         default:
             return nil
         }
     }
 
-    public var object: [String: Polymorphic]? {
+    public var object: [String: StructuredData]? {
         guard case let .object(ob) = self else { return nil }
-        var object: [String: Polymorphic] = [:]
-
-        ob.forEach { key, value in
-            object[key] = value
-        }
-
-        return object
+        return ob
     }
 
     public var bytes: [UInt8]? {

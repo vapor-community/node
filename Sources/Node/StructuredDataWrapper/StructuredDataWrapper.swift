@@ -1,7 +1,6 @@
 public protocol StructuredDataWrapper:
     NodeConvertible,
     PathIndexable,
-    Polymorphic,
     Equatable,
     ExpressibleByNilLiteral,
     ExpressibleByBooleanLiteral,

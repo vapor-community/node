@@ -11,8 +11,16 @@ extension StructuredDataWrapper {
         return wrapped.double
     }
 
+    public var float: Float? {
+        return wrapped.float
+    }
+
     public var int: Int? {
         return wrapped.int
+    }
+
+    public var uint: UInt? {
+        return wrapped.uint
     }
 
     public var string: String? {
@@ -27,11 +35,16 @@ extension StructuredDataWrapper {
         return wrapped.date
     }
 
-    public var array: [Polymorphic]? {
-        return wrapped.array
+    public var array: [Self]? {
+        return wrapped.array?.map(Self.init)
     }
 
-    public var object: [String: Polymorphic]? {
-        return wrapped.object
+    public var object: [String: Self]? {
+        guard let object = wrapped.object else { return nil }
+        var mutable: [String: Self] = [:]
+        object.forEach { k, v in
+            mutable[k] = Self(v)
+        }
+        return mutable
     }
 }

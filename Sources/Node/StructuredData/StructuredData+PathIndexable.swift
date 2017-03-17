@@ -1,12 +1,12 @@
 extension StructuredData: PathIndexable {
     /// If self is an array representation, return array
     public var pathIndexableArray: [StructuredData]? {
-        return structuredArray
+        return array
     }
 
     /// If self is an object representation, return object
     public var pathIndexableObject: [String: StructuredData]? {
-        return structuredObject
+        return object
     }
 
     public init(_ array: [StructuredData]) {
