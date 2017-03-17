@@ -4,14 +4,14 @@ extension StructuredDataWrapper {
      If self is an array representation, return array
      */
     public var pathIndexableArray: [Self]? {
-        return wrapped.structuredArray?.map { Self($0, in: context) }
+        return wrapped.array?.map { Self($0, in: context) }
     }
 
     /**
      If self is an object representation, return object
      */
     public var pathIndexableObject: [String: Self]? {
-        guard let o = wrapped.structuredObject else { return nil }
+        guard let o = wrapped.object else { return nil }
         var object: [String: Self] = [:]
         o.forEach { key, val in
             object[key] = Self(val, in: context)

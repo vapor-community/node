@@ -2,12 +2,13 @@ import Foundation
 
 extension Array: NodeConvertible {
     public init(node: Node) throws {
+        // use `is`, then cast to workaround compiler issue
         guard Element.self is NodeInitializable.Type else {
             throw NodeError.invalidContainer(container: "\(Array.self)", element: "\(Element.self)")
         }
 
         let element = Element.self as! NodeInitializable.Type
-        let array = node.typeArray ?? [node]
+        let array = node.array ?? [node]
         let mapped = try array.map { try element.init(node: $0) as! Element }
         self = mapped
     }

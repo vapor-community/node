@@ -3,7 +3,7 @@ extension Dictionary: NodeConvertible {
         guard Key.self is String.Type, Value.self is NodeInitializable.Type else {
             throw NodeError.invalidContainer(container: "\(Dictionary.self)", element: "\(Value.self)")
         }
-        guard let object = node.typeObject else {
+        guard let object = node.object else {
             throw NodeError.unableToConvert(input: node, expectation: "\([Key: Value].self)", path: [])
         }
 
