@@ -1,8 +1,6 @@
 import Foundation
 
 extension Date: NodeConvertible {
-    internal static let lock = NSLock()
-
     /**
         If a date receives a numbered node, it will use this closure
         to convert that number into a Date as a timestamp
@@ -34,9 +32,9 @@ extension Date: NodeConvertible {
         Override for custom implementations, or to remove supported formats
     */
     public static var incomingDateFormatters: [DateFormatter] = [
-        .iso8601,
-        .mysql,
-        .rfc1123
+        .iso8601(),
+        .mysql(),
+        .rfc1123()
     ]
 
     /**
@@ -50,7 +48,7 @@ extension Date: NodeConvertible {
         For complex scenarios where various string representations must be used,
         the user is responsible for handling their date formatting manually.
     */
-    public static var outgoingDateFormatter: DateFormatter = .iso8601
+    public static var outgoingDateFormatter: DateFormatter = .iso8601()
 
     /**
         Initializes a Date object with another Node.date, a number representing a timestamp,
@@ -63,8 +61,6 @@ extension Date: NodeConvertible {
         case let .number(number):
             self = try Date.incomingTimestamp(number)
         case let .string(string):
-            Date.lock.lock()
-            defer { Date.lock.unlock() }
             guard
                 let date = Date.incomingDateFormatters
                     .lazy
@@ -99,34 +95,61 @@ extension DateFormatter {
 
         http://stackoverflow.com/a/28016692/2611971
     */
-    @nonobjc public static let iso8601: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
-        return formatter
-    }()
+	public static func iso8601() -> DateFormatter {
+		if let formatter = Thread.current.threadDictionary["codes.vapor.iso8601DateFormatter"] as? DateFormatter {
+			return formatter
+		}
+		else {
+			let formatter = DateFormatter()
+
+			formatter.locale = Locale(identifier: "en_US_POSIX")
+			formatter.timeZone = TimeZone(secondsFromGMT: 0)
+			formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+
+			Thread.current.threadDictionary["codes.vapor.iso8601DateFormatter"] = formatter
+
+			return formatter
+		}
+	}
 }
 
 extension DateFormatter {
     /**
         A date formatter for mysql formatted types
     */
-    @nonobjc public static let mysql: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter
-    }()
+	public static func mysql() -> DateFormatter {
+		if let formatter = Thread.current.threadDictionary["codes.vapor.mysqlDateFormatter"] as? DateFormatter {
+			return formatter
+		}
+		else {
+			let formatter = DateFormatter()
+
+			formatter.timeZone = TimeZone(abbreviation: "UTC")
+			formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+			Thread.current.threadDictionary["codes.vapor.mysqlDateFormatter"] = formatter
+
+			return formatter
+		}
+	}
 }
 
 extension DateFormatter {
     /**
         A date formatter conforming to RFC 1123 spec
     */
-    @nonobjc public static let rfc1123: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss z"
-        return formatter
-    }()
+	public static func rfc1123() -> DateFormatter {
+		if let formatter = Thread.current.threadDictionary["codes.vapor.rfc1123DateFormatter"] as? DateFormatter {
+			return formatter
+		}
+		else {
+			let formatter = DateFormatter()
+
+			formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss z"
+
+			Thread.current.threadDictionary["codes.vapor.rfc1123DateFormatter"] = formatter
+
+			return formatter
+		}
+	}
 }
