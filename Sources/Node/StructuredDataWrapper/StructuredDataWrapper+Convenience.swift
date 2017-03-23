@@ -16,6 +16,10 @@ extension StructuredDataWrapper {
         self.init(.object([:]), in: context)
     }
 
+    public init(_ wrapped: StructuredData, _ context: Context) {
+        self.init(wrapped, in: context)
+    }
+
     public init(_ wrapped: StructuredData) {
         self.init(wrapped, in: Self.defaultContext)
     }

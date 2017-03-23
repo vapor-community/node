@@ -206,8 +206,6 @@ class NodePolymorphicTests: XCTestCase {
 
         let single = string.array?.flatMap { $0.string } ?? []
         XCTAssertEqual(single, ["hi"])
-        let fetched = arrayString.array?.flatMap { $0.string } ?? []
-        XCTAssertEqual(fetched, ["hi", "there", "array"])
         let array = arr.array?.flatMap { $0.int } ?? []
         XCTAssert(array == [1, 2, 3])
 
