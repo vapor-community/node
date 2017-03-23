@@ -204,11 +204,11 @@ class NodePolymorphicTests: XCTestCase {
         XCTAssertNil(int.array)
         XCTAssertNil(double.array)
 
-        let single = string.array?.flatMap { $0.string } ?? []
-        XCTAssertEqual(single, ["hi"])
         let array = arr.array?.flatMap { $0.int } ?? []
         XCTAssert(array == [1, 2, 3])
 
+        XCTAssertNil(string.array)
+        XCTAssertNil(arrayString.array)
         XCTAssertNil(ob.array)
         XCTAssertNil(bytes.array)
     }
