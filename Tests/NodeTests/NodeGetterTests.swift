@@ -56,6 +56,7 @@ class NodeGetterTests: XCTestCase {
         ("testgetSetThrows", testgetSetThrows),
         ("testgetDateRFC1123", testgetDateRFC1123),
         ("testgetDateMySQLDATETIME", testgetDateMySQLDATETIME),
+        ("testBadObject", testBadObject),
     ]
 
     func testgetTransform() throws {
@@ -245,6 +246,17 @@ class NodeGetterTests: XCTestCase {
         let node = try Node(node: ["time": "2010-05-16 15:20:00"])
         let date: Date = try node.get("time")
         XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
+    }
+
+    func testBadObject() throws {
+        // there was an issue where calling keys on an array of 
+        // string objects would stack overflow,
+        // this test asserts that doesn't happen
+        let arrayNotObject = Node(["key", "typo"])
+        XCTAssertNotNil(arrayNotObject.array)
+        XCTAssertNil(arrayNotObject.object)
+        // assert this doesn't stack overflow
+        _ = arrayNotObject["key"]
     }
 }
 

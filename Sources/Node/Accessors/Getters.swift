@@ -8,8 +8,12 @@ extension StructuredDataWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer])
         throws -> T {
-            let value = self[indexers] ?? .null
-            return try T(node: value)
+            do {
+                let value = self[indexers] ?? .null
+                return try T(node: value)
+            } catch let error as NodeError {
+                throw error.appendPath(indexers)
+            }
     }
 }
 
