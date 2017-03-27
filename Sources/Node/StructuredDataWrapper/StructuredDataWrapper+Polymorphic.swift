@@ -43,7 +43,7 @@ extension StructuredDataWrapper {
         guard let object = wrapped.object else { return nil }
         var mutable: [String: Self] = [:]
         object.forEach { k, v in
-            mutable[k] = Self(v)
+            mutable[k] = Self(v, context)
         }
         return mutable
     }

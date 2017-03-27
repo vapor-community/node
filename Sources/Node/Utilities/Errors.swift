@@ -6,10 +6,25 @@ public enum NodeError: Debuggable {
 }
 
 extension NodeError {
+    func appendPath(_ path: [PathIndexer]) -> NodeError {
+        switch self {
+        case .unableToConvert(
+            input: let input,
+            expectation: let expectation,
+            path: let existing
+        ) where existing.isEmpty:
+            return .unableToConvert(input: input, expectation: expectation, path: path)
+        default:
+            return self
+        }
+    }
+}
+
+extension NodeError {
     public var identifier: String {
         switch self {
         case .invalidContainer:
-            return "invalidType"
+            return "invalidContainer"
         case .unableToConvert:
             return "unableToConvert"
         }

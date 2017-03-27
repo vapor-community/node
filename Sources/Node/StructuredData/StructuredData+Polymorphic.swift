@@ -108,14 +108,8 @@ extension StructuredData {
     }
 
     public var array: [StructuredData]? {
-        switch self {
-        case .array(let array):
-            return array
-        case .string(let string):
-            return string.array?.map(StructuredData.string)
-        default:
-            return nil
-        }
+        guard case let .array(array) = self else { return nil }
+        return array
     }
 
     public var object: [String: StructuredData]? {
