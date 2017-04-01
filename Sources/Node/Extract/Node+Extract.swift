@@ -77,7 +77,7 @@ extension NodeBacked {
             guard let value = node[path] else {
                 throw NodeError.unableToConvert(node: nil, expected: "\(T.self)")
             }
-            return try T(node: value)
+            return try T(node: value, in: context)
     }
 
     public func extract<T : NodeInitializable>(
@@ -92,7 +92,7 @@ extension NodeBacked {
             guard let value = node[path] else {
                 throw NodeError.unableToConvert(node: nil, expected: "\([T].self)")
             }
-            return try [T](node: value)
+            return try [T](node: value, in: context)
     }
 
     public func extract<T : NodeInitializable>(
@@ -108,7 +108,7 @@ extension NodeBacked {
                 throw NodeError.unableToConvert(node: nil, expected: "\([[T]].self)")
             }
             let array = initial.nodeArray ?? [initial]
-            return try array.map { try [T](node: $0) }
+            return try array.map { try [T](node: $0, in: context) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -124,7 +124,7 @@ extension NodeBacked {
             guard let object = value?.nodeObject else {
                 throw NodeError.unableToConvert(node: value, expected: "\([String: T].self)")
             }
-            return try object.mapValues { return try T(node: $0) }
+            return try object.mapValues { return try T(node: $0, in: context) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -140,7 +140,7 @@ extension NodeBacked {
             guard let object = value?.nodeObject else {
                 throw NodeError.unableToConvert(node: value, expected: "\([String: [T]].self)")
             }
-            return try object.mapValues { return try [T](node: $0) }
+            return try object.mapValues { return try [T](node: $0, in: context) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -155,7 +155,7 @@ extension NodeBacked {
             guard let value = node[path] else {
                 throw NodeError.unableToConvert(node: nil, expected: "\(Set<T>.self)")
             }
-            let array = try [T](node: value)
+            let array = try [T](node: value, in: context)
             return Set(array)
     }
 }
@@ -173,7 +173,7 @@ extension NodeBacked {
         _  path: [PathIndex])
         throws -> T? {
             guard let node = node[path], node != .null else { return nil }
-            return try T(node: node)
+            return try T(node: node, in: context)
     }
 
     public func extract<T : NodeInitializable>(
@@ -186,7 +186,7 @@ extension NodeBacked {
         _ path: [PathIndex])
         throws -> [T]? {
             guard let node = node[path], node != .null else { return nil }
-            return try [T](node: node)
+            return try [T](node: node, in: context)
     }
 
     public func extract<T : NodeInitializable>(
@@ -200,7 +200,7 @@ extension NodeBacked {
         throws -> [[T]]? {
             guard let node = node[path], node != .null else { return nil }
             let array = node.nodeArray ?? [node]
-            return try array.map { try [T](node: $0) }
+            return try array.map { try [T](node: $0, in: context) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -216,7 +216,7 @@ extension NodeBacked {
             guard let object = node.nodeObject else {
                 throw NodeError.unableToConvert(node: node, expected: "\([String: T].self)")
             }
-            return try object.mapValues { return try T(node: $0) }
+            return try object.mapValues { return try T(node: $0, in: context) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -232,7 +232,7 @@ extension NodeBacked {
             guard let object = node.nodeObject else {
                 throw NodeError.unableToConvert(node: node, expected: "\([String: [T]].self)")
             }
-            return try object.mapValues { return try [T](node: $0) }
+            return try object.mapValues { return try [T](node: $0, in: context) }
     }
 
     public func extract<T : NodeInitializable>(
@@ -245,7 +245,7 @@ extension NodeBacked {
         _ path: [PathIndex])
         throws -> Set<T>? {
             guard let node = node[path], node != .null else { return nil }
-            let array = try [T](node: node)
+            let array = try [T](node: node, in: context)
             return Set(array)
     }
 }

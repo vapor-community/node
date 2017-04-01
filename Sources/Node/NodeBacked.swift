@@ -1,5 +1,6 @@
 public protocol NodeBacked: NodeConvertible, PathIndexable, Polymorphic {
     var node: Node { get set }
+    var context: Context { get }
     init(_ node: Node)
 }
 
@@ -12,6 +13,8 @@ extension NodeBacked {
     public func makeNode(context: Context = EmptyNode) -> Node {
         return node
     }
+
+    public var context: Context { return EmptyNode }
 }
 
 // Polymorphic
