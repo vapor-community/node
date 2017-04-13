@@ -1,0 +1,15 @@
+extension Data: NodeConvertible {
+  public func makeNode(context: Context = EmptyNode) -> Node {
+    let bytes = withUnsafeBytes {
+      [UInt8](UnsafeBufferPointer(start: $0, count: count))
+    }
+    return .bytes(bytes)
+  }
+
+  public init(node: Node, in context: Context) throws {
+    guard case let .bytes(bytes) = node else {
+      throw NodeError.unableToConvert(node: node, expected: "\(Bytes.self)")
+    }
+    self = Data(bytes: bytes)
+  }
+}
