@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Node
+import NodeFuzzy
 
 class DictionaryKeyPathTests: XCTestCase {
     static let allTests = [

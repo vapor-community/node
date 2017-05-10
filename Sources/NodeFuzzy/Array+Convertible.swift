@@ -1,4 +1,4 @@
-import Foundation
+@_exported import Node
 
 extension Array: NodeConvertible {
     public init(node: Node) throws {

@@ -1,6 +1,6 @@
 #if os(Linux)
 import XCTest
-@testable import NodeTests
+@testable import NodeFuzzyTests
 
 XCTMain([
     testCase(BasicConvertibleTests.allTests),

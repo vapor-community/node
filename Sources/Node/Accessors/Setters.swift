@@ -3,6 +3,11 @@ extension StructuredDataWrapper {
         let node = try value.flatMap { try $0.makeNode(in: context) } ?? .null
         self.wrapped[path] = node.wrapped
     }
+
+    public mutating func set(_ path: String, _ value: [NodeRepresentable?]?) throws {
+        let nodes = try value?.map { try $0.flatMap { try $0.makeNode(in: context) } ?? .null }
+        self.wrapped[path] = nodes.flatMap { Node.array($0).wrapped } ?? .null
+    }
 }
 
 extension StructuredDataWrapper {
