@@ -1,13 +1,13 @@
 extension StructuredDataWrapper {
     public func get<T : NodeInitializable>(
         _ indexers: PathIndexer...
-        ) throws -> T {
+    ) throws -> T {
         return try get(indexers)
     }
     
     public func get<T : NodeInitializable>(
         _ indexers: [PathIndexer]
-        ) throws -> T {
+    ) throws -> T {
         do {
             let value = self[indexers] ?? .null
             return try T(node: value)
