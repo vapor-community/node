@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Node
+import NodeFuzzy
 
 class TestInitializable: NodeInitializable {
     let node: Node

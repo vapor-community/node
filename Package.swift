@@ -7,6 +7,7 @@ let package = Package(
     name: "Node",
     targets: [
         Target(name: "Node"),
+        Target(name: "NodeFuzzy", dependencies: ["Node"]),
     ],
     dependencies: [
         .Package(url: "https://github.com/vapor/path-indexable.git", beta2),

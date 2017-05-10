@@ -8,7 +8,7 @@
 
 import XCTest
 import Foundation
-@testable import Node
+@testable import NodeFuzzy
 
 struct NoNull: NodeInitializable, Hashable {
     let node: Node
