@@ -1,22 +1,3 @@
-extension StructuredDataWrapper {
-    public func get<T : NodeInitializable>(
-        _ indexers: PathIndexer...)
-        throws -> T {
-            return try get(indexers)
-    }
-
-    public func get<T : NodeInitializable>(
-        _ indexers: [PathIndexer])
-        throws -> T {
-            do {
-                let value = self[indexers] ?? .null
-                return try T(node: value)
-            } catch let error as NodeError {
-                throw error.appendPath(indexers)
-            }
-    }
-}
-
 // MARK: Transformers
 
 extension StructuredDataWrapper {
