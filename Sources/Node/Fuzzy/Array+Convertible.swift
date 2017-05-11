@@ -15,5 +15,3 @@ extension Array: NodeConvertible {
         return Node(nodes)
     }
 }
-
-extension String: Error { }

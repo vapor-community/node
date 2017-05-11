@@ -1,7 +1,7 @@
 extension Dictionary: NodeConvertible {
     public init(node: Node) throws {
         guard Key.self is String.Type else {
-            throw NodeError.invalidContainer(container: "\(Dictionary.self)", element: "\(Value.self)")
+            throw NodeError.invalidDictionaryKeyType
         }
         
         guard let object = node.object else {
@@ -13,7 +13,6 @@ extension Dictionary: NodeConvertible {
         }
 
         var mapped: [Key: Value] = [:]
-
         try object.forEach { key, node in
             let key = key as! Key
             let val: Value = try Node.fuzzy.initialize(
@@ -21,16 +20,12 @@ extension Dictionary: NodeConvertible {
             )
             mapped[key] = val
         }
-
         self = mapped
     }
 
     public func makeNode(in context: Context?) throws -> Node {
         guard Key.self is String.Type else {
-            throw NodeError.invalidContainer(
-                container: "\(Dictionary.self)",
-                element: "Key(\(Key.self)) (expected String)"
-            )
+            throw NodeError.invalidDictionaryKeyType
         }
         
         var nodes: [String: Node] = [:]

@@ -1,7 +1,8 @@
 @_exported import Debugging
 
 public enum NodeError: Debuggable {
-    case invalidContainer(container: String, element: String)
+    case noFuzzyConverter(item: Any?, type: Any.Type)
+    case invalidDictionaryKeyType
     case unableToConvert(input: Node?, expectation: String, path: [PathIndexer])
 }
 
@@ -23,8 +24,10 @@ extension NodeError {
 extension NodeError {
     public var identifier: String {
         switch self {
-        case .invalidContainer:
-            return "invalidContainer"
+        case .noFuzzyConverter:
+            return "noFuzzyConverter"
+        case .invalidDictionaryKeyType:
+            return "invalidDictionaryKeyType"
         case .unableToConvert:
             return "unableToConvert"
         }
@@ -32,8 +35,16 @@ extension NodeError {
 
     public var reason: String {
         switch self {
-        case .invalidContainer(let container, let element):
-            return "Unable to use container '\(container)' with element '\(element)' expected a \(NodeConvertible.self) type"
+        case .noFuzzyConverter(let item, let type):
+            let reason: String
+            if let item = item {
+                reason = "No converters found for \(item) of type \(type)"
+            } else {
+                reason = "No converters found for type \(type)"
+            }
+            return reason
+        case .invalidDictionaryKeyType:
+            return "Dictionary must have String keys."
         case .unableToConvert(let node, let expectation, let path):
             let path = path.map { "\($0)" } .joined(separator: ".")
             if let node = node, node != .null {
@@ -46,9 +57,13 @@ extension NodeError {
 
     public var possibleCauses: [String] {
         switch self {
-        case .invalidContainer:
+        case .invalidDictionaryKeyType:
             return [
-                "tried to use a collection (Optional, Array, Dictionary, Set) that doesn't contain NodeConvertible types"
+                "You attempted to parse/serialize an object using a dictionary with non-String keys"
+            ]
+        case .noFuzzyConverter:
+            return [
+                "You have not properly set the Node.fuzzy array"
             ]
         case .unableToConvert:
             return [
@@ -61,13 +76,22 @@ extension NodeError {
 
     public var suggestedFixes: [String] {
         switch self {
-        case .invalidContainer(_, let element):
+        case .invalidDictionaryKeyType:
             return [
-                "ensure that '\(element)' conforms to '\(NodeConvertible.self)'",
-                "if '\(element)' is itself a collection (Optional, Array, Dictionary, Set), then ensure it's elements are '\(NodeConvertible.self)'",
-                "if the element type is `Any`, then manually inspect to ensure all elements contained conform to '\(NodeConvertible.self)'",
-                "if container is a dictionary, ensure Key is type String, and Value is '\(NodeConvertible.self)'"
+                "Change dictionary to [String: *] or Dictionary<String, *>"
             ]
+        case .noFuzzyConverter(let item, let type):
+            var fixes: [String] = []
+            
+            Node.fuzzy.forEach { fuzzy in
+                if let item = item {
+                    fixes.append("Conform \(item) of type \(type) to \(fuzzy)")
+                } else {
+                    fixes.append("Conform \(type) to \(fuzzy)")
+                }
+            }
+            
+            return fixes
         case .unableToConvert:
             return [
                 "called `get(...)` on a key or key path that does not exist in the data",

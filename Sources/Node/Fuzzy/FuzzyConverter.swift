@@ -29,7 +29,7 @@ extension Array where Iterator.Element == FuzzyConverter.Type {
         }
         
         guard let wrapped = maybe else {
-            throw "No converters found for type \(T.self)"
+            throw NodeError.noFuzzyConverter(item: nil, type: T.self)
         }
         
         return wrapped
@@ -44,7 +44,7 @@ extension Array where Iterator.Element == FuzzyConverter.Type {
         }
         
         guard let data = maybe else {
-            throw "No converters found for item \(any) of type \(T.self)."
+            throw NodeError.noFuzzyConverter(item: any, type: T.self)
         }
         return data
     }
