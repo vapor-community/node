@@ -1,5 +1,3 @@
-@_exported import Node
-
 extension Array: NodeConvertible {
     public init(node: Node) throws {
         let array = node.array ?? [node]
