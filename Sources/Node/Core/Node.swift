@@ -11,19 +11,18 @@ public struct Node: StructuredDataWrapper {
 }
 
 extension Node: FuzzyConverter {
-    public static func represent<T>(_ any: T, in context: Context) throws -> StructuredData? {
-        guard let node = any as? NodeRepresentable else {
+    public static func represent<T>(_ any: T, in context: Context) throws -> Node? {
+        guard let r = any as? NodeRepresentable else {
             return nil
         }
-        return try node.makeNode(in: context).wrapped
+        return try r.makeNode(in: context)
     }
     
-    public static func initialize<T>(_ data: StructuredData, in context: Context) throws -> T? {
+    public static func initialize<T>(node: Node) throws -> T? {
         guard let type = T.self as? NodeInitializable.Type else {
             return nil
         }
         
-        let node = Node(data, in: context)
         return try type.init(node: node) as? T
     }
 }

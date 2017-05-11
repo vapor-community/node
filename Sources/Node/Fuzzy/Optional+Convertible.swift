@@ -5,10 +5,7 @@ extension Optional: NodeConvertible {
             return
         }
 
-        let wrapped: Wrapped = try Node.fuzzy.initialize(
-            node.wrapped,
-            in: node.context
-        )
+        let wrapped: Wrapped = try Node.fuzzy.initialize(node: node)
         self = .some(wrapped)
     }
 
@@ -17,8 +14,7 @@ extension Optional: NodeConvertible {
         case .none:
             return .null
         case .some(let some):
-            let wrapped = try Node.fuzzy.represent(some, in: context)
-            return Node(wrapped, in: context)
+            return try Node.fuzzy.represent(some, in: context)
         }
     }
 }

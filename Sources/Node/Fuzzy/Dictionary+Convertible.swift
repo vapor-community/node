@@ -15,9 +15,7 @@ extension Dictionary: NodeConvertible {
         var mapped: [Key: Value] = [:]
         try object.forEach { key, node in
             let key = key as! Key
-            let val: Value = try Node.fuzzy.initialize(
-                node.wrapped, in: node.context
-            )
+            let val: Value = try Node.fuzzy.initialize(node: node)
             mapped[key] = val
         }
         self = mapped
@@ -30,9 +28,15 @@ extension Dictionary: NodeConvertible {
         
         var nodes: [String: Node] = [:]
         try forEach { (key, value) in
-            let wrapped = try Node.fuzzy.represent(value, in: context)
-            nodes[key as! String] = Node(wrapped, in: context)
+            nodes[key as! String] = try Node.fuzzy.represent(value, in: context)
         }
+        
         return Node(nodes)
+    }
+}
+
+extension StructuredDataWrapper {
+    public mutating func set(_ path: String, _ any: [String: Any?]?) throws {
+        try set(path, any.makeNode(in: context))
     }
 }
