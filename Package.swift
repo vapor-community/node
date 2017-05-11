@@ -6,8 +6,7 @@ let beta2 = Version(2, 0, 0, prereleaseIdentifiers: ["beta"])
 let package = Package(
     name: "Node",
     targets: [
-        Target(name: "Node"),
-        Target(name: "NodeFuzzy", dependencies: ["Node"]),
+        Target(name: "Node")
     ],
     dependencies: [
         .Package(url: "https://github.com/vapor/path-indexable.git", beta2),

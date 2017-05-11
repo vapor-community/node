@@ -7,9 +7,13 @@
 //
 
 import XCTest
-import NodeFuzzy
+import Node
 
 class DictionaryKeyPathTests: XCTestCase {
+    override func setUp() {
+        Node.fuzzy = [Node.self]
+    }
+    
     static let allTests = [
         ("testPaths", testPaths),
         ("testGarbage", testGarbage)
@@ -34,7 +38,7 @@ class DictionaryKeyPathTests: XCTestCase {
     }
 
     func testGarbage() throws {
-        let node = try [1, 2, "3", "4", ["hello": "world"]].converted(to: Node.self, in: nil)
+        let node = try! [1, 2, "3", "4", ["hello": "world"]].converted(to: Node.self, in: nil)
         XCTAssertEqual(node[0], 1)
         XCTAssertEqual(node[1], 2)
         XCTAssertEqual(node[2], "3")
