@@ -85,9 +85,9 @@ extension NodeError {
             
             Node.fuzzy.forEach { fuzzy in
                 if let item = item {
-                    fixes.append("Conform \(item) of type \(type) to \(fuzzy)")
+                    fixes.append("Conform \(item) of type \(type) to \(fuzzy)Convertible")
                 } else {
-                    fixes.append("Conform \(type) to \(fuzzy)")
+                    fixes.append("Conform \(type) to \(fuzzy)Convertible")
                 }
             }
             

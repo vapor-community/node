@@ -1,5 +1,5 @@
 extension StructuredDataWrapper {
-    public mutating func set(_ path: String, _ any: Any) throws {
+    public mutating func set(_ path: String, _ any: Any?) throws {
         let value = try Node.fuzzy.represent(any, in: context)
         wrapped[path] = value.wrapped
     }
