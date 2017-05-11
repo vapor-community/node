@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import Node
-@testable import NodeFuzzy
+@testable import Node
 
 class NumberTests: XCTestCase {
     static let allTests = [

@@ -1,5 +1,5 @@
 import XCTest
-import NodeFuzzy
+import Node
 
 struct JSON: StructuredDataWrapper {
     var wrapped: StructuredData

@@ -1,6 +1,6 @@
 import Foundation
 import XCTest
-import NodeFuzzy
+import Node
 
 extension Node {
     internal init() {

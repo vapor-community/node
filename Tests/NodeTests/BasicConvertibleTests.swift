@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import NodeFuzzy
+import Node
 import Foundation
 
 class BasicConvertibleTests: XCTestCase {

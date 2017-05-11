@@ -8,7 +8,7 @@
 
 import XCTest
 import Foundation
-@testable import NodeFuzzy
+@testable import Node
 
 struct NoNull: NodeInitializable, Hashable {
     let node: Node
@@ -31,6 +31,10 @@ func == (l: NoNull, r: NoNull) -> Bool {
 }
 
 class NodeGetterTests: XCTestCase {
+    override func setUp() {
+        Node.fuzzy = [Node.self]
+    }
+    
     static let allTests = [
         ("testgetTransform", testgetTransform),
         ("testgetTransformThrows", testgetTransformThrows),
@@ -108,7 +112,7 @@ class NodeGetterTests: XCTestCase {
 
     func testgetArray() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
-        let geted = try node.get("nest", "ed", "array") as [NoNull]
+        let geted = try! node.get("nest", "ed", "array") as [NoNull]
         let numbers = geted.flatMap { $0.node.int }
         XCTAssert(numbers == [1,2,3,4])
     }
