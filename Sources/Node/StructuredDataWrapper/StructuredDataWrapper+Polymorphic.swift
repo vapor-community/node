@@ -36,7 +36,9 @@ extension StructuredDataWrapper {
     }
 
     public var array: [Self]? {
-        return wrapped.array?.map(Self.init)
+        return wrapped.array?.map { item in
+            Self(item, context)
+        }
     }
 
     public var object: [String: Self]? {
