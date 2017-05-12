@@ -10,10 +10,6 @@ import XCTest
 import Node
 
 class DictionaryKeyPathTests: XCTestCase {
-    override func setUp() {
-        Node.fuzzy = [Node.self]
-    }
-    
     static let allTests = [
         ("testPaths", testPaths),
         ("testGarbage", testGarbage)

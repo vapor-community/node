@@ -9,7 +9,7 @@ public protocol FuzzyConverter {
     ) throws -> T?
 }
 
-private var _fuzzyTypes: [FuzzyConverter.Type] = []
+private var _fuzzyTypes: [FuzzyConverter.Type] = [Node.self]
 
 extension Node {
     public static var fuzzy: [FuzzyConverter.Type] {
