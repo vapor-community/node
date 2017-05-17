@@ -7,8 +7,4 @@ public struct Identifier: StructuredDataWrapper {
         self.wrapped = wrapped
         self.context = context ?? emptyContext
     }
-
-    public init() {
-        self.init([:])
-    }
 }
