@@ -26,7 +26,7 @@ class DictionaryKeyPathTests: XCTestCase {
             return
         }
 
-        guard case let .string(str) = node else {
+        guard let str = node.string else {
             XCTFail()
             return
         }
@@ -37,7 +37,7 @@ class DictionaryKeyPathTests: XCTestCase {
             XCTFail()
             return
         }
-        guard case let .string(setStr) = setVal else {
+        guard let setStr = setVal.string else {
             XCTFail()
             return
         }
