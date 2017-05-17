@@ -12,25 +12,37 @@ import Node
 class DictionaryKeyPathTests: XCTestCase {
     static let allTests = [
         ("testPaths", testPaths),
-        ("testGarbage", testGarbage)
+        ("testGarbage", testGarbage),
     ]
     
     func testPaths() {
-        let TestDictionary: Node = [
-            "one" : [
-                "two" : "Found me!"
-            ]
-        ]
+        let inner = Node(["two" : .string("Found me!")])
+        var test = Node([
+            "one" : inner
+            ])
 
-        var node = TestDictionary
+        guard let node = test["one", "two"] else {
+            XCTFail()
+            return
+        }
 
-        let path: [String] = ["one", "two"]
-        let value: String! = node[path]?.string
-        XCTAssert(value == "Found me!")
+        guard let str = node.string else {
+            XCTFail()
+            return
+        }
+        XCTAssert(str == "Found me!")
 
-        node["path", "to", "new", "value"] = "Hello!"
-        let setVal = node["path", "to", "new", "value"]
-        XCTAssertEqual(setVal, "Hello!")
+        test["path", "to", "new", "value"] = .string("Hello!")
+        guard let setVal = test["path", "to", "new", "value"] else {
+            XCTFail()
+            return
+        }
+        guard let setStr = setVal.string else {
+            XCTFail()
+            return
+        }
+
+        XCTAssert(setStr == "Hello!")
     }
 
     func testGarbage() throws {
