@@ -4,9 +4,9 @@ public struct Node: StructuredDataWrapper {
     public var wrapped: StructuredData
     public var context: Context
 
-    public init(_ wrapped: StructuredData, in context: Context?) {
+    public init(_ wrapped: StructuredData, in context: Context? = nil) {
         self.wrapped = wrapped
-        self.context = context ?? emptyContext
+        self.context = context ?? Node.defaultContext
     }
 }
 
@@ -32,7 +32,7 @@ extension Node: NodeConvertible {
         self = node
     }
 
-    public func makeNode(in context: Context?) -> Node {
+    public func makeNode(in context: Context? = nil) -> Node {
         return self
     }
 }

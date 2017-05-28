@@ -178,14 +178,14 @@ class BasicConvertibleTests: XCTestCase {
         let node = expectation.makeNode(in: nil)
         XCTAssertEqual(expectation.uuidString, node.string)
 
-        let inverse = try node.converted(to: UUID.self, in: nil)
+        let inverse = try node.converted(to: UUID.self)
         XCTAssertEqual(inverse, expectation)
     }
 
     func testUUIDConvertibleThrows() throws {
         let node = Node("I'm not a uuid :)")
         do {
-            _ = try node.converted(to: UUID.self, in: nil)
+            _ = try node.converted(to: UUID.self)
             XCTFail("Should fail")
         } catch is NodeError {
             // ok, expected to fail

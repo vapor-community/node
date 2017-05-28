@@ -12,7 +12,7 @@ extension StructuredDataWrapper {
         self.init(node)
     }
 
-    public init(_ context: Context?) {
+    public init(_ context: Context? = Self.defaultContext) {
         self.init(.object([:]), in: context)
     }
 

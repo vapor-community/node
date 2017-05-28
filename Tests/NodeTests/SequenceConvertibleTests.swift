@@ -41,18 +41,18 @@ class SequenceConvertibleTests: XCTestCase {
 
     func testSequence() throws {
         let ints: [Int] = [1,2,3,4,5]
-        let node = try ints.makeNode(in: nil)
-        XCTAssert(node == .array([1,2,3,4,5], in: nil))
+        let node = try ints.makeNode()
+        XCTAssert(node == .array([1,2,3,4,5]))
 
         let representables = ints.map { $0 as NodeRepresentable }
-        let node2 = try representables.makeNode(in: nil)
-        XCTAssert(node2 == .array([1,2,3,4,5], in: nil))
+        let node2 = try representables.makeNode()
+        XCTAssert(node2 == .array([1,2,3,4,5]))
 
-        let models = try ints.converted(to: [TestInitializable].self, in: nil)
+        let models = try ints.converted(to: [TestInitializable].self)
         let backInts = models.map { $0.node } .flatMap { $0.int }
         XCTAssert(backInts == ints)
 
-        let models2 = try representables.converted(to: [TestInitializable].self, in: nil)
+        let models2 = try representables.converted(to: [TestInitializable].self)
         let backInts2 = models2.map { $0.node } .flatMap { $0.int }
         XCTAssert(backInts2 == ints)
 
@@ -91,7 +91,7 @@ class SequenceConvertibleTests: XCTestCase {
         let node = try dict.makeNode(in: nil)
         XCTAssert(node == ["key": "val", "hi": "world"])
 
-        let model = try dict.converted(to: TestInitializable.self, in: nil)
+        let model = try dict.converted(to: TestInitializable.self)
         XCTAssert(model.node["key"]?.string == "val")
         XCTAssert(model.node["hi"]?.string == "world")
     }
@@ -104,10 +104,10 @@ class SequenceConvertibleTests: XCTestCase {
         XCTAssert(one == [1])
 
         let strings = ["1", "2", "3", "4", "5"]
-        let collected = try strings.converted(to: [Int].self, in: nil)
+        let collected = try strings.converted(to: [Int].self)
         XCTAssert(collected == [1,2,3,4,5])
 
-        let collectedMixed = try [1, 2, "3", "4", 5].converted(to: [Int].self, in: nil)
+        let collectedMixed = try [1, 2, "3", "4", 5].converted(to: [Int].self)
         XCTAssert(collectedMixed == [1,2,3,4,5])
     }
 
@@ -122,7 +122,7 @@ class SequenceConvertibleTests: XCTestCase {
         let collected = try Set<Int>(node: Node(node: strings))
         XCTAssert(collected == [1,2,3,4,5])
 
-        let collectedMixed = try [1, 2, "3", "4", 5].converted(to: Set<Int>.self, in: nil)
+        let collectedMixed = try [1, 2, "3", "4", 5].converted(to: Set<Int>.self)
         XCTAssert(collectedMixed == [1,2,3,4,5])
     }
 
