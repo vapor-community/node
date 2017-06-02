@@ -114,7 +114,7 @@ extension DateFormatter {
     */
     @nonobjc public static let mysql: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
     }()
