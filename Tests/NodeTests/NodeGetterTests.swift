@@ -36,6 +36,7 @@ class NodeGetterTests: XCTestCase {
     }
     
     static let allTests = [
+        ("testGetNoPath", testGetNoPath),
         ("testgetTransform", testgetTransform),
         ("testgetTransformThrows", testgetTransformThrows),
         ("testgetTransformOptionalValue", testgetTransformOptionalValue),
@@ -62,6 +63,12 @@ class NodeGetterTests: XCTestCase {
         ("testgetDateMySQLDATETIME", testgetDateMySQLDATETIME),
         ("testBadObject", testBadObject),
     ]
+
+    func testGetNoPath() throws {
+        let node = "foo" as Node
+        let foo = try node.get() as String
+        XCTAssertEqual(foo, "foo")
+    }
 
     func testgetTransform() throws {
         let dict = ["date": 250]
