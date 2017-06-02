@@ -63,6 +63,12 @@ class NodeGetterTests: XCTestCase {
         ("testBadObject", testBadObject),
     ]
 
+    func testGetNoPath() throws {
+        let node = "foo" as Node
+        let foo = try node.get() as String
+        XCTAssertEqual(foo, "foo")
+    }
+
     func testgetTransform() throws {
         let dict = ["date": 250]
         let node = try Node(node: dict, in: nil)
