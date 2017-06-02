@@ -36,6 +36,7 @@ class NodeGetterTests: XCTestCase {
     }
     
     static let allTests = [
+        ("testGetNoPath", testGetNoPath),
         ("testgetTransform", testgetTransform),
         ("testgetTransformThrows", testgetTransformThrows),
         ("testgetTransformOptionalValue", testgetTransformOptionalValue),
