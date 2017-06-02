@@ -9,4 +9,9 @@ extension StructuredDataWrapper {
         let node = Node(data, in: context)
         return try Node.fuzzy.initialize(node: node)
     }
+
+    public func get<T>() throws -> T {
+        let node = Node(wrapped, in: context)
+        return try Node.fuzzy.initialize(node: node)
+    }
 }
