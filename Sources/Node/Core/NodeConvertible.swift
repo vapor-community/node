@@ -4,4 +4,4 @@
 /// Any NodeConvertible can be turned into any other NodeConvertible type
 ///
 /// Json => Node => Object => Node => XML => ...
-public protocol NodeConvertible: NodeInitializable, NodeRepresentable {}
+public typealias NodeConvertible = NodeInitializable & NodeRepresentable
