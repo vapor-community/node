@@ -2,7 +2,7 @@ Pod::Spec.new do |spec|
   # Node was taken, so using NodeCocoapods here ... we'll see how that works
   # in code do `#if COCOAPODS` to use correct import
   spec.name         = 'NodeCocoapods'
-  spec.version      = '2.0.1'
+  spec.version      = '2.0.3'
   spec.license      = 'MIT'
   spec.homepage     = 'https://github.com/vapor/node'
   spec.authors      = { 'Vapor' => 'contact@vapor.codes' }
