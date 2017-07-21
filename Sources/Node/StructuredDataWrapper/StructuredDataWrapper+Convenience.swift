@@ -32,7 +32,7 @@ extension StructuredDataWrapper {
         return T(wrapped, in: context)
     }
 
-    public func converted<T: NodeInitializable>(to type: T.Type = T.self) throws -> T {
+    public func converted<T: NodeInitializable>(to type: T.Type) throws -> T {
         return try T.init(node: self)
     }
 
