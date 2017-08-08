@@ -15,14 +15,26 @@ extension StructuredData {
 // MARK: Initializers
 
 extension StructuredData.Number {
+    #if swift(>=4)
+    public init<I: BinaryInteger>(_ value: I) {
+        let max = Int64(value)
+        let int = Int(max)
+        self = .int(int)
+    }
+    #else
     public init<I: Integer>(_ value: I) {
         let max = value.toIntMax()
         let int = Int(max)
         self = .int(int)
     }
+    #endif
 
     public init<U: UnsignedInteger>(_ value: U) {
+        #if swift(>=4)
+        let max = UInt64(value)
+        #else
         let max = value.toUIntMax()
+        #endif
         let uint = UInt(max)
         self = .uint(uint)
     }
