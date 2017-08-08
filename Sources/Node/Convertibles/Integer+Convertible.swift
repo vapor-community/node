@@ -13,7 +13,7 @@ extension SignedInteger {
         #if swift(>=4)
             self.init(Int64(int))
         #else
-            self.init(int.toUIntMax())
+            self.init(int.toIntMax())
         #endif
     }
 
@@ -21,7 +21,7 @@ extension SignedInteger {
         #if swift(>=4)
             let max = Int64(self)
         #else
-            let max = self.toUIntMax()
+            let max = self.toIntMax()
         #endif
         let number = StructuredData.Number(max)
         return .number(number, in: context)
