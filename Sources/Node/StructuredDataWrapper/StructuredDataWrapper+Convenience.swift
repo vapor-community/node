@@ -24,19 +24,11 @@ extension StructuredDataWrapper {
         self.init(wrapped, in: Self.defaultContext)
     }
 
-    public func converted<T: StructuredDataWrapper>(to type: T.Type) -> T {
+    public func converted<T: StructuredDataWrapper>(to type: T.Type = T.self) -> T {
         return T(wrapped, in: context)
     }
 
-    public func converted<T: StructuredDataWrapper>() -> T {
-        return T(wrapped, in: context)
-    }
-
-    public func converted<T: NodeInitializable>(to type: T.Type) throws -> T {
-        return try T.init(node: self)
-    }
-
-    public func converted<T: NodeInitializable>() throws -> T {
+    public func converted<T: NodeInitializable>(to type: T.Type = T.self) throws -> T {
         return try T.init(node: self)
     }
 
