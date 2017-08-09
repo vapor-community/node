@@ -9,12 +9,21 @@ extension SignedInteger {
         guard let int = node.int else {
             throw NodeError.unableToConvert(input: node, expectation: "\(Self.self)", path: [])
         }
-
-        self.init(int.toIntMax())
+        
+        #if swift(>=4)
+            self.init(Int64(int))
+        #else
+            self.init(int.toIntMax())
+        #endif
     }
 
     public func makeNode(in context: Context?) -> Node {
-        let number = StructuredData.Number(self.toIntMax())
+        #if swift(>=4)
+            let max = Int64(self)
+        #else
+            let max = self.toIntMax()
+        #endif
+        let number = StructuredData.Number(max)
         return .number(number, in: context)
     }
 }
