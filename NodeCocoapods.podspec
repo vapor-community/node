@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
   spec.summary      = 'A formatted data encapsulation meant to facilitate the transformation from one object to another.'
   spec.source       = { :git => "#{spec.homepage}.git", :tag => "#{spec.version}" }
   spec.ios.deployment_target = "8.0"
-  spec.osx.deployment_target = "10.9"
+  spec.osx.deployment_target = "10.10"
   spec.watchos.deployment_target = "2.0"
   spec.tvos.deployment_target = "9.0"
   spec.requires_arc = true
@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
   spec.subspec "Default" do |ss|
     ss.source_files = 'Sources/**/*.{swift}'
     ss.dependency 'Core', '~> 2.1.2'
-    ss.dependency 'Bits', '~> 0.1.2'
+    ss.dependency 'Bits', '~> 1.1.0'
     ss.dependency 'Debugging', '~> 1.1.0'
   end
 end
