@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
   spec.subspec "Default" do |ss|
     ss.source_files = 'Sources/**/*.{swift}'
     ss.dependency 'Core', '~> 2.1.2'
-    ss.dependency 'Bits', '~> 1.1.0'
+    ss.dependency 'Bits', '~> 0.1.2'
     ss.dependency 'Debugging', '~> 1.1.0'
   end
 end
