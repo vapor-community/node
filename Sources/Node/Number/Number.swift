@@ -75,6 +75,7 @@ extension StructuredData.Number {
             guard u < UInt.intMax else { return Int.max }
             return Int(u)
         case let .double(d):
+            guard d < Double(Int.max) else { return Int.max }
             return Int(d)
         }
     }
