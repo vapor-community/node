@@ -148,17 +148,27 @@ extension String: PathIndexer {
     }
 
     public func unwrapComponents() -> [PathIndexer] {
-        return characters
-            .split(separator: ".")
-            .map(String.init)
+        #if swift(>=4)
+            return split(separator: ".")
+                .map(String.init)
+        #else
+            return characters
+                .split(separator: ".")
+                .map(String.init)
+        #endif
     }
 }
 
 extension String {
     internal func keyPathComponents() -> [String] {
-        return characters
-            .split(separator: ".")
-            .map(String.init)
+        #if swift(>=4)
+            return split(separator: ".")
+                .map(String.init)
+        #else
+            return characters
+                .split(separator: ".")
+                .map(String.init)
+        #endif
     }
 }
 
