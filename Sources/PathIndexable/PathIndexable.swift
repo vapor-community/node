@@ -148,7 +148,7 @@ extension String: PathIndexer {
     }
 
     public func unwrapComponents() -> [PathIndexer] {
-        return self
+        return toCharacterSequence()
             .split(separator: ".")
             .map(String.init)
     }
