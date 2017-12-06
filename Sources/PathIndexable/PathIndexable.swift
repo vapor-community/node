@@ -148,7 +148,7 @@ extension String: PathIndexer {
     }
 
     public func unwrapComponents() -> [PathIndexer] {
-        return characters
+        return toCharacterSequence()
             .split(separator: ".")
             .map(String.init)
     }
@@ -156,10 +156,20 @@ extension String: PathIndexer {
 
 extension String {
     internal func keyPathComponents() -> [String] {
-        return characters
+        return toCharacterSequence()
             .split(separator: ".")
             .map(String.init)
     }
+
+    #if swift(>=4.0)
+    private func toCharacterSequence() -> String {
+        return self
+    }
+    #else
+    private func toCharacterSequence() -> CharacterView {
+        return self.characters
+    }
+    #endif    
 }
 
 /// Everything in indexable will explode keypaths,
