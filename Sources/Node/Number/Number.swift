@@ -88,6 +88,7 @@ extension StructuredData.Number {
         case let .uint(u):
             return u
         case let .double(d):
+            guard d < Double(UInt.max) else { return UInt.max }
             return UInt(d)
         }
     }
