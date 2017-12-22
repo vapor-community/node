@@ -166,7 +166,7 @@ extension String {
         return self
     }
     #else
-    private func toCharacterSequence() -> CharacterView {
+    fileprivate func toCharacterSequence() -> CharacterView {
         return self.characters
     }
     #endif    
