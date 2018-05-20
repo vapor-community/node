@@ -42,7 +42,11 @@ extension StructuredDataWrapper {
         let schema = StructuredData.object(object)
 
         // take first context to attempt inference, should all be same
+        #if swift(>=4.1)
+        let context = o.values.lazy.compactMap { $0.context } .first
+        #else
         let context = o.values.lazy.flatMap { $0.context } .first
+        #endif
         self.init(schema, in: context)
     }
 }

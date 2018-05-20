@@ -120,14 +120,22 @@ class NodeGetterTests: XCTestCase {
     func testgetArray() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted = try! node.get("nest.ed.array") as [NoNull]
+        #if swift(>=4.1)
+        let numbers = geted.compactMap { $0.node.int }
+        #else
         let numbers = geted.flatMap { $0.node.int }
+        #endif
         XCTAssert(numbers == [1,2,3,4])
     }
 
     func testgetArrayOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [1, 2, 3, 4]]]])
         let geted: [NoNull]? = try node.get("nest.ed.array")
+        #if swift(>=4.1)
+        let numbers = geted?.compactMap { $0.node.int } ?? []
+        #else
         let numbers = geted?.flatMap { $0.node.int } ?? []
+        #endif
         XCTAssert(numbers == [1,2,3,4])
     }
 
@@ -142,9 +150,15 @@ class NodeGetterTests: XCTestCase {
     func testgetArrayOfArrays() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
         let geted = try node.get("nest.ed.array") as [[NoNull]]
+        #if swift(>=4.1)
+        let numbers = geted.map { innerArray in
+            innerArray.compactMap { $0.node.int }
+        }
+        #else
         let numbers = geted.map { innerArray in
             innerArray.flatMap { $0.node.int }
         }
+        #endif
 
         guard numbers.count == 4 else {
             XCTFail("failed array of arrays")
@@ -159,9 +173,15 @@ class NodeGetterTests: XCTestCase {
     func testgetArrayOfArraysOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["array": [[1], [2], [3], [4]]]]])
         let geted: [[NoNull]]? = try node.get("nest.ed.array")
+        #if swift(>=4.1)
+        let numbers = geted?.map { innerArray in
+            innerArray.compactMap { $0.node.int }
+        } ?? []
+        #else
         let numbers = geted?.map { innerArray in
             innerArray.flatMap { $0.node.int }
         } ?? []
+        #endif
 
         guard numbers.count == 4 else {
             XCTFail("failed array of arrays optional")
@@ -204,14 +224,22 @@ class NodeGetterTests: XCTestCase {
     func testgetObjectOfArrays() throws {
         let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
         let geted = try node.get("nest.ed.object") as [String: [NoNull]]
+        #if swift(>=4.1)
+        let ints = geted["hello"]?.compactMap({ $0.node.int }) ?? []
+        #else
         let ints = geted["hello"]?.flatMap({ $0.node.int }) ?? []
+        #endif
         XCTAssert(ints == [1,2,3,4])
     }
 
     func testgetObjectOfArraysOptional() throws {
         let node = try Node(node: ["nest": [ "ed": ["object": ["hello": [1,2,3,4]]]]])
         let geted: [String: [NoNull]]? = try node.get("nest.ed.object")
+        #if swift(>=4.1)
+        let ints = geted?["hello"]?.compactMap({ $0.node.int }) ?? []
+        #else
         let ints = geted?["hello"]?.flatMap({ $0.node.int }) ?? []
+        #endif
         XCTAssert(ints == [1,2,3,4])
     }
 
