@@ -55,7 +55,11 @@ class NodeBackedTests: XCTestCase {
         XCTAssertEqual(node["arr", 2]?.int, 2)
         XCTAssertEqual(node["null"]?.isNull, true)
         XCTAssertEqual(node["double"]?.double, 3.14)
+        #if swift(>=4.1)
+        let arr = node["arr"]?.array?.compactMap { $0.int } ?? []
+        #else
         let arr = node["arr"]?.array?.flatMap { $0.int } ?? []
+        #endif
         XCTAssertEqual(arr, [0, 1, 2])
         let ob = node["ob"]?.object
         XCTAssertEqual(ob?["name"]?.string, "World")

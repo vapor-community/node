@@ -49,11 +49,19 @@ class SequenceConvertibleTests: XCTestCase {
         XCTAssert(node2 == .array([1,2,3,4,5], in: nil))
 
         let models = try ints.converted(to: [TestInitializable].self, in: nil)
+        #if swift(>=4.1)
+        let backInts = models.map { $0.node } .compactMap { $0.int }
+        #else
         let backInts = models.map { $0.node } .flatMap { $0.int }
+        #endif
         XCTAssert(backInts == ints)
 
         let models2 = try representables.converted(to: [TestInitializable].self, in: nil)
+        #if swift(>=4.1)
+        let backInts2 = models2.map { $0.node } .compactMap { $0.int }
+        #else
         let backInts2 = models2.map { $0.node } .flatMap { $0.int }
+        #endif
         XCTAssert(backInts2 == ints)
 
 

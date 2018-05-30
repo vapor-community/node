@@ -114,12 +114,21 @@ class PathIndexableTests: XCTestCase {
             return
         }
 
+        #if swift(>=4.1)
+        let mapped: [Double] = value.compactMap { node in
+            guard case let .number(val) = node else {
+                return nil
+            }
+            return val
+        }
+        #else
         let mapped: [Double] = value.flatMap { node in
             guard case let .number(val) = node else {
                 return nil
             }
             return val
         }
+        #endif
         XCTAssert(mapped == [0,1,2,3])
     }
 

@@ -116,7 +116,11 @@ extension String: PathIndexer {
                 return array[idx]
             }
 
+            #if swift(>=4.1)
+            let value = array.compactMap(self.get)
+            #else
             let value = array.flatMap(self.get)
+            #endif
             guard !value.isEmpty else { return nil }
             return type(of: indexable).init(value)
         }
