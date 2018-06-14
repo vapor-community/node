@@ -2,7 +2,7 @@ Pod::Spec.new do |spec|
   # Node was taken, so using NodeCocoapods here ... we'll see how that works
   # in code do `#if COCOAPODS` to use correct import
   spec.name         = 'NodeCocoapods'
-  spec.version      = '2.0.3'
+  spec.version      = '2.1.1'
   spec.license      = 'MIT'
   spec.homepage     = 'https://github.com/vapor/node'
   spec.authors      = { 'Vapor' => 'contact@vapor.codes' }
@@ -18,8 +18,8 @@ Pod::Spec.new do |spec|
 
   spec.subspec "Default" do |ss|
     ss.source_files = 'Sources/**/*.{swift}'
-    ss.dependency 'Core', '~> 2.0'
-    ss.dependency 'Bits', '~> 1.0'
-    ss.dependency 'Debugging', '~> 1.0'
+    ss.dependency 'Core', '~> 2.1.2'
+    ss.dependency 'Bits', '~> 1.1.0'
+    ss.dependency 'Debugging', '~> 1.1.0'
   end
 end
