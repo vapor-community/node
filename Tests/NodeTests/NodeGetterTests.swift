@@ -61,6 +61,10 @@ class NodeGetterTests: XCTestCase {
         ("testgetSetThrows", testgetSetThrows),
         ("testgetDateRFC1123", testgetDateRFC1123),
         ("testgetDateMySQLDATETIME", testgetDateMySQLDATETIME),
+        ("testgetOptionalDateRFC1123", testgetOptionalDateRFC1123),
+        ("testgetOptionalDateNil", testgetOptionalDateNil),
+        ("testgetImplicitlyUnwrappedOptionalDateRFC1123", testgetImplicitlyUnwrappedOptionalDateRFC1123),
+        ("testgetImplicitlyUnwrappedOptionalDateNil", testgetImplicitlyUnwrappedOptionalDateNil),
         ("testBadObject", testBadObject),
     ]
 
@@ -285,6 +289,30 @@ class NodeGetterTests: XCTestCase {
         let node = try Node(node: ["time": "2010-05-16 15:20:00"])
         let date: Date = try node.get("time")
         XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
+    }
+
+    func testgetOptionalDateRFC1123() throws {
+        let node = try Node(node: ["time": "Sun, 16 May 2010 15:20:00 GMT"])
+        let date: Date? = try node.get("time")
+        XCTAssertEqual(date?.timeIntervalSince1970, 1274023200.0)
+    }
+
+    func testgetImplicitlyUnwrappedOptionalDateRFC1123() throws {
+        let node = try Node(node: ["time": "Sun, 16 May 2010 15:20:00 GMT"])
+        let date: Date! = try node.get("time")
+        XCTAssertEqual(date.timeIntervalSince1970, 1274023200.0)
+    }
+
+    func testgetOptionalDateNil() throws {
+        let node = Node.null
+        let date: Date? = try node.get("time")
+        XCTAssertNil(date)
+    }
+
+    func testgetImplicitlyUnwrappedOptionalDateNil() throws {
+        let node = Node.null
+        let date: Date! = try node.get("time")
+        XCTAssertNil(date)
     }
 
     func testBadObject() throws {
